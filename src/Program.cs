@@ -14,8 +14,6 @@ options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")
 
 var app = builder.Build();
 
-
-// test
 app.UseHttpsRedirection();
 app.MapControllers();
 app.Run();
