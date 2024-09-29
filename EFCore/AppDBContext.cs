@@ -1,18 +1,10 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-
-public class AppDbContext : DbContext
-{
-
-  public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
-  { }
-  public DbSet<User> Users { get; set; }
-  public DbSet<Product> Products { get; set; }
-  protected override void OnModelCreating(ModelBuilder modelBuilder)
-  {
-    modelBuilder.Entity<User>(entity =>
+    public class AppDbContext : DbContext
     {
+  modelBuilder.Entity<User>(entity =>
+   {
       entity.HasKey(u => u.UserId);
       entity.Property(u => u.UserId).HasDefaultValueSql("uuid_generate_v4()");
       entity.HasKey(a => a.AddressId);
@@ -46,4 +38,5 @@ public class AppDbContext : DbContext
       attribut.Property(u => u.OrderDate).HasDefaultValueSql("CURRENT_TIMESTAMP");
     });
     }
+}
 }
