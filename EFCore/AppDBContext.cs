@@ -1,9 +1,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-public class AppDbContext : DbContext
-{
-
+    public class AppDbContext : DbContext
+    {
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
     { }
     public DbSet<User> Users { get; set; }
@@ -24,15 +23,14 @@ public class AppDbContext : DbContext
             entity.Property(u => u.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
         });
 
-        modelBuilder.Entity<Order>(entity =>
+        modelBuilder.Entity<Order>(attribut =>
         {
-            entity.HasKey(u => u.OrderId);
-            entity.Property(u => u.OrderId).HasDefaultValueSql("uuid_generate_v4()");
-            entity.Property(u => u.Image);
-            entity.Property(u => u.OrderStatus);
-            entity.Property(u => u.TotalAmount).IsRequired();
-            entity.Property(u => u.OrderDate).HasDefaultValueSql("CURRENT_TIMESTAMP");
+            attribut.HasKey(u => u.OrderId);
+            attribut.Property(u => u.OrderId).HasDefaultValueSql("uuid_generate_v4()");
+            attribut.Property(u => u.Image);
+            attribut.Property(u => u.OrderStatus);
+            attribut.Property(u => u.TotalAmount).IsRequired();
+            attribut.Property(u => u.OrderDate).HasDefaultValueSql("CURRENT_TIMESTAMP");
         });
     }
-
 }

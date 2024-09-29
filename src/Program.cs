@@ -1,8 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddScoped<UserService>();
 builder.Services.AddControllers();
+builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<OrderService>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(typeof(Program));
