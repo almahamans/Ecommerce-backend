@@ -1,7 +1,10 @@
 public enum OrderStatus{
-    Delevierd,
-    Returned,
+    Pending,
+    Processing,
     Shipped,
+    Delivered,
+    Canceled,
+    Returned,
     OnProgress
 }
 public class Order{

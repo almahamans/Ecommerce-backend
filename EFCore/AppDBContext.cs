@@ -36,16 +36,14 @@ public class AppDbContext : DbContext
      entity.Property(p => p.Image).IsRequired();
 
    });
-
-
-        modelBuilder.Entity<Order>(attribut =>
-        {
-            attribut.HasKey(u => u.OrderId);
-            attribut.Property(u => u.OrderId).HasDefaultValueSql("uuid_generate_v4()");
-            attribut.Property(u => u.Image);
-            attribut.Property(u => u.OrderStatus);
-            attribut.Property(u => u.TotalAmount).IsRequired();
-            attribut.Property(u => u.OrderDate).HasDefaultValueSql("CURRENT_TIMESTAMP");
-        });
+    modelBuilder.Entity<Order>(attribut =>
+    {
+      attribut.HasKey(u => u.OrderId);
+      attribut.Property(u => u.OrderId).HasDefaultValueSql("uuid_generate_v4()");
+      attribut.Property(u => u.Image);
+      attribut.Property(u => u.OrderStatus);
+      attribut.Property(u => u.TotalAmount).IsRequired();
+      attribut.Property(u => u.OrderDate).HasDefaultValueSql("CURRENT_TIMESTAMP");
+    });
     }
 }

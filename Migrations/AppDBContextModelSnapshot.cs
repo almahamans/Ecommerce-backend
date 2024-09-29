@@ -25,7 +25,7 @@ namespace Backend.Migrations
             modelBuilder.Entity("Product", b =>
                 {
                     b.Property<Guid>("ProductId")
-=======
+
             modelBuilder.Entity("Order", b =>
                 {
                     b.Property<Guid>("OrderId")
@@ -39,8 +39,6 @@ namespace Backend.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
-
-=======
 
                     b.Property<string>("Image")
                         .IsRequired()
@@ -61,7 +59,6 @@ namespace Backend.Migrations
                     b.HasKey("ProductId");
 
                     b.ToTable("Product");
-=======
                     b.Property<DateTime>("OrderDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
@@ -124,6 +121,7 @@ namespace Backend.Migrations
                     b.ToTable("Users");
                 });
 #pragma warning restore 612, 618
-        }
+                }
+    }
     }
 }
