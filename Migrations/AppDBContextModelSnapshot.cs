@@ -21,47 +21,17 @@ namespace Backend.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-
-            modelBuilder.Entity("Product", b =>
-                {
-                    b.Property<Guid>("ProductId")
-=======
             modelBuilder.Entity("Order", b =>
                 {
                     b.Property<Guid>("OrderId")
-
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid")
                         .HasDefaultValueSql("uuid_generate_v4()");
-
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-=======
 
                     b.Property<string>("Image")
                         .IsRequired()
                         .HasColumnType("text");
 
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("numeric");
-
-                    b.Property<string>("ProductName")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("integer");
-
-                    b.HasKey("ProductId");
-
-                    b.ToTable("Product");
-=======
                     b.Property<DateTime>("OrderDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
@@ -76,7 +46,6 @@ namespace Backend.Migrations
                     b.HasKey("OrderId");
 
                     b.ToTable("Orders");
-
                 });
 
             modelBuilder.Entity("User", b =>
