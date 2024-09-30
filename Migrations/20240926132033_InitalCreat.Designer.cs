@@ -10,9 +10,9 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Backend.Migrations
 {
-    [DbContext(typeof(AppDbContext))]
-    [Migration("20240926131308_User")]
-    partial class User
+    [DbContext(typeof(AppDBContext))]
+    [Migration("20240926132033_InitalCreat")]
+    partial class InitalCreat
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -10,9 +11,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Backend.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240929115512_ordermigr")]
+    partial class ordermigr
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,76 +24,17 @@ namespace Backend.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-<<<<<<< HEAD
-            modelBuilder.Entity("Product", b =>
-                {
-                    b.Property<Guid>("ProductId");
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-                    b.Property<decimal>("Price")
-                    .HasColumnType("numeric");
-
-                    b.Property<string>("ProductName")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("integer");
-
-                    b.HasKey("ProductId");
-
-                    b.ToTable("Product");
-                });
-                modelBuilder.Entity("Order", b =>
-=======
-
-            modelBuilder.Entity("Product", b =>
-                {
-                    b.Property<Guid>("ProductId")
-=======
             modelBuilder.Entity("Order", b =>
->>>>>>> 01f35cdef96f7cde77e603a663915378dddb9802
                 {
                     b.Property<Guid>("OrderId")
-
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid")
                         .HasDefaultValueSql("uuid_generate_v4()");
-<<<<<<< HEAD
-=======
 
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-=======
-
->>>>>>> 01f35cdef96f7cde77e603a663915378dddb9802
                     b.Property<string>("Image")
                         .IsRequired()
                         .HasColumnType("text");
 
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("numeric");
-
-                    b.Property<string>("ProductName")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("integer");
-
-                    b.HasKey("ProductId");
-
-                    b.ToTable("Product");
-=======
                     b.Property<DateTime>("OrderDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
@@ -105,7 +49,6 @@ namespace Backend.Migrations
                     b.HasKey("OrderId");
 
                     b.ToTable("Orders");
-
                 });
 
             modelBuilder.Entity("User", b =>
@@ -153,7 +96,6 @@ namespace Backend.Migrations
                     b.ToTable("Users");
                 });
 #pragma warning restore 612, 618
-                }
+        }
     }
-    }
-
+}
