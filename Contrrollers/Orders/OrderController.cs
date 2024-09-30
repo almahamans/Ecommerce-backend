@@ -17,7 +17,8 @@ public class OrderController : ControllerBase{
             return ApiResponse.Created(newOrder, "A new Order created successfully");
         }catch(Exception ex){
            return ApiResponse.NotFound($"error in creating the order (controller). {ex.Message}");
-        }        
+        }  
+    }      
     [HttpGet]
     public async Task<IActionResult> GetOrders(){
         try{

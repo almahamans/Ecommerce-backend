@@ -1,6 +1,9 @@
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 
+// public interface IOrderService{
+//     public Order CreateOrderSrvice(CreateOrderDto createOrderDto)
+// }
 public class OrderService{
     readonly AppDbContext _appDbContext;
     readonly IMapper _mapper;
@@ -12,7 +15,7 @@ public class OrderService{
         if(createOrderDto == null){
             return null;
         }else{
-            var order = _mapper.Map<Order>(createOrderDto);
+            var order =  _mapper.Map<Order>(createOrderDto);
             order.OrderStatus = OrderStatus.OnProgress;
             // // //maybe in the frontend can print the value???????????
             Console.WriteLine(order.OrderStatus);
