@@ -9,41 +9,55 @@ public class OrderService{
         _mapper = mapper;
     }
     public async Task<Order> CreateOrderSrvice(CreateOrderDto createOrderDto){
-        var order = _mapper.Map<Order>(createOrderDto);
-        order.OrderStatus = OrderStatus.OnProgress;
-        await _appDbContext.AddAsync(order);
-        await _appDbContext.SaveChangesAsync();
-        return order;
+        if(createOrderDto == null){
+            return null;
+        }else{
+            var order = _mapper.Map<Order>(createOrderDto);
+            order.OrderStatus = OrderStatus.OnProgress;
+            // // //maybe in the frontend can print the value???????????
+            Console.WriteLine(order.OrderStatus);
+            await _appDbContext.Orders.AddAsync(order);
+            await _appDbContext.SaveChangesAsync();
+            return order;  
+        }
     }
     public async Task<bool> DeleteOrderSrvice(Guid id){
         var order = await _appDbContext.Orders.FindAsync(id);
         if(order == null){
             return false;
+        }else{
+            _appDbContext.Orders.Remove(order);
+            await _appDbContext.SaveChangesAsync();
+            return true;  
         }
-        _appDbContext.Orders.Remove(order);
-        await _appDbContext.SaveChangesAsync();
-        return true;
     }
     public async Task<List<OrderDto>> GetAllOrdersService(){
         var order = await _appDbContext.Orders.ToListAsync();
-        var orderData = _mapper.Map<List<OrderDto>>(order);
-        return orderData;
+        if(order.Count() < 0){
+            Console.WriteLine("Empty List");
+            return null; 
+        }else{
+            var orderData = _mapper.Map<List<OrderDto>>(order);
+            return orderData;    
+        }  
     }
     public async Task<OrderDto> GetOrderByIdService(Guid id){
         var order = await _appDbContext.Orders.FindAsync(id);
-        if (order == null)
-        {
+        if (order == null){
             return null;
         }
         return _mapper.Map<OrderDto>(order);
     }
     public async Task<OrderDto> UpdateOrderStatusSrvice(Guid id, UpdateOrderDto updateOrderDto){
         var order = await _appDbContext.Orders.FindAsync(id);
-        if (order == null)
-        {
+        if (order == null){
+            return null;
+        }
+        if(updateOrderDto == null){
             return null;
         }
         order.OrderStatus = updateOrderDto.orderStatus ?? order.OrderStatus;
+        order.TotalAmount = updateOrderDto.TotalAmount ?? order.TotalAmount;
         _appDbContext.Orders.Update(order);
         await _appDbContext.SaveChangesAsync();
         var mappingOrder = _mapper.Map<OrderDto>(order);

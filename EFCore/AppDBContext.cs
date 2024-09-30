@@ -22,6 +22,10 @@ public class AppDbContext : DbContext
             entity.Property(u => u.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
         });
 
+
+
+
+
         modelBuilder.Entity<Order>(attribut =>
         {
             attribut.HasKey(u => u.OrderId);
