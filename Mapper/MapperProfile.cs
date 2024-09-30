@@ -8,8 +8,8 @@ using AutoMapper;
     {
         public MappingProfile()
         {
-            CreateMap<Order, OrderDto>();
-            CreateMap<OrderDto, Order>();
+            CreateMap<Order, OrderDto>().ReverseMap();
             CreateMap<CreateOrderDto, Order>();
-        }
+            CreateMap<UpdateOrderDto, OrderDto>();
+    }
     }
