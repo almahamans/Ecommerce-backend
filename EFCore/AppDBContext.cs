@@ -2,18 +2,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 public class AppDbContext : DbContext
-{
-
-  public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
-  { }
-  public DbSet<User> Users { get; set; }
-
-
-
-  public DbSet<Order> Orders { get; set; }
-  protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
-    modelBuilder.Entity<User>(entity =>
+    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options){ }
+    public DbSet<User> Users { get; set; }
+    public DbSet<Order> Orders {get; set;}
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
       entity.HasKey(u => u.UserId);
       entity.Property(u => u.UserId).HasDefaultValueSql("uuid_generate_v4()");
@@ -28,24 +21,16 @@ public class AppDbContext : DbContext
     });
 
 
-// add relation many to many only -
-
-
-
-
-
-
-
-
-
-    modelBuilder.Entity<Order>(attribut =>
-    {
-      attribut.HasKey(u => u.OrderId);
-      attribut.Property(u => u.OrderId).HasDefaultValueSql("uuid_generate_v4()");
-      attribut.Property(u => u.Image);
-      attribut.Property(u => u.OrderStatus);
-      attribut.Property(u => u.TotalAmount).IsRequired();
-      attribut.Property(u => u.OrderDate).HasDefaultValueSql("CURRENT_TIMESTAMP");
-    });
-  }
+        modelBuilder.Entity<Order>(attribut =>
+        {
+            attribut.HasKey(u => u.OrderId);
+            attribut.Property(u => u.OrderId).HasDefaultValueSql("uuid_generate_v4()");
+            attribut.Property(u => u.Image);
+            attribut.Property(u => u.OrderStatus);
+            attribut.Property(u => u.TotalAmount).IsRequired();
+            attribut.Property(u => u.OrderDate).HasDefaultValueSql("CURRENT_TIMESTAMP");
+        });
+    }
 }
+
+
