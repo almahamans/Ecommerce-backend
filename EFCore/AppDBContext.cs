@@ -32,6 +32,11 @@ public class AppDbContext : DbContext
 
 
 
+
+
+
+
+
     modelBuilder.Entity<Order>(attribut =>
     {
       attribut.HasKey(u => u.OrderId);
