@@ -1,8 +1,15 @@
+
+using System.ComponentModel.DataAnnotations;
+
+
 public record UpdateUserDto
 {
-    public Role Role {get; set;}
-    public  string? UserName { get; set; }
-    public  string? Password { get; set; }
-    public  string? Email { get; set; }
-    public string? Phone { get; set; } = string.Empty;
+
+    [StringLength(50, ErrorMessage = "Username must be between 3 and 50 characters.", MinimumLength = 3)]
+    public string? UserName { get; set; }
+
+    [StringLength(100, ErrorMessage = "Password must be between 6 and 100 characters.", MinimumLength = 6)]
+    public string? Password { get; set; }
+    public string? Phone { get; set; }
+      public string? Image { get; set; }
 }
