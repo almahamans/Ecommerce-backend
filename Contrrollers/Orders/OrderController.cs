@@ -12,7 +12,7 @@ public class OrderController : ControllerBase{
             return ApiResponse.BadRequest();
         }
         try{
-            var newOrder = _orderService.CreateOrderSrvice(createOrderDto);
+            var newOrder = await _orderService.CreateOrderSrvice(createOrderDto);
             return ApiResponse.Created(newOrder, "A new Order created successfully");
         }catch(Exception ex){
            return ApiResponse.NotFound($"error in creating the order (controller). {ex.Message}");

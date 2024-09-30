@@ -1,17 +1,17 @@
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 
-public interface IOrderService{
-    public Order CreateOrderSrvice(CreateOrderDto createOrderDto);
-}
-public class OrderService : IOrderService{
+// public interface IOrderService{
+//     public Order CreateOrderSrvice(CreateOrderDto createOrderDto)
+// }
+public class OrderService{
     readonly AppDbContext _appDbContext;
     readonly IMapper _mapper;
     public OrderService(AppDbContext appDbContext, IMapper mapper){
         _appDbContext = appDbContext;
         _mapper = mapper;
     }
-    public Order CreateOrderSrvice(CreateOrderDto createOrderDto){
+    public async Task<Order> CreateOrderSrvice(CreateOrderDto createOrderDto){
         if(createOrderDto == null){
             return null;
         }else{
@@ -19,8 +19,8 @@ public class OrderService : IOrderService{
             order.OrderStatus = OrderStatus.OnProgress;
             // // //maybe in the frontend can print the value???????????
             Console.WriteLine(order.OrderStatus);
-            _appDbContext.Orders.AddAsync(order);
-            _appDbContext.SaveChangesAsync();
+            await _appDbContext.Orders.AddAsync(order);
+            await _appDbContext.SaveChangesAsync();
             return order;  
         }
     }
