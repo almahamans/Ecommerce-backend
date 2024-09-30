@@ -1,23 +1,26 @@
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 
-public class OrderService{
+public interface IOrderService{
+    public Order CreateOrderSrvice(CreateOrderDto createOrderDto);
+}
+public class OrderService : IOrderService{
     readonly AppDbContext _appDbContext;
     readonly IMapper _mapper;
     public OrderService(AppDbContext appDbContext, IMapper mapper){
         _appDbContext = appDbContext;
         _mapper = mapper;
     }
-    public async Task<Order> CreateOrderSrvice(CreateOrderDto createOrderDto){
+    public Order CreateOrderSrvice(CreateOrderDto createOrderDto){
         if(createOrderDto == null){
             return null;
         }else{
-            var order = _mapper.Map<Order>(createOrderDto);
+            var order =  _mapper.Map<Order>(createOrderDto);
             order.OrderStatus = OrderStatus.OnProgress;
             // // //maybe in the frontend can print the value???????????
             Console.WriteLine(order.OrderStatus);
-            await _appDbContext.Orders.AddAsync(order);
-            await _appDbContext.SaveChangesAsync();
+            _appDbContext.Orders.AddAsync(order);
+            _appDbContext.SaveChangesAsync();
             return order;  
         }
     }
