@@ -9,9 +9,9 @@ public class OrderService{
         _mapper = mapper;
     }
     public async Task<Order> CreateOrderSrvice(CreateOrderDto createOrderDto){
-        Console.WriteLine("---------service");
         var order = _mapper.Map<Order>(createOrderDto);
-        await _appDbContext.Orders.AddAsync(order);
+        order.OrderStatus = OrderStatus.OnProgress;
+        await _appDbContext.AddAsync(order);
         await _appDbContext.SaveChangesAsync();
         return order;
     }

@@ -7,10 +7,17 @@ public class OrderController : ControllerBase{
         _orderService = orderService;
     }
     [HttpPost]
-    public async Task<IActionResult> CreateOrder([FromBody] CreateOrderDto createOrderDto){
-        var newOrder = _orderService.CreateOrderSrvice(createOrderDto);
-        Console.WriteLine("---------constroller");
-        return Created("A new Order created successfully", newOrder);
+    public async Task<IActionResult> CreateOrder([FromBody] CreateOrderDto createOrderDto){      
+        if(!ModelState.IsValid)
+        {
+            return BadRequest("null");
+        }
+        try{
+            var newOrder = _orderService.CreateOrderSrvice(createOrderDto);
+            return Created("A new Order created successfully", newOrder);
+        }catch(Exception ex){
+            return NotFound($"{ex.Message}");
+        }        
     }
     [HttpGet]
     public async Task<IActionResult> GetOrders(){
