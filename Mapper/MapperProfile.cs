@@ -4,12 +4,16 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 
-    public class MappingProfile : Profile
+public class MappingProfile : Profile
+{
+    public MappingProfile()
     {
-        public MappingProfile()
-        {
-            CreateMap<Order, OrderDto>();
-            CreateMap<OrderDto, Order>();
-            CreateMap<CreateOrderDto, Order>();
-        }
+        CreateMap<Order, OrderDto>();
+        CreateMap<OrderDto, Order>();
+        CreateMap<CreateOrderDto, Order>();
+
+        CreateMap<User, UserDto>();
+        CreateMap<UserDto, User>();
+        CreateMap<CreateUserDto, User>();
     }
+}
