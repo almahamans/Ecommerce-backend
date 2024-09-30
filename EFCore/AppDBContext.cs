@@ -1,10 +1,21 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-    public class AppDbContext : DbContext
+
+public class AppDbContext : DbContext
+{
+
+  public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
+  { }
+  public DbSet<User> Users { get; set; }
+
+
+
+  public DbSet<Order> Orders { get; set; }
+  protected override void OnModelCreating(ModelBuilder modelBuilder)
+  {
+    modelBuilder.Entity<User>(entity =>
     {
-  modelBuilder.Entity<User>(entity =>
-   {
       entity.HasKey(u => u.UserId);
       entity.Property(u => u.UserId).HasDefaultValueSql("uuid_generate_v4()");
       entity.HasKey(a => a.AddressId);
@@ -17,17 +28,11 @@ using Microsoft.EntityFrameworkCore;
       entity.Property(u => u.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
     });
 
-    modelBuilder.Entity<Product>(entity =>
-   {
-     entity.HasKey(p => p.ProductId);
-     entity.Property(p => p.ProductId).HasDefaultValueSql("uuid_generate_v4()");
-     entity.Property(p => p.ProductName).IsRequired().HasMaxLength(100);
-     entity.Property(p => p.Description).IsRequired().HasMaxLength(100);
-     entity.Property(p => p.Price).IsRequired();
-     entity.Property(p => p.Quantity).IsRequired();
-     entity.Property(p => p.Image).IsRequired();
 
-   });
+
+
+
+
     modelBuilder.Entity<Order>(attribut =>
     {
       attribut.HasKey(u => u.OrderId);
@@ -37,6 +42,5 @@ using Microsoft.EntityFrameworkCore;
       attribut.Property(u => u.TotalAmount).IsRequired();
       attribut.Property(u => u.OrderDate).HasDefaultValueSql("CURRENT_TIMESTAMP");
     });
-    }
-}
+  }
 }
