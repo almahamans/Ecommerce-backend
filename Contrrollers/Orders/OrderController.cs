@@ -7,6 +7,7 @@ public class OrderController : ControllerBase{
         _orderService = orderService;
     }
     [HttpPost]
+
     public async Task<IActionResult> CreateOrder([FromBody] CreateOrderDto createOrderDto){      
         if(!ModelState.IsValid){
             return ApiResponse.BadRequest();
@@ -17,7 +18,6 @@ public class OrderController : ControllerBase{
         }catch(Exception ex){
            return ApiResponse.NotFound($"error in creating the order (controller). {ex.Message}");
         }        
-    }
     [HttpGet]
     public async Task<IActionResult> GetOrders(){
         try{
