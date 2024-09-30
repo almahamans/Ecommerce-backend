@@ -5,5 +5,6 @@ public record UserDto
     public required string Password { get; set; }
     public required string Email { get; set; }
     public string Phone { get; set; } = string.Empty;
+    //addrss id - user id
    
 }

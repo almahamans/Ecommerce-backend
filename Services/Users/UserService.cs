@@ -1,26 +1,121 @@
- public class UserService
-  {
-      private readonly AppDbContext _appDbContext;
 
-      public UserService(AppDbContext appDbContext){
-          _appDbContext = appDbContext;
-      }
+using System.Diagnostics.Contracts;
+using System.Linq.Expressions;
+using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 
 
-      public async Task<User> CreateUserAsync(CreateUserDto newUserDto)
+public class UserService
 {
-    var user = new User
-    {
-        UserId = Guid.NewGuid(),
-        UserName = newUserDto.UserName,
-        Email = newUserDto.Email,
-        Password = newUserDto.Password, 
-        Role = newUserDto.Role,
-    };
+    private readonly AppDbContext _appDbContext;
+    private readonly IMapper _mapper;
 
-    await _appDbContext.Users.AddAsync(user);
-    await _appDbContext.SaveChangesAsync();
-    return user;
+
+    public UserService(AppDbContext appDbContext, IMapper mapper)
+    {
+        _appDbContext = appDbContext;
+        _mapper = mapper;
+    }
+
+
+    public async Task<User> CreateUserServiceAsync(CreateUserDto newUser)
+    {
+
+        //include var quey = 
+        try
+        {
+            var hashedPassword = BCrypt.Net.BCrypt.HashPassword(newUser.Password);
+            newUser.Password = hashedPassword;
+
+            var user = _mapper.Map<User>(newUser);
+
+            await _appDbContext.Users.AddAsync(user);
+
+            await _appDbContext.SaveChangesAsync();
+
+            return user;
+
+        }
+
+        catch (DbUpdateException dbEx)
+        {
+            Console.WriteLine($"DbUpdateException: {dbEx.Message}\nStack Trace: {dbEx.StackTrace}");
+            throw new ApplicationException("An error occurred while saving to the database. Please check the data and try again.");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception: {ex.Message}\nStack Trace: {ex.StackTrace}");
+            throw new ApplicationException("An unexpected error occurred. Please try again later.");
+        }
+    }
+
+    public async Task<List<UserDto>> GetUsersServiceAsync()
+    {
+
+        var users = await _appDbContext.Users.ToListAsync();
+
+        var userIds = await _appDbContext.Users
+        .Select(u => u.UserId)
+        .ToListAsync();
+        Console.WriteLine($"------------------------display Ids-----------------------------------");
+
+        foreach (var item in userIds)
+        {
+            Console.WriteLine($"{item}");
+
+        }
+
+        var usersData = _mapper.Map<List<UserDto>>(users);
+        return usersData;
+    }
+
+    public async Task<UserDto> GetUserByIdServiceAsync(Guid userId)
+    {
+
+        var user = await _appDbContext.Users.FindAsync(userId);
+        var userData = _mapper.Map<UserDto>(user);
+        return userData;
+    }
+
+
+    public async Task<UserDto> UpdateUserByIdServiceAsync(Guid userId, UpdateUserDto updateUser)
+    {
+        var user = await _appDbContext.Users.FindAsync(userId);
+        if (user == null)
+        {
+            return null;
+        }
+        user.UserName = updateUser.UserName ?? user.UserName;
+        user.Email = updateUser.Email ?? user.Email;
+        user.Password = updateUser.Password ?? user.Password;
+        user.Phone = updateUser.Phone ?? user.Phone;
+
+        _appDbContext.Update(user);
+        await _appDbContext.SaveChangesAsync();
+
+        var userData = _mapper.Map<UserDto>(user);
+        return userData;
+
+    }
+
+    public async Task<bool> DeleteUserByIdServiceAsync(Guid userId)
+    {
+        var user = await _appDbContext.Users.FindAsync(userId);
+        if (user == null)
+        {
+            return false;
+        }
+
+        _appDbContext.Remove(user);
+        await _appDbContext.SaveChangesAsync();
+        return true;
+
+    }
+
+
+
 }
 
-  }
+
+
+
