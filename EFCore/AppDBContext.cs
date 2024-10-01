@@ -2,12 +2,13 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 public class AppDbContext : DbContext
+{
+  public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
+  public DbSet<User> Users { get; set; }
+  public DbSet<Order> Orders { get; set; }
+  protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
-    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options){ }
-    public DbSet<User> Users { get; set; }
-    public DbSet<Order> Orders {get; set;}
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
+
         modelBuilder.Entity<User>(entity =>
         {
             entity.HasKey(u => u.UserId);
@@ -35,5 +36,6 @@ public class AppDbContext : DbContext
         });
     }
 }
+
 
 
