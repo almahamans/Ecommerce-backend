@@ -1,13 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
  
-[ApiController, Route("/api/orders")]
+[ApiController, Route("/api/v1/orders")]
 public class OrderController : ControllerBase{
     readonly OrderService _orderService;
     public OrderController(OrderService orderService){
         _orderService = orderService;
     }
     [HttpPost]
-
     public async Task<IActionResult> CreateOrder([FromBody] CreateOrderDto createOrderDto){      
         if(!ModelState.IsValid){
             return ApiResponse.BadRequest();
