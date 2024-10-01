@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 public interface IOrderService{
     public Task<Order> CreateOrderSrvice(CreateOrderDto createOrderDto);
     public Task<bool> DeleteOrderSrvice(Guid id);
-    public Task<PaginatedResult<Order>> GetAllOrdersService(int pageNumber, int pageSize);
+    public Task<PaginatedResult<Order>> GetAllOrdersService(QueryParameters queryParameters);
     public Task<OrderDto> GetOrderByIdService(Guid id);
     public Task<OrderDto> UpdateOrderStatusSrvice(Guid id, UpdateOrderDto updateOrderDto);
 }
@@ -43,22 +43,33 @@ public class OrderService : IOrderService{
             throw new ApplicationException(ex.Message);
         }
     }
-    public async Task<PaginatedResult<Order>> GetAllOrdersService(int pageNumber, int pageSize){
+    public async Task<PaginatedResult<Order>> GetAllOrdersService(QueryParameters queryParameters){
         try{
-        var NumOforders = await _appDbContext.Orders.CountAsync();
-        if (pageNumber < 1) pageNumber = 1;
-        if (pageSize < 1) pageSize = 5;
+            var query = _appDbContext.Orders.AsQueryable();
+            switch (queryParameters.SortBy?.ToLower())
+            {
+                case "OrderDate":
+                    query = queryParameters.SortOrder.ToLower() == "desc"
+                        ? query.OrderByDescending(o => o.OrderDate)
+                        : query.OrderBy(o => o.OrderDate);
+                    break;
+                default:
+                    break;
+            }
+        var NumOforders = await query.CountAsync();
+        if (queryParameters.PageNumber < 1) queryParameters.PageNumber = 1;
+        if (queryParameters.PageSize < 1) queryParameters.PageSize = 5;
         if (NumOforders < 0){
             Console.WriteLine("There is no orders");
             return null;
         }
-        var orders = await _appDbContext.Orders.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync(); 
+        var orders = await query.Skip((queryParameters.PageNumber - 1) * queryParameters.PageSize).Take(queryParameters.PageSize).ToListAsync(); 
         return new PaginatedResult<Order>
         {
             Items = orders,
             TotalCount = NumOforders,
-            PageNumber = pageNumber,
-            PageSize = pageSize
+            PageNumber = queryParameters.PageNumber,
+            PageSize = queryParameters.PageSize
         };
         }catch (Exception ex){
             throw new ApplicationException(ex.Message);

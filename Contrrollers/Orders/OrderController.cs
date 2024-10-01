@@ -19,9 +19,10 @@ public class OrderController : ControllerBase{
         }  
     }      
     [HttpGet]
-    public async Task<IActionResult> GetOrders([FromBody] int pageNumber = 1, int pageSize = 5){
+    public async Task<IActionResult> GetOrders([FromQuery] QueryParameters queryParameters)
+    {
         try{
-            var orders = await _iorderService.GetAllOrdersService(pageNumber, pageSize);
+            var orders = await _iorderService.GetAllOrdersService(queryParameters);
             return ApiResponse.Success(orders);
         }catch(Exception ex){
             return ApiResponse.NotFound($"error in geting orders (controller). {ex.Message}");
@@ -29,9 +30,9 @@ public class OrderController : ControllerBase{
     }
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetOrderById(Guid id){
-        // if(id == null){
-        //     return ApiResponse.BadRequest("no id found");
-        // }
+        if(id == null){
+            return ApiResponse.BadRequest("no id found");
+        }
         try{
         var order = await _iorderService.GetOrderByIdService(id);
         return ApiResponse.Success(order);
@@ -41,9 +42,9 @@ public class OrderController : ControllerBase{
     }
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> DeleteOrderById(Guid id){
-        // if (id == ){
-        //     return ApiResponse.BadRequest("No id found");
-        // }
+        if (id == null){
+            return ApiResponse.BadRequest("No id found");
+        }
         try{
             var order = await _iorderService.DeleteOrderSrvice(id);
             return ApiResponse.Success(order);  
@@ -53,9 +54,9 @@ public class OrderController : ControllerBase{
     }
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> UpdateOrderById(Guid id, [FromBody] UpdateOrderDto updateOrderDto){
-        // if (id == null){
-        //     return ApiResponse.BadRequest("no id found");
-        // }
+        if (id == null){
+            return ApiResponse.BadRequest("no id found");
+        }
         try{
             var order = await _iorderService.UpdateOrderStatusSrvice(id, updateOrderDto);
             return Ok(order);  
