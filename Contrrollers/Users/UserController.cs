@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 [ApiController, Route("/api/v1/users")]
 public class UserController : ControllerBase
 {
-    private readonly UserService _userService;
+    private readonly IUserService _userService;
     public UserController(UserService userService)
     {
         _userService = userService;
@@ -16,6 +16,7 @@ public class UserController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateUser([FromBody] CreateUserDto newUser)
     {
+
         try
         {
             if (!ModelState.IsValid)
@@ -28,6 +29,32 @@ public class UserController : ControllerBase
 
         catch (ApplicationException ex)
         {
+            Console.WriteLine($"------------controller app error-------------------");
+
+            return ApiResponse.ServerError("Server error: " + ex.Message);
+        }
+        catch (System.Exception ex)
+        {
+            Console.WriteLine($"------------controller app exp-------------------");
+            return ApiResponse.ServerError("Server error: " + ex.Message);
+        }
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetUsers()
+    {
+        try
+        {
+            var users = await _userService.GetUsersServiceAsync();
+            if (users == null || !users.Any())
+            {
+                return ApiResponse.NotFound("There are no users yet");
+            }
+            return ApiResponse.Success(users, "Users are returned succesfully");
+        }
+        catch (ApplicationException ex)
+        {
+
             return ApiResponse.ServerError("Server error: " + ex.Message);
         }
         catch (System.Exception ex)
@@ -36,23 +63,23 @@ public class UserController : ControllerBase
         }
     }
 
-    [HttpGet]
-    public async Task<IActionResult> GetUsers()
-    {
-        var users = _userService.GetUsersServiceAsync();
-        return ApiResponse.Success(users, "Users are returned succesfully");
-    }
     [HttpGet("{userId}")]
     public async Task<IActionResult> GetUser(Guid userId)
     {
-        Console.WriteLine($"In controller----------");
-
         var user = await _userService.GetUserByIdServiceAsync(userId);
+        if (user == null)
+        {
+            return ApiResponse.NotFound($"User with this id {userId} does not exist");
+        }
         return ApiResponse.Success(user, "User is returned succesfully");
     }
     [HttpPut("{userId}")]
-    public async Task<IActionResult> UpdateUser(Guid userId, UpdateUserDto updateUserDto)
+    public async Task<IActionResult> UpdateUser(Guid userId, [FromBody] UpdateUserDto updateUserDto)
     {
+        if (!ModelState.IsValid)
+        {
+            return ApiResponse.BadRequest("Invalid User Data");
+        }
         var user = await _userService.UpdateUserByIdServiceAsync(userId, updateUserDto);
         return ApiResponse.Success(user, "User is Updated succesfully");
 
@@ -61,8 +88,13 @@ public class UserController : ControllerBase
 
     public async Task<IActionResult> DeleteUser(Guid userId)
     {
-        var user = await _userService.DeleteUserByIdServiceAsync(userId);
-        return ApiResponse.Success(user, "User is Deleted succesfully");
+        var isDeleted = await _userService.DeleteUserByIdServiceAsync(userId);
+        if (isDeleted == false)
+        {
+            return ApiResponse.NotFound($"User with this id {userId} does not exist");
+        }
+        return ApiResponse.Success(isDeleted, "User is Deleted succesfully");
     }
+
 
 }
