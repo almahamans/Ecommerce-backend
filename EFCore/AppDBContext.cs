@@ -6,7 +6,8 @@ public class AppDbContext : DbContext
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options){ }
     public DbSet<User> Users { get; set; }
     public DbSet<Order> Orders {get; set;}
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    public DbSet<Shipment> Shipments { get; set; }
+  protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
     modelBuilder.Entity<User>(entity =>
       {
@@ -22,7 +23,6 @@ public class AppDbContext : DbContext
       entity.Property(u => u.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
     });
 
-
         modelBuilder.Entity<Order>(attribut =>
         {
             attribut.HasKey(o => o.OrderId);
@@ -37,7 +37,7 @@ public class AppDbContext : DbContext
         {
           attribut.HasKey(s => s.ShipmentId);
           attribut.Property(s => s.ShipmentId).HasDefaultValueSql("uuid_generate_v4()");
-          // attribut.Property(u => u.OrderStatus);
+          attribut.Property(s => s.ShipmentStatus);
           attribut.Property(s => s.TrackingNumber).HasDefaultValueSql("uuid_generate_v4()");
           attribut.Property(s => s.DeliveryDate);
           attribut.Property(s => s.ShipmentDate).HasDefaultValueSql("CURRENT_TIMESTAMP");
