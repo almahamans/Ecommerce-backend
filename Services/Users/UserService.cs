@@ -6,9 +6,9 @@ using Microsoft.EntityFrameworkCore;
 
 public interface IUserService
 {
+    public Task<List<User>> GetUsersServiceAsync();
     public Task<UserDto> GetUserByIdServiceAsync(Guid userId);
-    public Task<User> CreateUserServiceAsync(CreateUserDto newUser);
-    public Task<List<UserDto>> GetUsersServiceAsync();
+    public Task<UserDto> CreateUserServiceAsync(CreateUserDto newUser);
     public Task<UserDto> UpdateUserByIdServiceAsync(Guid userId, UpdateUserDto updateUser);
     public Task<bool> DeleteUserByIdServiceAsync(Guid userId);
 
@@ -27,55 +27,13 @@ public class UserService : IUserService
     }
 
 
-    public async Task<User> CreateUserServiceAsync(CreateUserDto newUser)
-    {
-        try
-        {
-            var hashedPassword = BCrypt.Net.BCrypt.HashPassword(newUser.Password);
-            newUser.Password = hashedPassword;
-
-            var user = _mapper.Map<User>(newUser);
-
-            await _appDbContext.Users.AddAsync(user);
-
-            await _appDbContext.SaveChangesAsync();
-
-            return user;
-
-        }
-
-        catch (DbUpdateException dbEx)
-        {
-
-            Console.WriteLine($"DbUpdateException: {dbEx.Message}\nStack Trace: {dbEx.StackTrace}");
-            throw new ApplicationException("An error occurred while saving to the database. Please check the data and try again.");
-        }
-        catch (Exception ex)
-        {
-
-            Console.WriteLine($"Exception: {ex.Message}\nStack Trace: {ex.StackTrace}");
-            throw new ApplicationException("An unexpected error occurred. Please try again later.");
-        }
-    }
-
-    public async Task<List<UserDto>> GetUsersServiceAsync()
+    public async Task<List<User>> GetUsersServiceAsync()
     {
 
         try
         {
             var users = await _appDbContext.Users.ToListAsync();
-            var userIds = await _appDbContext.Users
-            .Select(u => u.UserId)
-            .ToListAsync();
-
-            foreach (var item in userIds)
-            {
-                Console.WriteLine($"{item}");
-
-            }
-
-            var usersData = _mapper.Map<List<UserDto>>(users);
-            return usersData;
+            return users;
         }
         catch (DbUpdateException dbEx)
         {
@@ -109,7 +67,38 @@ public class UserService : IUserService
             throw new ApplicationException("An unexpected error occurred. Please try again later.");
         }
     }
+    public async Task<UserDto> CreateUserServiceAsync(CreateUserDto newUser)
+    {
+        try
+        {
+            var hashedPassword = BCrypt.Net.BCrypt.HashPassword(newUser.Password);
+            newUser.Password = hashedPassword;
 
+            var user = _mapper.Map<User>(newUser);
+
+            await _appDbContext.Users.AddAsync(user);
+
+            await _appDbContext.SaveChangesAsync();
+
+
+            var userData = _mapper.Map<UserDto>(user);
+            return userData;
+
+        }
+
+        catch (DbUpdateException dbEx)
+        {
+
+            Console.WriteLine($"DbUpdateException: {dbEx.Message}\nStack Trace: {dbEx.StackTrace}");
+            throw new ApplicationException("An error occurred while saving to the database. Please check the data and try again.");
+        }
+        catch (Exception ex)
+        {
+
+            Console.WriteLine($"Exception: {ex.Message}\nStack Trace: {ex.StackTrace}");
+            throw new ApplicationException("An unexpected error occurred. Please try again later.");
+        }
+    }
 
     public async Task<UserDto> UpdateUserByIdServiceAsync(Guid userId, UpdateUserDto updateUser)
     {
