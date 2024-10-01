@@ -8,9 +8,11 @@ public class AppDbContext : DbContext
     public DbSet<Order> Orders {get; set;}
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+    modelBuilder.Entity<User>(entity =>
+      {
       entity.HasKey(u => u.UserId);
       entity.Property(u => u.UserId).HasDefaultValueSql("uuid_generate_v4()");
-     // entity.HasKey(a => a.AddressId);
+    //  entity.HasKey(a => a.AddressId);
     //  entity.Property(a => a.AddressId).HasDefaultValueSql("uuid_generate_v4()");
       entity.Property(u => u.UserName).IsRequired().HasMaxLength(100);
       entity.Property(u => u.Email).IsRequired().HasMaxLength(100);
@@ -23,14 +25,24 @@ public class AppDbContext : DbContext
 
         modelBuilder.Entity<Order>(attribut =>
         {
-            attribut.HasKey(u => u.OrderId);
-            attribut.Property(u => u.OrderId).HasDefaultValueSql("uuid_generate_v4()");
-            attribut.Property(u => u.Image);
-            attribut.Property(u => u.OrderStatus);
-            attribut.Property(u => u.TotalAmount).IsRequired();
-            attribut.Property(u => u.OrderDate).HasDefaultValueSql("CURRENT_TIMESTAMP");
+            attribut.HasKey(o => o.OrderId);
+            attribut.Property(o => o.OrderId).HasDefaultValueSql("uuid_generate_v4()");
+            attribut.Property(o => o.Image);
+            attribut.Property(o => o.OrderStatus);
+            attribut.Property(o => o.TotalAmount).IsRequired();
+            attribut.Property(o => o.OrderDate).HasDefaultValueSql("CURRENT_TIMESTAMP");
         });
-    }
+    
+    modelBuilder.Entity<Shipment>(attribut =>
+        {
+          attribut.HasKey(s => s.ShipmentId);
+          attribut.Property(s => s.ShipmentId).HasDefaultValueSql("uuid_generate_v4()");
+          // attribut.Property(u => u.OrderStatus);
+          attribut.Property(s => s.TrackingNumber).HasDefaultValueSql("uuid_generate_v4()");
+          attribut.Property(s => s.DeliveryDate);
+          attribut.Property(s => s.ShipmentDate).HasDefaultValueSql("CURRENT_TIMESTAMP");
+        });
+  }
 }
 
 
