@@ -5,7 +5,7 @@ public enum Role
     Customer
 }
 
-public record User
+public class User
 {
 
     public Guid UserId { get; set; }

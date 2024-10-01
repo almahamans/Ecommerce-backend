@@ -1,4 +1,4 @@
-public record UserDto
+public class UserDto
 {
     public Role Role {get; set;}
     public required string UserName { get; set; }

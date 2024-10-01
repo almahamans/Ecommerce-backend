@@ -6,6 +6,8 @@ public class AppDbContext : DbContext
   public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
   public DbSet<User> Users { get; set; }
   public DbSet<Order> Orders { get; set; }
+  public DbSet<Address> Addresses { get; set; }
+
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
     modelBuilder.Entity<User>(entity =>
@@ -33,6 +35,16 @@ public class AppDbContext : DbContext
       attribut.Property(u => u.TotalAmount).IsRequired();
       attribut.Property(u => u.OrderDate).HasDefaultValueSql("CURRENT_TIMESTAMP");
     });
+
+    modelBuilder.Entity<Address>(attribut =>
+    {
+      attribut.HasKey(a => a.AddresId);
+      attribut.Property(a => a.AddresId).HasDefaultValueSql("uuid_generate_v4()");
+      attribut.Property(a => a.City).HasMaxLength(50);
+      attribut.Property(a => a.Neighberhood).HasMaxLength(100);
+      attribut.Property(a => a.Street).HasMaxLength(500);
+    });
+
   }
 }
 

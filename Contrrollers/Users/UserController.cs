@@ -8,11 +8,48 @@ using Microsoft.EntityFrameworkCore;
 public class UserController : ControllerBase
 {
     private readonly IUserService _userService;
-    public UserController(UserService userService)
+    public UserController(IUserService userService)
     {
         _userService = userService;
     }
+    // GET => /api/users => Get all the users
+    [HttpGet("Searching")]
+    public async Task<IActionResult> GetUsers([FromQuery] QueryParameters queryParameters)
+    {
+        try
+        {
+            var users = await _userService.GetUsersSearchByServiceAsync(queryParameters);
+            return ApiResponse.Success(users);
+        }
+        catch (ApplicationException ex)
+        {
+            return ApiResponse.ServerError(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception : {ex.Message}");
+            return ApiResponse.ServerError("An unexpected error occurred.");
+        }
+    }
 
+    [HttpGet("paginated")]
+    public async Task<IActionResult> GetUsers([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 5)
+    {
+        try
+        {
+            var users = await _userService.GetUsersPaginationServiceAsync(pageNumber, pageSize);
+            return ApiResponse.Success(users);
+        }
+        catch (ApplicationException ex)
+        {
+            return ApiResponse.ServerError(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception : {ex.Message}");
+            return ApiResponse.ServerError("An unexpected error occurred.");
+        }
+    }
     [HttpPost]
     public async Task<IActionResult> CreateUser([FromBody] CreateUserDto newUser)
     {
@@ -29,13 +66,10 @@ public class UserController : ControllerBase
 
         catch (ApplicationException ex)
         {
-            Console.WriteLine($"------------controller app error-------------------");
-
             return ApiResponse.ServerError("Server error: " + ex.Message);
         }
         catch (System.Exception ex)
         {
-            Console.WriteLine($"------------controller app exp-------------------");
             return ApiResponse.ServerError("Server error: " + ex.Message);
         }
     }

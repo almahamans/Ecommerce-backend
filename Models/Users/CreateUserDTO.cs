@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 
 
-public record CreateUserDto
+public class CreateUserDto
 {
     [Required(ErrorMessage = "Username is missing.")]
     [StringLength(50, ErrorMessage = "Username must be between 3 and 50 characters.", MinimumLength = 3)]

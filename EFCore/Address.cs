@@ -1,6 +1,6 @@
 
 
-public record Address
+public class Address
 {
 
     public Guid AddresId { get; set; }
