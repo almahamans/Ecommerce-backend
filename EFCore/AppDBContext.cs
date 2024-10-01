@@ -30,9 +30,6 @@ public class AppDbContext : DbContext
         {
             attribut.HasKey(o => o.OrderId);
             attribut.Property(o => o.OrderId).HasDefaultValueSql("uuid_generate_v4()");
-            attribut.Property(o => o.Image);
-            attribut.Property(o => o.OrderStatus);
-            attribut.Property(o => o.Quantity);
             attribut.Property(o => o.TotalAmount).IsRequired();
             attribut.Property(o => o.OrderDate).HasDefaultValueSql("CURRENT_TIMESTAMP");
         });

@@ -63,6 +63,5 @@ public class OrderController : ControllerBase{
         }catch (Exception ex){
             return ApiResponse.NotFound($"Not entered data. {ex.Message}");
         }
-
     }
 }
