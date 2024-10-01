@@ -65,6 +65,7 @@ public class OrderService : IOrderService{
         }
         order.OrderStatus = updateOrderDto.orderStatus ?? order.OrderStatus;
         order.TotalAmount = updateOrderDto.TotalAmount ?? order.TotalAmount;
+        order.Quantity = updateOrderDto.Quantity ?? order.Quantity;
         _appDbContext.Orders.Update(order);
         await _appDbContext.SaveChangesAsync();
         var mappingOrder = _mapper.Map<OrderDto>(order);

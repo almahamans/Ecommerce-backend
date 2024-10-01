@@ -11,5 +11,6 @@ public class Order{
     public OrderStatus OrderStatus {get; set;}
     public DateTime OrderDate {get; set;}
     public decimal TotalAmount {get; set;}
+    public int Quantity { get; set; }
     public string Image {get; set;} = string.Empty;
 }
