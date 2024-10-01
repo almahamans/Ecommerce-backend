@@ -3,7 +3,7 @@ using System.Diagnostics.Contracts;
 using System.Linq.Expressions;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-
+//
 public interface IAddressService
 {
 public Task<PaginatedResult<Address>> GetAddressesSearchByServiceAsync(QueryParameters queryParameters);
@@ -53,7 +53,7 @@ public class AddressService : IAddressService
             var addresses = await query
                 .Skip((queryParameters.PageNumber - 1) * queryParameters.PageSize)
                 .Take(queryParameters.PageSize)
-                .ToListAsync();
+                .ToListAsync(); 
 
             return new PaginatedResult<Address>
             {
