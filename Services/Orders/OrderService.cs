@@ -1,10 +1,14 @@
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 
-// public interface IOrderService{
-//     public Order CreateOrderSrvice(CreateOrderDto createOrderDto)
-// }
-public class OrderService{
+public interface IOrderService{
+    public Task<Order> CreateOrderSrvice(CreateOrderDto createOrderDto);
+    public Task<bool> DeleteOrderSrvice(Guid id);
+    public Task<List<OrderDto>> GetAllOrdersService();
+    public Task<OrderDto> GetOrderByIdService(Guid id);
+    public Task<OrderDto> UpdateOrderStatusSrvice(Guid id, UpdateOrderDto updateOrderDto);
+}
+public class OrderService : IOrderService{
     readonly AppDbContext _appDbContext;
     readonly IMapper _mapper;
     public OrderService(AppDbContext appDbContext, IMapper mapper){

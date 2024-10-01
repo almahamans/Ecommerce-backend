@@ -28,12 +28,12 @@ public class AppDbContext : DbContext
 
         modelBuilder.Entity<Order>(attribut =>
         {
-            attribut.HasKey(u => u.OrderId);
-            attribut.Property(u => u.OrderId).HasDefaultValueSql("uuid_generate_v4()");
-            attribut.Property(u => u.Image);
-            attribut.Property(u => u.OrderStatus);
-            attribut.Property(u => u.TotalAmount).IsRequired();
-            attribut.Property(u => u.OrderDate).HasDefaultValueSql("CURRENT_TIMESTAMP");
+            attribut.HasKey(o => o.OrderId);
+            attribut.Property(o => o.OrderId).HasDefaultValueSql("uuid_generate_v4()");
+            attribut.Property(o => o.Image);
+            attribut.Property(o => o.OrderStatus);
+            attribut.Property(o => o.TotalAmount).IsRequired();
+            attribut.Property(o => o.OrderDate).HasDefaultValueSql("CURRENT_TIMESTAMP");
         });
     }
 }
