@@ -4,6 +4,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<OrderService>();
+builder.Services.AddScoped<IShipmentSrvice, ShipmentService>();
 
 
 builder.Services.AddEndpointsApiExplorer();

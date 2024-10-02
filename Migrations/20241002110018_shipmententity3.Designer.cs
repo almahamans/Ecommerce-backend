@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -10,9 +11,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Backend.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241002110018_shipmententity3")]
+    partial class shipmententity3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -28,27 +31,21 @@ namespace Backend.Migrations
                         .HasColumnType("uuid")
                         .HasDefaultValueSql("uuid_generate_v4()");
 
-<<<<<<< HEAD
-=======
                     b.Property<string>("Image")
                         .IsRequired()
                         .HasColumnType("text");
 
->>>>>>> ba240eb6776a3abc5da6aff0200db6c7df1554e5
                     b.Property<DateTime>("OrderDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
-<<<<<<< HEAD
-=======
                     b.Property<int>("OrderStatus")
                         .HasColumnType("integer");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("integer");
 
->>>>>>> ba240eb6776a3abc5da6aff0200db6c7df1554e5
                     b.Property<decimal>("TotalAmount")
                         .HasColumnType("numeric");
 
@@ -57,8 +54,6 @@ namespace Backend.Migrations
                     b.ToTable("Orders");
                 });
 
-<<<<<<< HEAD
-=======
             modelBuilder.Entity("Shipment", b =>
                 {
                     b.Property<Guid>("ShipmentId")
@@ -82,7 +77,6 @@ namespace Backend.Migrations
                     b.ToTable("Shipments");
                 });
 
->>>>>>> ba240eb6776a3abc5da6aff0200db6c7df1554e5
             modelBuilder.Entity("User", b =>
                 {
                     b.Property<Guid>("UserId")
@@ -100,12 +94,6 @@ namespace Backend.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
-<<<<<<< HEAD
-                    b.Property<string>("Image")
-                        .HasColumnType("text");
-
-=======
->>>>>>> ba240eb6776a3abc5da6aff0200db6c7df1554e5
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("text");
