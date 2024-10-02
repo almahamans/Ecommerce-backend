@@ -7,7 +7,7 @@ public interface IOrderService{
     public Task<PaginatedResult<Order>> GetAllOrdersService(QueryParameters queryParameters);
     public Task<OrderDto> GetOrderByIdService(Guid id);
     public Task<OrderDto> UpdateOrderStatusSrvice(Guid id, UpdateOrderDto updateOrderDto);
-}
+} 
 public class OrderService : IOrderService{
     readonly AppDbContext _appDbContext;
     readonly IMapper _mapper;
@@ -26,7 +26,7 @@ public class OrderService : IOrderService{
             return order;  
         }
         }catch (Exception ex){
-            throw new ApplicationException(ex.Message);
+            throw new ApplicationException($"Error in create order service: {ex.Message}");
         }
     }
     public async Task<bool> DeleteOrderSrvice(Guid id){
@@ -40,7 +40,7 @@ public class OrderService : IOrderService{
             return true;  
         }
         }catch (Exception ex){
-            throw new ApplicationException(ex.Message);
+            throw new ApplicationException($"Error in delete order service: {ex.Message}");
         }
     }
     public async Task<PaginatedResult<Order>> GetAllOrdersService(QueryParameters queryParameters){
@@ -72,32 +72,34 @@ public class OrderService : IOrderService{
             PageSize = queryParameters.PageSize
         };
         }catch (Exception ex){
-            throw new ApplicationException(ex.Message);
+            throw new ApplicationException($"Error in getting orders service: {ex.Message}");
         }
     }
     public async Task<OrderDto> GetOrderByIdService(Guid id){
-        var order = await _appDbContext.Orders.FindAsync(id);
-        if (order == null){
-            return null;
-        }
-        return _mapper.Map<OrderDto>(order);
-    }
-    public async Task<OrderDto> UpdateOrderStatusSrvice(Guid id, UpdateOrderDto updateOrderDto){
         try{
         var order = await _appDbContext.Orders.FindAsync(id);
         if (order == null){
             return null;
         }
-        if(updateOrderDto == null){
-            return null;
+        return _mapper.Map<OrderDto>(order);
+        }catch (Exception ex){
+            throw new ApplicationException($"Error in getting an order by id service: {ex.Message}");
         }
+    }
+    public async Task<OrderDto> UpdateOrderStatusSrvice(Guid id, UpdateOrderDto updateOrderDto){
+        try{
+        var order = await _appDbContext.Orders.FindAsync(id);
+        
+        if (order == null) return null;
+        if(updateOrderDto == null) return null;
+
         order.TotalAmount = updateOrderDto.TotalAmount ?? order.TotalAmount;
         _appDbContext.Orders.Update(order);
         await _appDbContext.SaveChangesAsync();
         var mappingOrder = _mapper.Map<OrderDto>(order);
         return mappingOrder;
         }catch (Exception ex){
-            throw new ApplicationException(ex.Message);
+            throw new ApplicationException($"Error in updating an order service: {ex.Message}");
         }
     }
 }
