@@ -8,9 +8,13 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
-         CreateMap<Order, OrderDto>().ReverseMap();
-            CreateMap<CreateOrderDto, Order>();
-            CreateMap<UpdateOrderDto, OrderDto>();
+        CreateMap<Order, OrderDto>().ReverseMap();
+        CreateMap<CreateOrderDto, Order>();
+        CreateMap<UpdateOrderDto, OrderDto>();
+
+        CreateMap<CreateShipmentDto, Shipment>();
+        CreateMap<UpdateShipmentDto, ShipmentDto>();
+        CreateMap<Shipment, ShipmentDto>().ReverseMap();
 
         CreateMap<User, UserDto>();
         CreateMap<UserDto, User>();

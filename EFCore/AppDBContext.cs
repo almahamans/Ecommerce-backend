@@ -38,7 +38,6 @@ public class AppDbContext : DbContext
           attribut.HasKey(s => s.ShipmentId);
           attribut.Property(s => s.ShipmentId).HasDefaultValueSql("uuid_generate_v4()");
           attribut.Property(s => s.ShipmentStatus);
-          attribut.Property(s => s.TrackingNumber).HasDefaultValueSql("uuid_generate_v4()");
           attribut.Property(s => s.DeliveryDate);
           attribut.Property(s => s.ShipmentDate).HasDefaultValueSql("CURRENT_TIMESTAMP");
         });
