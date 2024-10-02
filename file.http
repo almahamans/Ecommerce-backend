@@ -1,0 +1,32 @@
+POST  http://localhost:5125/api/v1/auth/register
+Content-Type: application/json
+
+{
+ 
+ "UserName": "thoa",
+  "Password" : "dhggf2333",
+  "Email" : "tha@gmail.com"
+}
+
+###
+POST  http://localhost:5125/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "Password" : "dhggf2333",
+  "Email" : "shahd@gmail.com"
+
+}
+
+###
+
+GET http://localhost:5125/api/v1/users
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI2NmY5NjUxZC1hMDFkLTQ3YmEtOGRjZS0zZDM0NTUzMTIwZDYiLCJ1bmlxdWVfbmFtZSI6InNoYWhkIiwicm9sZSI6IkFkbWluIiwibmJmIjoxNzI3ODc0NzEzLCJleHAiOjE3Mjc4NzUwMTMsImlhdCI6MTcyNzg3NDcxMywiaXNzIjoiTG9jYWxob3N0SXNzdWVyIiwiYXVkIjoiTG9jYWxob3N0QXVkaWVuY2UifQ.bOu_JhfV-MFmmP9dFxvKkNclhZSFH0Gp2vYRxjsMNOY
+###
+
+// The id is for Shahad user - you have to change the token every 5 min
+PUT http://localhost:5125/api/v1/users/create-admin/66f9651d-a01d-47ba-8dce-3d34553120d6
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI5NGQ1NWYyZS1mOTU5LTQzMWYtYjdjYy02NWYwMTk0YmFmYzUiLCJ1bmlxdWVfbmFtZSI6InRob2EiLCJyb2xlIjoiQWRtaW4iLCJuYmYiOjE3Mjc4NzQ0MjUsImV4cCI6MTcyNzg3NDcyNSwiaWF0IjoxNzI3ODc0NDI1LCJpc3MiOiJMb2NhbGhvc3RJc3N1ZXIiLCJhdWQiOiJMb2NhbGhvc3RBdWRpZW5jZSJ9.Kt24Pbje2ndksIeKGx-XG_tNfQccbfiNCtyIrv4KXbo
+###
+
+

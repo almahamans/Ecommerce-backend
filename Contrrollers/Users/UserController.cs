@@ -1,5 +1,6 @@
 
 using System.Text;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,11 +9,27 @@ using Microsoft.EntityFrameworkCore;
 public class UserController : ControllerBase
 {
     private readonly IUserService _userService;
+
     public UserController(IUserService userService)
     {
         _userService = userService;
+
     }
+
+    [Authorize(Roles = "Admin")]
+    [HttpPut("create-admin/{userId}")]
+    public async Task<IActionResult> UpdateToAdmin(Guid userId)
+    {
+        var user = await _userService.UpdateToAdminByIdServiceAsync(userId);
+        if (user == null)
+        {
+            return ApiResponse.NotFound($"User with this id {userId} does not exist");
+        }
+        return ApiResponse.Success(user, "User is now is Admin");
+    }
+
     // GET => /api/users => Get all the users
+
     [HttpGet("Searching")]
     public async Task<IActionResult> GetUsers([FromQuery] QueryParameters queryParameters)
     {
@@ -50,30 +67,33 @@ public class UserController : ControllerBase
             return ApiResponse.ServerError("An unexpected error occurred.");
         }
     }
-    [HttpPost]
-    public async Task<IActionResult> CreateUser([FromBody] CreateUserDto newUser)
-    {
 
-        try
-        {
-            if (!ModelState.IsValid)
-            {
-                return ApiResponse.BadRequest("Invalid User Data");
-            }
-            var user = await _userService.CreateUserServiceAsync(newUser);
-            return ApiResponse.Created(user, "user created successfully");
-        }
 
-        catch (ApplicationException ex)
-        {
-            return ApiResponse.ServerError("Server error: " + ex.Message);
-        }
-        catch (System.Exception ex)
-        {
-            return ApiResponse.ServerError("Server error: " + ex.Message);
-        }
-    }
+    // [HttpPost]
+    // public async Task<IActionResult> CreateUser([FromBody] CreateUserDto newUser)
+    // {
 
+    //     try
+    //     {
+    //         if (!ModelState.IsValid)
+    //         {
+    //             return ApiResponse.BadRequest("Invalid User Data");
+    //         }
+    //         var user = await _userService.CreateUserServiceAsync(newUser);
+    //         return ApiResponse.Created(user, "user created successfully");
+    //     }
+
+    //     catch (ApplicationException ex)
+    //     {
+    //         return ApiResponse.ServerError("Server error: " + ex.Message);
+    //     }
+    //     catch (System.Exception ex)
+    //     {
+    //         return ApiResponse.ServerError("Server error: " + ex.Message);
+    //     }
+    // }
+
+    [Authorize(Roles = "Admin")]
     [HttpGet]
     public async Task<IActionResult> GetUsers()
     {
@@ -97,7 +117,9 @@ public class UserController : ControllerBase
         }
     }
 
-    [HttpGet("{userId}")]
+
+    [Authorize(Roles = "Customer")]
+    [HttpGet("profile/{userId}")]
     public async Task<IActionResult> GetUser(Guid userId)
     {
         var user = await _userService.GetUserByIdServiceAsync(userId);
@@ -107,6 +129,7 @@ public class UserController : ControllerBase
         }
         return ApiResponse.Success(user, "User is returned succesfully");
     }
+    [Authorize(Roles = "Customer")]
     [HttpPut("{userId}")]
     public async Task<IActionResult> UpdateUser(Guid userId, [FromBody] UpdateUserDto updateUserDto)
     {
@@ -118,8 +141,9 @@ public class UserController : ControllerBase
         return ApiResponse.Success(user, "User is Updated succesfully");
 
     }
+    
+    [Authorize(Roles = "Customer")]
     [HttpDelete("{userId}")]
-
     public async Task<IActionResult> DeleteUser(Guid userId)
     {
         var isDeleted = await _userService.DeleteUserByIdServiceAsync(userId);

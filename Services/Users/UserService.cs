@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 public interface IUserService
 {
+    public Task<UserDto> UpdateToAdminByIdServiceAsync(Guid userId);
     public Task<PaginatedResult<User>> GetUsersSearchByServiceAsync(QueryParameters queryParameters);
 
     public Task<PaginatedResult<User>> GetUsersPaginationServiceAsync(int pageNumber, int pageSize);
@@ -25,6 +26,34 @@ public class UserService : IUserService
     {
         _appDbContext = appDbContext;
         _mapper = mapper;
+    }
+
+
+    public async Task<UserDto> UpdateToAdminByIdServiceAsync(Guid userId)
+    {
+        try
+        {
+            var user = await _appDbContext.Users.FindAsync(userId);
+            if (user == null)
+            {
+                return null;
+            }
+            user.Role = Role.Admin;
+            _appDbContext.Update(user);
+            await _appDbContext.SaveChangesAsync();
+            var userData = _mapper.Map<UserDto>(user);
+            return userData;
+        }
+        catch (DbUpdateException dbEx)
+        {
+            Console.WriteLine($"DbUpdateException: {dbEx.Message}\nStack Trace: {dbEx.StackTrace}");
+            throw new ApplicationException("An error occurred while saving to the database. Please check the data and try again.");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception: {ex.Message}\nStack Trace: {ex.StackTrace}");
+            throw new ApplicationException("An unexpected error occurred. Please try again later.");
+        }
     }
 
     public async Task<PaginatedResult<User>> GetUsersSearchByServiceAsync(QueryParameters queryParameters)
@@ -53,7 +82,7 @@ public class UserService : IUserService
                     break;
 
                 default:
-                    query = query.OrderBy(u => u.UserName); 
+                    query = query.OrderBy(u => u.UserName);
                     break;
             }
 
@@ -63,15 +92,15 @@ public class UserService : IUserService
             if (queryParameters.PageSize < 1) queryParameters.PageSize = 10;
 
             var users = await query
-                .Skip((queryParameters.PageNumber - 1) * queryParameters.PageSize) 
-                .Take(queryParameters.PageSize)                   
+                .Skip((queryParameters.PageNumber - 1) * queryParameters.PageSize)
+                .Take(queryParameters.PageSize)
                 .ToListAsync();
 
-           
+
 
             return new PaginatedResult<User>
             {
-                Items = users,                  
+                Items = users,
                 TotalCount = totalCount,
                 PageNumber = queryParameters.PageNumber,
                 PageSize = queryParameters.PageSize

@@ -1,5 +1,7 @@
 
 
+using System.Text.Json.Serialization;
+
 public class Address
 {
 
@@ -7,5 +9,11 @@ public class Address
     public string City { get; set; }
     public string Neighberhood { get; set; }
     public string Street { get; set; }
+
+    //req
+  //  public Guid UserId  { get; set; }
+
+  //   [JsonIgnore]
+ //   public User User { get; set; } = new User();
 
 }
