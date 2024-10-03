@@ -2,28 +2,33 @@ using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 
 public interface IShipmentSrvice{
-    public Task<Shipment> CreateShipmentSrvice(CreateShipmentDto createShipmentDto);
+    public Task<Shipment> CreateShipmentSrvice();
     public Task<bool> DeleteShipmentSrvice(Guid id);
     public Task<PaginatedResult<Shipment>> GetAllShipmentsService(QueryParameters queryParameters);
     public Task<ShipmentDto> GetShipmentByIdService(Guid id);
     public Task<ShipmentDto> UpdateShipmentSrvice(Guid id, UpdateShipmentDto updateShipmentDto);
 }
 public class ShipmentService : IShipmentSrvice{
-    AppDbContext _appDbContext;
-    IMapper _mapper;
-    public ShipmentService(AppDbContext appDbContext, IMapper mapper){
+    readonly AppDbContext _appDbContext;
+    readonly IMapper _mapper;
+    public ShipmentService(AppDbContext appDbContext, IMapper mapper)
+    {
         _appDbContext = appDbContext;
         _mapper = mapper;
     }
-    public async Task<Shipment> CreateShipmentSrvice(CreateShipmentDto createShipmentDto){
-        try{
-        if(createShipmentDto == null) return null;
-
+    public async Task<Shipment> CreateShipmentSrvice(){
+        CreateShipmentDto createShipmentDto = new CreateShipmentDto();
+        try
+        {
         var mapShipment = _mapper.Map<Shipment>(createShipmentDto);
+
+        // Order order = new Order();
+        // await _appDbContext.Shipments.Include(o => o.Order).FirstOrDefaultAsync(mapShipment.OrderId == order.OrderId);
         mapShipment.ShipmentStatus = ShipmentStatus.OnProgress;
+
         await _appDbContext.Shipments.AddAsync(mapShipment);
         await _appDbContext.SaveChangesAsync();
-        return mapShipment;
+            return mapShipment;
         }catch (Exception ex){
             throw new ApplicationException($"Error in create shipment service: {ex.Message}");
         }

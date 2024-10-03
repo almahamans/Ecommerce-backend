@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 [ApiController, Route("/api/v1/shipments")]
@@ -7,25 +8,25 @@ public class ShipmentController : ControllerBase{
         _ishipmentSrvice = ishipmentSrvice;
     }
     [HttpPost]
-    public async Task<IActionResult> CrerateShipment(CreateShipmentDto createShipmentDto){
+    public async Task<IActionResult> CrerateShipment(){
         if (!ModelState.IsValid){
             return ApiResponse.BadRequest();
         }
         try{
-        var newShipment = await _ishipmentSrvice.CreateShipmentSrvice(createShipmentDto);
+        var newShipment = await _ishipmentSrvice.CreateShipmentSrvice();
         return ApiResponse.Created(newShipment, "A new shipment created");
         }catch(Exception ex){
             return ApiResponse.NotFound($"Error in create shipment controller: {ex.Message}");
         }
     }
     [HttpGet]
-    public async Task<IActionResult> GetAllShipments(){
+    public async Task<IActionResult> GetAllShipments([FromQuery] QueryParameters queryParameters)
+    {
         if (!ModelState.IsValid){
             return ApiResponse.BadRequest();
         }
         try{
-        var shipments = await _ishipmentSrvice.GetAllShipmentsService();
-        if(shipments.Count() < 0) return ApiResponse.NotFound("Shipping list is empty");
+        var shipments = await _ishipmentSrvice.GetAllShipmentsService(queryParameters);
         return ApiResponse.Success(shipments);
         }catch(Exception ex){
             return ApiResponse.NotFound($"Error in Getting shipments controller: {ex.Message}");
@@ -55,6 +56,7 @@ public class ShipmentController : ControllerBase{
             return ApiResponse.NotFound($"Error in finding a shipment controller: {ex.Message}");
         }
     }
+    [Authorize("Admin")]
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> UpdateShipmentInfo(Guid id, UpdateShipmentDto updateShipmentDto){
         if (!ModelState.IsValid){
@@ -64,7 +66,7 @@ public class ShipmentController : ControllerBase{
             var shipment = await _ishipmentSrvice.UpdateShipmentSrvice(id, updateShipmentDto);
             return Ok(shipment);
         }catch (Exception ex){
-            return ApiResponse.NotFound($"Not entered data. {ex.Message}");
+            return ApiResponse.NotFound($"No entered data. {ex.Message}");
         }
     }
 }

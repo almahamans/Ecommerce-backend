@@ -28,27 +28,14 @@ namespace Backend.Migrations
                         .HasColumnType("uuid")
                         .HasDefaultValueSql("uuid_generate_v4()");
 
-<<<<<<< HEAD
-=======
-                    b.Property<string>("Image")
-                        .IsRequired()
-                        .HasColumnType("text");
-
->>>>>>> ba240eb6776a3abc5da6aff0200db6c7df1554e5
                     b.Property<DateTime>("OrderDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
-<<<<<<< HEAD
-=======
-                    b.Property<int>("OrderStatus")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("ShipmentId")
+                        .HasColumnType("uuid");
 
-                    b.Property<int>("Quantity")
-                        .HasColumnType("integer");
-
->>>>>>> ba240eb6776a3abc5da6aff0200db6c7df1554e5
                     b.Property<decimal>("TotalAmount")
                         .HasColumnType("numeric");
 
@@ -57,8 +44,6 @@ namespace Backend.Migrations
                     b.ToTable("Orders");
                 });
 
-<<<<<<< HEAD
-=======
             modelBuilder.Entity("Shipment", b =>
                 {
                     b.Property<Guid>("ShipmentId")
@@ -68,6 +53,9 @@ namespace Backend.Migrations
 
                     b.Property<DateTime>("DeliveryDate")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("OrderId")
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("ShipmentDate")
                         .ValueGeneratedOnAdd()
@@ -79,10 +67,12 @@ namespace Backend.Migrations
 
                     b.HasKey("ShipmentId");
 
+                    b.HasIndex("OrderId")
+                        .IsUnique();
+
                     b.ToTable("Shipments");
                 });
 
->>>>>>> ba240eb6776a3abc5da6aff0200db6c7df1554e5
             modelBuilder.Entity("User", b =>
                 {
                     b.Property<Guid>("UserId")
@@ -100,12 +90,9 @@ namespace Backend.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
-<<<<<<< HEAD
                     b.Property<string>("Image")
                         .HasColumnType("text");
 
-=======
->>>>>>> ba240eb6776a3abc5da6aff0200db6c7df1554e5
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("text");
@@ -128,6 +115,23 @@ namespace Backend.Migrations
                         .IsUnique();
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("Shipment", b =>
+                {
+                    b.HasOne("Order", "Order")
+                        .WithOne("Shipment")
+                        .HasForeignKey("Shipment", "OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
+                });
+
+            modelBuilder.Entity("Order", b =>
+                {
+                    b.Navigation("Shipment")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

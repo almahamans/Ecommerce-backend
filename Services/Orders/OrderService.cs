@@ -11,6 +11,7 @@ public interface IOrderService{
 public class OrderService : IOrderService{
     readonly AppDbContext _appDbContext;
     readonly IMapper _mapper;
+   
     public OrderService(AppDbContext appDbContext, IMapper mapper){
         _appDbContext = appDbContext;
         _mapper = mapper;
@@ -20,10 +21,23 @@ public class OrderService : IOrderService{
         if(createOrderDto == null){
             return null;
         }else{
+            Shipment shipment = new Shipment();
+               
+            // when you create an order 
+            // create one object instance of Shipment 
+            // then assign the order id into the shipment.OrderId
+            await _appDbContext.Orders.Include(s => s.Shipment).FirstOrDefaultAsync(o => o.OrderId == shipment.OrderId);
+            
             var order =  _mapper.Map<Order>(createOrderDto);
+            var ordershipment = order.Shipment.ShipmentId; 
+            order.ShipmentId = ordershipment;
+            _mapper.Map<Order> order.Shipment.ShipmentStatus;
             await _appDbContext.Orders.AddAsync(order);
             await _appDbContext.SaveChangesAsync();
-            return order;  
+            // var odrerStatus = order.Shipment.ShipmentStatus;
+            // var maporderstatus = _mapper.Map<Order>(odrerStatus);
+            // Console.WriteLine($"--------------------------{maporderstatus}");
+            return  order;  
         }
         }catch (Exception ex){
             throw new ApplicationException($"Error in create order service: {ex.Message}");
@@ -39,7 +53,8 @@ public class OrderService : IOrderService{
             await _appDbContext.SaveChangesAsync();
             return true;  
         }
-        }catch (Exception ex){
+        }
+        catch (Exception ex){
             throw new ApplicationException($"Error in delete order service: {ex.Message}");
         }
     }
@@ -63,8 +78,13 @@ public class OrderService : IOrderService{
             Console.WriteLine("There is no orders");
             return null;
         }
-        var orders = await query.Skip((queryParameters.PageNumber - 1) * queryParameters.PageSize).Take(queryParameters.PageSize).ToListAsync(); 
-        return new PaginatedResult<Order>
+        var orders = await query.Skip((queryParameters.PageNumber - 1) * queryParameters.PageSize).Take(queryParameters.PageSize).ToListAsync();
+        // orders = _mapper.Map<List<Order>>(query.Select(s => s.Shipment.ShipmentStatus).ToList());
+        // var shipmentStat = _appDbContext.Shipments.Select(x => x.shipmentId != null && _appDbContext.Orders.FirstOrDefaultAsync(x => x.ShipmentId != null)).ShipmentStatus;
+        // var shipmentOfOrder = orders.Find(x => x.OrderId == shipmentId);
+        // var shipmentOfOrder = await _appDbContext.Orders.Include(o => o.Shipment).FirstOrDefaultAsync(x => x.OrderId == );
+            
+            return new PaginatedResult<Order>
         {
             Items = orders,
             TotalCount = NumOforders,

@@ -1,9 +1,11 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
  
-[ApiController, Route("/api/v1/orders")]
+[ApiController, Route("api/v1/orders")]
 public class OrderController : ControllerBase{
     readonly IOrderService _iorderService;
-    public OrderController(IOrderService iorderService){
+    public OrderController(IOrderService iorderService )
+    {
         _iorderService = iorderService;
     }
     [HttpPost]
@@ -52,6 +54,7 @@ public class OrderController : ControllerBase{
             return ApiResponse.NotFound($"error in deleting order (controller).{ex.Message}");
         }
     }
+    [Authorize("Admin")]
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> UpdateOrderById(Guid id, [FromBody] UpdateOrderDto updateOrderDto){
         if (id == null){

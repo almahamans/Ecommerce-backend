@@ -1,4 +1,7 @@
-public enum ShipmentStatus{
+using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
+public enum ShipmentStatus
+{
     Pending,
     Shipped,
     Delivered,
@@ -7,8 +10,15 @@ public enum ShipmentStatus{
     OnProgress
 }
 public class Shipment{
-public required Guid ShipmentId {get; set;}
-public ShipmentStatus ShipmentStatus { get; set; }
-public DateTime ShipmentDate {get; set;} 
-public DateTime DeliveryDate {get; set;} 
+    [Required]
+    public Guid ShipmentId { get; set; }
+    public ShipmentStatus ShipmentStatus { get; set; }
+    public DateTime ShipmentDate { get; set; }
+    public DateTime DeliveryDate { get; set; }
+ //not really important
+    public Guid OrderId { get; set; }
+    [JsonIgnore]
+    public Order Order { get; set; }
+    
+    
 }

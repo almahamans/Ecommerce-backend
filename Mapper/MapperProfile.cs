@@ -12,6 +12,9 @@ public class MappingProfile : Profile
         CreateMap<CreateOrderDto, Order>();
         CreateMap<UpdateOrderDto, OrderDto>();
 
+        CreateMap<ShipmentStatus, Order>().ReverseMap();
+        CreateMap<Shipment, Order>().ReverseMap();
+
         CreateMap<CreateShipmentDto, Shipment>();
         CreateMap<UpdateShipmentDto, ShipmentDto>();
         CreateMap<Shipment, ShipmentDto>().ReverseMap();
