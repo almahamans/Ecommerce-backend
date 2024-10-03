@@ -7,37 +7,56 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper.Configuration.Annotations;
 
-public class ProductService
+public class CategoryService
 {
 
     private readonly AppDbContext _appDbContext;
     private readonly IMapper _mapper;
 
-    public ProductService(AppDbContext appDbContext, IMapper mapper)
+    public CategoryService(AppDbContext appDbContext, IMapper mapper)
     {
         _appDbContext = appDbContext;
         _mapper = mapper;
     }
 
-    // create product service
-    public async Task<ProductDto> CreateProductServiceAsync(CreateProductDto newProduct)
+    // create category service
+    public async Task<Category> CreateCategoryServiceAsync(CreateCategoryDto newCategory)
     {
 
         Console.WriteLine($"-------Test1----------");
 
         try
         {
-            var slug = newProduct.ProductName.Replace(" ", "-");
-            newProduct.Slug = slug;
-            var product = _mapper.Map<Product>(newProduct);
-            Console.WriteLine($"-------Test2----------");
-            await _appDbContext.Products.AddAsync(product);
-            Console.WriteLine($"-------Test3----------");
+
+            var slug = newCategory.CategoryName.Replace(" ", "-");
+            newCategory.Slug = slug;
+            var category = _mapper.Map<Category>(newCategory);
+            await _appDbContext.AddAsync(category);
             await _appDbContext.SaveChangesAsync();
-            Console.WriteLine($"-------Test4----------");
-            //revearce the produc befot returnng it
-            var productData = _mapper.Map<ProductDto>(product);
-            return productData;
+            return category;
+        }
+        catch (DbUpdateException dbEx)
+        {
+            // Handle database update exceptions (like unique constraint violations)
+            Console.WriteLine($"Database Update Error: {dbEx.Message}");
+            throw new ApplicationException("An error occurred while saving to the database. Please check the data and try again.");
+        }
+        catch (Exception ex)
+        {
+            // Handle any other unexpected exceptions
+            Console.WriteLine($"An unexpected error occurred: {ex.Message}");
+            throw new ApplicationException("An unexpected error occurred. Please try again later.");
+        }
+
+    }
+    public async Task<List<CategoryDto>> GetCategoryServiceAsync()
+    {
+        try
+        {
+
+            var categories = await _appDbContext.Categories.ToListAsync();
+            var categoriesData = _mapper.Map<List<CategoryDto>>(categories);
+            return categoriesData;
         }
         catch (DbUpdateException dbEx)
         {
@@ -54,43 +73,17 @@ public class ProductService
 
     }
 
-    // get products and the category associated with it
-    public async Task<List<ProductDto>> GetProductsServiceAsync()
+    public async Task<CategoryDto> GetCategoryByIdServiceAsync(Guid categoryId)
     {
         try
         {
-            //get the producs from the db
-            var products = await _appDbContext.Products.Include(p => p.Category).ToListAsync();
-            // convert products to productDto
-            var productsData = _mapper.Map<List<ProductDto>>(products);
-            return productsData;
-        }
-        catch (DbUpdateException dbEx)
-        {
-            // Handle database update exceptions (like unique constraint violations)
-            Console.WriteLine($"Database Update Error: {dbEx.Message}");
-            throw new ApplicationException("An error occurred while saving to the database. Please check the data and try again.");
-        }
-        catch (Exception ex)
-        {
-            // Handle any other unexpected exceptions
-            Console.WriteLine($"An unexpected error occurred: {ex.Message}");
-            throw new ApplicationException("An unexpected error occurred. Please try again later.");
-        }
-
-    }
-
-    public async Task<ProductDto?> GetProductByIdServiceAsync(Guid productId)
-    {
-        try
-        {
-            var product = await _appDbContext.Products.FindAsync(productId);
-            if (product == null)
+            var category = await _appDbContext.Categories.FindAsync(categoryId);
+            if (category == null)
             {
                 return null;
             }
-            var productDate = _mapper.Map<ProductDto>(product);
-            return productDate;
+            var categoryDate = _mapper.Map<CategoryDto>(category);
+            return categoryDate;
         }
         catch (Exception ex)
         {
@@ -102,26 +95,29 @@ public class ProductService
 
     }
 
-    public async Task<ProductDto?> UpdateProductServiceAsync(UpdateProductDto updateProduct, Guid productId)
+    public async Task<CategoryDto?> UpdateCategoryServiceAsync(UpdateCategoryDto updateCategory, Guid categoryId)
     {
         try
         {
-            var product = await _appDbContext.Products.FindAsync(productId);
-            if (product == null)
+            Console.WriteLine($"---test1----");
+            var category = await _appDbContext.Categories.FindAsync(categoryId);
+            if (category == null)
             {
-                return null;
+                return null; // Category not found
             }
 
-            product.ProductName = updateProduct.ProductName ?? product.ProductName;
-            product.Price = updateProduct.Price ?? product.Price;
-            product.Description = updateProduct.Description ?? product.Description;
-            product.Quantity = updateProduct.Quantity ?? product.Quantity;
-            product.Image = updateProduct.Image ?? product.Image;
+            Console.WriteLine($"---test2----");
+            category.CategoryName = updateCategory.CategoryName ?? category.CategoryName;
+
             Console.WriteLine($"---test3----");
-            _appDbContext.Update(product);
+            _appDbContext.Update(category);
+
+            Console.WriteLine($"---test4----");
             await _appDbContext.SaveChangesAsync();
-            var productDate = _mapper.Map<ProductDto>(product);
-            return productDate;
+
+            Console.WriteLine($"---test5----");
+            var categoryData = _mapper.Map<CategoryDto>(category);
+            return categoryData;
         }
         catch (Exception ex)
         {
@@ -134,19 +130,20 @@ public class ProductService
     }
 
 
-public async Task<bool> DeleteProductByIdServiceAsync(Guid productId){
+    public async Task<bool> DeleteCategoryByIdServiceAsync(Guid categoryId)
+    {
 
- try
+        try
         {
-         var product = await _appDbContext.Products.FindAsync(productId);
-            if (product  == null)
+            var category = await _appDbContext.Categories.FindAsync(categoryId);
+            if (category == null)
             {
                 return false;
             }
-           _appDbContext.Products.Remove(product);
+            _appDbContext.Categories.Remove(category);
             await _appDbContext.SaveChangesAsync();
             return true;
-           
+
         }
         catch (DbUpdateException dbEx)
         {
@@ -163,6 +160,5 @@ public async Task<bool> DeleteProductByIdServiceAsync(Guid productId){
 
 
 
-}
-  
+    }
 }

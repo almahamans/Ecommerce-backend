@@ -2,8 +2,9 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
-builder.Services.AddScoped<UserService>();
-builder.Services.AddScoped<OrderService>();
+
+builder.Services.AddScoped<ProductService>();
+builder.Services.AddScoped<CategoryService>();
 
 
 builder.Services.AddEndpointsApiExplorer();
@@ -15,6 +16,10 @@ options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")
 
 var app = builder.Build();
 
+//must be in order
+app.UseAuthentication();
+app.UseAuthentication();
+app.UseSwagger();
 app.UseHttpsRedirection();
 app.MapControllers();
 app.Run();

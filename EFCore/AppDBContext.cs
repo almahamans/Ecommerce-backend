@@ -1,50 +1,55 @@
-using Microsoft.AspNetCore.Identity;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
+
+// must download the packages/dependincy needed to use the Dbcontext
 public class AppDbContext : DbContext
 {
 
   public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
   { }
-  public DbSet<User> Users { get; set; }
 
+  // database set = table
+  public DbSet<Product> Products { get; set; }
+  public DbSet<Category> Categories { get; set; }
 
-
-  public DbSet<Order> Orders { get; set; }
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
-    modelBuilder.Entity<User>(entity =>
-    {
-      entity.HasKey(u => u.UserId);
-      entity.Property(u => u.UserId).HasDefaultValueSql("uuid_generate_v4()");
-      entity.HasKey(a => a.AddressId);
-      entity.Property(a => a.AddressId).HasDefaultValueSql("uuid_generate_v4()");
-      entity.Property(u => u.UserName).IsRequired().HasMaxLength(100);
-      entity.Property(u => u.Email).IsRequired().HasMaxLength(100);
-      entity.HasIndex(u => u.Email).IsUnique();
-      entity.Property(u => u.Password).IsRequired();
-      entity.Property(u => u.Role);
-      entity.Property(u => u.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
-    });
 
 
 
+    // define the constraints and keys
+    modelBuilder.Entity<Product>(entity =>
+   {
+     entity.HasKey(p => p.ProductId);
+     entity.Property(p => p.ProductId).HasDefaultValueSql("uuid_generate_v4()");
+     entity.Property(p => p.ProductName).IsRequired().HasMaxLength(100);
+     entity.Property(p => p.Description).IsRequired().HasMaxLength(100);
+     entity.Property(p => p.Price).IsRequired();
+     entity.Property(p => p.Quantity).IsRequired();
+     entity.Property(p => p.Image).IsRequired();
+     entity.Property(p => p.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
 
 
+   });
+    modelBuilder.Entity<Category>(entity =>
+{
+  entity.HasKey(category => category.CategoryId);
+  entity.Property(c => c.CategoryId).HasDefaultValueSql("uuid_generate_v4()");
+  entity.Property(c => c.CategoryName).IsRequired().HasMaxLength(100);
+  entity.HasIndex(c => c.CategoryName).IsUnique();
+});
 
-
-
-
-
-
-    modelBuilder.Entity<Order>(attribut =>
-    {
-      attribut.HasKey(u => u.OrderId);
-      attribut.Property(u => u.OrderId).HasDefaultValueSql("uuid_generate_v4()");
-      attribut.Property(u => u.Image);
-      attribut.Property(u => u.OrderStatus);
-      attribut.Property(u => u.TotalAmount).IsRequired();
-      attribut.Property(u => u.OrderDate).HasDefaultValueSql("CURRENT_TIMESTAMP");
-    });
+    modelBuilder.Entity<Category>()
+               .HasMany(c => c.Products)
+               //This means that every product belongs to a single category.
+               .WithOne(p => p.Category)
+               //CategoryId property in the Product entity 
+               .HasForeignKey(p => p.CategoryId)
+               .OnDelete(DeleteBehavior.Cascade);
   }
+
 }
