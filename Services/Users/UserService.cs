@@ -148,7 +148,7 @@ public class UserService : IUserService
 
         try
         {
-            var users = await _appDbContext.Users.ToListAsync();
+            var users = await _appDbContext.Users.Include(u => u.Addresses).ToListAsync();
             return users;
         }
         catch (DbUpdateException dbEx)
@@ -168,7 +168,7 @@ public class UserService : IUserService
         try
         {
 
-            var user = await _appDbContext.Users.FindAsync(userId);
+            var user = await _appDbContext.Users.Include(u => u.Addresses).FirstOrDefaultAsync(u => u.UserId == userId);
             var userData = _mapper.Map<UserDto>(user);
             return userData;
         }
@@ -221,6 +221,12 @@ public class UserService : IUserService
         try
         {
             var user = await _appDbContext.Users.FindAsync(userId);
+
+            if (user == null)
+            {
+                return null;
+
+            }
 
             user.UserName = updateUser.UserName ?? user.UserName;
             user.Password = updateUser.Password ?? user.Password;

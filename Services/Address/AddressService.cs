@@ -6,13 +6,13 @@ using Microsoft.EntityFrameworkCore;
 //changeg pass - db - watch
 public interface IAddressService
 {
-public Task<PaginatedResult<Address>> GetAddressesSearchByServiceAsync(QueryParameters queryParameters);
+    public Task<PaginatedResult<Address>> GetAddressesSearchByServiceAsync(QueryParameters queryParameters);
 
     public Task<PaginatedResult<Address>> GetAddressesPaginationServiceAsync(int pageNumber, int pageSize);
     public Task<List<Address>> GetAddressesServiceAsync();
     public Task<AddressDto> GetAddressByIdServiceAsync(Guid addressId);
- public Task<AddressDto> CreateAddressServiceAsync(CreateAddressDto newAddress);
- public Task<AddressDto> UpdateAddressByIdServiceAsync(Guid addressId, UpdateAddressDto updateAddress);
+    public Task<AddressDto> CreateAddressServiceAsync(CreateAddressDto newAddress);
+    public Task<AddressDto> UpdateAddressByIdServiceAsync(Guid addressId, UpdateAddressDto updateAddress);
     public Task<bool> DeleteAddressByIdServiceAsync(Guid addressId);
 }
 public class AddressService : IAddressService
@@ -39,10 +39,11 @@ public class AddressService : IAddressService
                 query = query.Where(a => a.City.ToLower().Contains(lowerCaseSearchTerm));
             }
 
-            if (queryParameters.SortBy?.ToLower()== "city"){
-            query = queryParameters.SortOrder.ToLower() == "desc"
-                        ? query.OrderByDescending(u => u.City)
-                        : query.OrderBy(u => u.City);
+            if (queryParameters.SortBy?.ToLower() == "city")
+            {
+                query = queryParameters.SortOrder.ToLower() == "desc"
+                            ? query.OrderByDescending(u => u.City)
+                            : query.OrderBy(u => u.City);
             }
 
             var totalCount = await query.CountAsync();
@@ -53,7 +54,7 @@ public class AddressService : IAddressService
             var addresses = await query
                 .Skip((queryParameters.PageNumber - 1) * queryParameters.PageSize)
                 .Take(queryParameters.PageSize)
-                .ToListAsync(); 
+                .ToListAsync();
 
             return new PaginatedResult<Address>
             {
@@ -125,8 +126,7 @@ public class AddressService : IAddressService
     {
         try
         {
-
-            var address = await _appDbContext.Addresses.FindAsync(addressId);
+            var address = await _appDbContext.Addresses.FirstOrDefaultAsync(a => a.AddresId == addressId);
             var addressData = _mapper.Map<AddressDto>(address);
             return addressData;
         }
@@ -146,10 +146,15 @@ public class AddressService : IAddressService
         try
         {
             Console.WriteLine($"----------ser---------------");
-            
-           
-            var address = _mapper.Map<Address>(newAddress);
 
+            var user = await _appDbContext.Users.FindAsync(newAddress.UserId);
+            if (user == null || string.IsNullOrEmpty(user.UserName))
+            {
+                throw new ApplicationException($"User with ID {newAddress.UserId} does not exist or does not have a valid UserName.");
+            }
+
+            var address = _mapper.Map<Address>(newAddress);
+            address.UserId = newAddress.UserId;
             await _appDbContext.Addresses.AddAsync(address);
 
             await _appDbContext.SaveChangesAsync();
@@ -180,9 +185,13 @@ public class AddressService : IAddressService
         {
             var address = await _appDbContext.Addresses.FindAsync(addressId);
 
-            address.City = updateAddress.City ??  address.City;
-           address.Neighberhood = updateAddress.Neighberhood ??  address.Neighberhood;
-            address.Street = updateAddress.Street ??  address.Street;
+            if (address == null)
+            {
+                return null;
+            }
+            address.City = updateAddress.City ?? address.City;
+            address.Neighberhood = updateAddress.Neighberhood ?? address.Neighberhood;
+            address.Street = updateAddress.Street ?? address.Street;
 
             _appDbContext.Update(address);
             await _appDbContext.SaveChangesAsync();

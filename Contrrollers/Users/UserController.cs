@@ -16,7 +16,7 @@ public class UserController : ControllerBase
 
     }
 
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
     [HttpPut("create-admin/{userId}")]
     public async Task<IActionResult> UpdateToAdmin(Guid userId)
     {
@@ -29,7 +29,7 @@ public class UserController : ControllerBase
     }
 
     // GET => /api/users => Get all the users
-
+    [Authorize(Roles = "Admin")]
     [HttpGet("Searching")]
     public async Task<IActionResult> GetUsers([FromQuery] QueryParameters queryParameters)
     {
@@ -49,6 +49,7 @@ public class UserController : ControllerBase
         }
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpGet("paginated")]
     public async Task<IActionResult> GetUsers([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 5)
     {
@@ -93,7 +94,7 @@ public class UserController : ControllerBase
     //     }
     // }
 
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
     [HttpGet]
     public async Task<IActionResult> GetUsers()
     {
@@ -138,11 +139,16 @@ public class UserController : ControllerBase
             return ApiResponse.BadRequest("Invalid User Data");
         }
         var user = await _userService.UpdateUserByIdServiceAsync(userId, updateUserDto);
+        if (user == null)
+        {
+            return ApiResponse.BadRequest($" User with this {userId} does not exist");
+
+        }
         return ApiResponse.Success(user, "User is Updated succesfully");
 
     }
-    
-    [Authorize(Roles = "Customer")]
+
+    [Authorize(Roles = "Admin")]
     [HttpDelete("{userId}")]
     public async Task<IActionResult> DeleteUser(Guid userId)
     {

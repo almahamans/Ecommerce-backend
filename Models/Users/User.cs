@@ -16,9 +16,7 @@ public class User
     public string Phone { get; set; } = string.Empty;
     public string? Image { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-   //  public Guid AddressId { get; set; }
 
-   // [JsonIgnore]
-   //    public List<Address> Addresses { get; set; } = new List<Address>();
+    public List<Address> Addresses { get; set; } 
 
 }

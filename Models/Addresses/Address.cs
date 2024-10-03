@@ -10,10 +10,8 @@ public class Address
     public string Neighberhood { get; set; }
     public string Street { get; set; }
 
-    //req
-  //  public Guid UserId  { get; set; }
+   public Guid UserId  { get; set; }
 
-  //   [JsonIgnore]
- //   public User User { get; set; } = new User();
+   public User User { get; set; } 
 
 }

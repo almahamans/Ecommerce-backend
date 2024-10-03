@@ -4,10 +4,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddControllers();
-builder.Services.AddScoped<IUserService,UserService>();
+builder.Services.AddControllers().AddNewtonsoftJson(options =>
+    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+);
+builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<OrderService>();
-builder.Services.AddScoped<IAddressService,AddressService>();
+builder.Services.AddScoped<IAddressService, AddressService>();
 builder.Services.AddScoped<AuthService>();
 
 

@@ -45,11 +45,11 @@ public class AppDbContext : DbContext
       attribut.Property(a => a.Street).HasMaxLength(500);
     });
 
-//     modelBuilder.Entity<User>()
-// .HasMany(u => u.Addresses)
-// .WithOne(a => a.User)
-// .HasForeignKey(a => a.UserId)
-// .OnDelete(DeleteBehavior.Cascade);
+    modelBuilder.Entity<User>()
+.HasMany(u => u.Addresses)
+.WithOne(a => a.User)
+.HasForeignKey(a => a.UserId)
+.OnDelete(DeleteBehavior.Cascade);
 
   }
 }

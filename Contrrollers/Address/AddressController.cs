@@ -1,5 +1,6 @@
 
 using System.Text;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,6 +14,7 @@ public class AddressController : ControllerBase
         _addressService = addressService;
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpGet("Searching")]
     public async Task<IActionResult> GetAddresses([FromQuery] QueryParameters queryParameters)
     {
@@ -37,6 +39,7 @@ public class AddressController : ControllerBase
         }
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpGet("paginated")]
     public async Task<IActionResult> GetAddress([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 5)
     {
@@ -55,10 +58,13 @@ public class AddressController : ControllerBase
             return ApiResponse.ServerError("An unexpected error occurred.");
         }
     }
-
+    //customer have to be loged in to create an address
+    [Authorize(Roles = "Customer")]
     [HttpPost]
     public async Task<IActionResult> CreateAddress([FromBody] CreateAddressDto newAddress)
     {
+        Console.WriteLine($"-----cont----------------");
+
 
         try
         {
@@ -80,7 +86,7 @@ public class AddressController : ControllerBase
             return ApiResponse.ServerError("Server error: " + ex.Message);
         }
     }
-
+    [Authorize(Roles = "Admin")]
     [HttpGet]
     public async Task<IActionResult> GetAddresses()
     {
@@ -104,6 +110,7 @@ public class AddressController : ControllerBase
         }
     }
 
+    [Authorize(Roles = "Admin,Customer")]
     [HttpGet("{addressId}")]
     public async Task<IActionResult> GetAddress(Guid addressId)
     {
@@ -114,7 +121,7 @@ public class AddressController : ControllerBase
         }
         return ApiResponse.Success(address, "Address is returned succesfully");
     }
-
+    [Authorize(Roles = "Customer")]
     [HttpPut("{addressId}")]
     public async Task<IActionResult> UpdateAddress(Guid addressId, [FromBody] UpdateAddressDto updateAddressDto)
     {
@@ -122,10 +129,17 @@ public class AddressController : ControllerBase
         {
             return ApiResponse.BadRequest("Invalid Adress Data");
         }
+
         var address = await _addressService.UpdateAddressByIdServiceAsync(addressId, updateAddressDto);
+        if (address == null)
+        {
+            return ApiResponse.BadRequest(" address nout found");
+
+        }
         return ApiResponse.Success(address, "address is Updated succesfully");
 
     }
+    [Authorize(Roles = "Customer")]
     [HttpDelete("{addressId}")]
 
     public async Task<IActionResult> DeleteAddress(Guid addressId)
