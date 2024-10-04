@@ -24,7 +24,7 @@ public class AppDbContext : DbContext
 });
 
 
-    modelBuilder.Entity<Order>(attribut =>
+  modelBuilder.Entity<Order>(attribut =>
     {
       attribut.HasKey(u => u.OrderId);
       attribut.Property(u => u.OrderId).HasDefaultValueSql("uuid_generate_v4()");
@@ -33,6 +33,13 @@ public class AppDbContext : DbContext
       attribut.Property(u => u.TotalAmount).IsRequired();
       attribut.Property(u => u.OrderDate).HasDefaultValueSql("CURRENT_TIMESTAMP");
     });
+
+    modelBuilder.Entity<OrderProduct>(attribut =>
+  {
+    attribut.Property(op => op.ProductQuantity);
+    attribut.Property(op => op.ProductsPrice);
+  });
+
   }
 }
 
