@@ -6,7 +6,7 @@ public interface IOrderService{
     public Task<bool> DeleteOrderSrvice(Guid id);
     public Task<PaginatedResult<Order>> GetAllOrdersService(QueryParameters queryParameters);
     public Task<OrderDto> GetOrderByIdService(Guid id);
-    public Task<OrderDto> UpdateOrderStatusSrvice(Guid id, UpdateOrderDto updateOrderDto);
+    public Task<OrderDto> UpdateOrderSrvice(Guid id, UpdateOrderDto updateOrderDto);
 } 
 public class OrderService : IOrderService{
     readonly AppDbContext _appDbContext;
@@ -21,23 +21,20 @@ public class OrderService : IOrderService{
         if(createOrderDto == null){
             return null;
         }else{
-            Shipment shipment = new Shipment();
-               
-            // when you create an order 
-            // create one object instance of Shipment 
-            // then assign the order id into the shipment.OrderId
-            await _appDbContext.Orders.Include(s => s.Shipment).FirstOrDefaultAsync(o => o.OrderId == shipment.OrderId);
-            
-            var order =  _mapper.Map<Order>(createOrderDto);
-            var ordershipment = order.Shipment.ShipmentId; 
-            order.ShipmentId = ordershipment;
-            _mapper.Map<Order> order.Shipment.ShipmentStatus;
-            await _appDbContext.Orders.AddAsync(order);
+            var newOrder = _mapper.Map<Order>(createOrderDto);
+            await _appDbContext.Orders.AddAsync(newOrder);
             await _appDbContext.SaveChangesAsync();
-            // var odrerStatus = order.Shipment.ShipmentStatus;
-            // var maporderstatus = _mapper.Map<Order>(odrerStatus);
-            // Console.WriteLine($"--------------------------{maporderstatus}");
-            return  order;  
+            
+            var newShipment = new Shipment{
+                ShipmentStatus = ShipmentStatus.OnProgress,
+                OrderId = newOrder.OrderId,
+                Order = newOrder
+            };
+            await _appDbContext.Shipments.AddAsync(newShipment);
+            await _appDbContext.SaveChangesAsync();
+
+            newOrder.ShipmentId = newShipment.ShipmentId;
+                return newOrder;  
         }
         }catch (Exception ex){
             throw new ApplicationException($"Error in create order service: {ex.Message}");
@@ -60,7 +57,7 @@ public class OrderService : IOrderService{
     }
     public async Task<PaginatedResult<Order>> GetAllOrdersService(QueryParameters queryParameters){
         try{
-            var query = _appDbContext.Orders.AsQueryable();
+            var query = _appDbContext.Orders.Include(o => o.Shipment).AsQueryable();
             switch (queryParameters.SortBy?.ToLower())
             {
                 case "OrderDate":
@@ -75,17 +72,15 @@ public class OrderService : IOrderService{
         if (queryParameters.PageNumber < 1) queryParameters.PageNumber = 1;
         if (queryParameters.PageSize < 1) queryParameters.PageSize = 5;
         if (NumOforders < 0){
-            Console.WriteLine("There is no orders");
             return null;
         }
         var orders = await query.Skip((queryParameters.PageNumber - 1) * queryParameters.PageSize).Take(queryParameters.PageSize).ToListAsync();
-        // orders = _mapper.Map<List<Order>>(query.Select(s => s.Shipment.ShipmentStatus).ToList());
-        // var shipmentStat = _appDbContext.Shipments.Select(x => x.shipmentId != null && _appDbContext.Orders.FirstOrDefaultAsync(x => x.ShipmentId != null)).ShipmentStatus;
-        // var shipmentOfOrder = orders.Find(x => x.OrderId == shipmentId);
-        // var shipmentOfOrder = await _appDbContext.Orders.Include(o => o.Shipment).FirstOrDefaultAsync(x => x.OrderId == );
-            
-            return new PaginatedResult<Order>
-        {
+        
+        foreach(var order in orders){
+                Console.WriteLine(order.Shipment.ShipmentStatus);
+        }
+
+        return new PaginatedResult<Order>{
             Items = orders,
             TotalCount = NumOforders,
             PageNumber = queryParameters.PageNumber,
@@ -101,12 +96,13 @@ public class OrderService : IOrderService{
         if (order == null){
             return null;
         }
+        var s = _mapper.Map<OrderDto>(order);
         return _mapper.Map<OrderDto>(order);
         }catch (Exception ex){
             throw new ApplicationException($"Error in getting an order by id service: {ex.Message}");
         }
     }
-    public async Task<OrderDto> UpdateOrderStatusSrvice(Guid id, UpdateOrderDto updateOrderDto){
+    public async Task<OrderDto> UpdateOrderSrvice(Guid id, UpdateOrderDto updateOrderDto){
         try{
         var order = await _appDbContext.Orders.FindAsync(id);
         

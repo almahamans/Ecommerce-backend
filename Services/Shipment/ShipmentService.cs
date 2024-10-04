@@ -98,8 +98,11 @@ public class ShipmentService : IShipmentSrvice{
 
         shipment.ShipmentDate = updateShipmentDto.ShipmentDate ?? shipment.ShipmentDate;
         shipment.DeliveryDate = updateShipmentDto.DeliveryDate ?? shipment.DeliveryDate;
+        shipment.ShipmentStatus = updateShipmentDto.ShipmentStatus ?? shipment.ShipmentStatus;
+
         _appDbContext.Shipments.Update(shipment);
         await _appDbContext.SaveChangesAsync();
+        
         var mappingShipment = _mapper.Map<ShipmentDto>(shipment);
         return mappingShipment;
         }catch (Exception ex){

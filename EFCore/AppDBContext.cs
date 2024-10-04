@@ -47,7 +47,8 @@ public class AppDbContext : DbContext
     modelBuilder.Entity<Order>()
     .HasOne(o => o.Shipment)
     .WithOne(s => s.Order)
-    .HasForeignKey<Shipment>(s => s.OrderId);
+    .HasForeignKey<Shipment>(s => s.OrderId)
+    .OnDelete(DeleteBehavior.Cascade);
   }
 }
 

@@ -11,8 +11,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Backend.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241002130943_megratioeinfjewi")]
-    partial class megratioeinfjewi
+    [Migration("20241004164626_ondelsesd")]
+    partial class ondelsesd
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

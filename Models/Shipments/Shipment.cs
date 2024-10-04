@@ -2,12 +2,12 @@ using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 public enum ShipmentStatus
 {
-    Pending,
-    Shipped,
-    Delivered,
-    Canceled,
-    Returned,
-    OnProgress
+    Pending = 5,
+    Shipped = 1,
+    Delivered = 2,
+    Canceled = 3,
+    Returned = 4,
+    OnProgress = 0
 }
 public class Shipment{
     [Required]

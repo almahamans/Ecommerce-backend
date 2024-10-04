@@ -56,7 +56,7 @@ public class ShipmentController : ControllerBase{
             return ApiResponse.NotFound($"Error in finding a shipment controller: {ex.Message}");
         }
     }
-    [Authorize("Admin")]
+    // [Authorize("Admin")]
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> UpdateShipmentInfo(Guid id, UpdateShipmentDto updateShipmentDto){
         if (!ModelState.IsValid){

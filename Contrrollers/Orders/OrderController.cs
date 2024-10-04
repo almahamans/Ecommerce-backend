@@ -54,14 +54,14 @@ public class OrderController : ControllerBase{
             return ApiResponse.NotFound($"error in deleting order (controller).{ex.Message}");
         }
     }
-    [Authorize("Admin")]
+    // [Authorize("Admin")]
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> UpdateOrderById(Guid id, [FromBody] UpdateOrderDto updateOrderDto){
         if (id == null){
             return ApiResponse.BadRequest("no id found");
         }
         try{
-            var order = await _iorderService.UpdateOrderStatusSrvice(id, updateOrderDto);
+            var order = await _iorderService.UpdateOrderSrvice(id, updateOrderDto);
             return Ok(order);  
         }catch (Exception ex){
             return ApiResponse.NotFound($"Not entered data. {ex.Message}");
