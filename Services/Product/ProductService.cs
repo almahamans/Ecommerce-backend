@@ -7,7 +7,15 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper.Configuration.Annotations;
 
-public class ProductService
+public interface IProductService
+{
+    Task<ProductDto> CreateProductServiceAsync(CreateProductDto newProduct);
+    Task<PagedResult<ProductDto>> GetProductsServiceAsync(int pageNumber, int pageSize);
+    Task<ProductDto?> GetProductByIdServiceAsync(Guid productId);
+    Task<ProductDto?> UpdateProductServiceAsync(UpdateProductDto updateProduct, Guid productId);
+    Task<bool> DeleteProductByIdServiceAsync(Guid productId);
+}
+public class ProductService : IProductService
 {
 
     private readonly AppDbContext _appDbContext;
@@ -55,15 +63,31 @@ public class ProductService
     }
 
     // get products and the category associated with it
-    public async Task<List<ProductDto>> GetProductsServiceAsync()
+    public async Task<PagedResult<ProductDto>> GetProductsServiceAsync(int pageNumber, int pageSize)
     {
         try
         {
-            //get the producs from the db
-            var products = await _appDbContext.Products.Include(p => p.Category).ToListAsync();
-            // convert products to productDto
+            // Get the total count of products
+            var totalProducts = await _appDbContext.Products.CountAsync();
+
+            // Get the products from the database, sorted by created date and paginated
+            var products = await _appDbContext.Products
+                .Include(p => p.Category) // Eager load the Category
+                .OrderByDescending(p => p.CreatedAt) // Sort by created date, descending
+                .Skip((pageNumber - 1) * pageSize) // Skip for pagination
+                .Take(pageSize) // Take the specified page size
+                .ToListAsync(); // Use ToListAsync for asynchronous operation
+
+            // Convert products to ProductDto
             var productsData = _mapper.Map<List<ProductDto>>(products);
-            return productsData;
+
+            return new PagedResult<ProductDto>
+            {
+                TotalCount = totalProducts,
+                PageSize = pageSize,
+                CurrentPage = pageNumber,
+                Items = productsData
+            };
         }
         catch (DbUpdateException dbEx)
         {
@@ -77,7 +101,6 @@ public class ProductService
             Console.WriteLine($"An unexpected error occurred: {ex.Message}");
             throw new ApplicationException("An unexpected error occurred. Please try again later.");
         }
-
     }
 
     public async Task<ProductDto?> GetProductByIdServiceAsync(Guid productId)
@@ -134,19 +157,20 @@ public class ProductService
     }
 
 
-public async Task<bool> DeleteProductByIdServiceAsync(Guid productId){
+    public async Task<bool> DeleteProductByIdServiceAsync(Guid productId)
+    {
 
- try
+        try
         {
-         var product = await _appDbContext.Products.FindAsync(productId);
-            if (product  == null)
+            var product = await _appDbContext.Products.FindAsync(productId);
+            if (product == null)
             {
                 return false;
             }
-           _appDbContext.Products.Remove(product);
+            _appDbContext.Products.Remove(product);
             await _appDbContext.SaveChangesAsync();
             return true;
-           
+
         }
         catch (DbUpdateException dbEx)
         {
@@ -163,6 +187,6 @@ public async Task<bool> DeleteProductByIdServiceAsync(Guid productId){
 
 
 
-}
-  
+    }
+
 }

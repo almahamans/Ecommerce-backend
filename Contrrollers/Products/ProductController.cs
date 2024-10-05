@@ -11,12 +11,14 @@ using Microsoft.AspNetCore.Mvc;
 public class ProductController : ControllerBase
 {
 
-    private readonly ProductService _productService;
+    private readonly IProductService _productService;
 
-    public ProductController(ProductService productService)
+    public ProductController(IProductService productService)
     {
         _productService = productService;
     }
+
+
 
     // create products
     [HttpPost]
@@ -43,11 +45,11 @@ public class ProductController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetProducts()
+    public async Task<IActionResult> GetProducts(int pageNumber = 1, int pageSize = 10)
     {
         try
         {
-            var products = await _productService.GetProductsServiceAsync();
+            var products = await _productService.GetProductsServiceAsync(pageNumber, pageSize);
 
             return ApiResponse.Success(products, "Products are returned succesfully");
         }

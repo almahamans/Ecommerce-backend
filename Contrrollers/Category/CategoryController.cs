@@ -5,9 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 public class CategoryController : ControllerBase
 {
 
-    private readonly CategoryService _categoryService;
+    private readonly ICategoryService _categoryService;
 
-    public CategoryController(CategoryService categoryService)
+    public CategoryController(ICategoryService categoryService)
     {
         _categoryService = categoryService;
     }
@@ -36,11 +36,11 @@ public class CategoryController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetCategories()
+    public async Task<IActionResult> GetCategories(int pageNumber = 1, int pageSize = 5)
     {
         try
         {
-            var categories = await _categoryService.GetCategoryServiceAsync();
+            var categories = await _categoryService.GetCategoriesAsync(pageNumber, pageSize);
             return ApiResponse.Success(categories, "Categories are returned succesfully");
         }
         catch (ApplicationException ex)
@@ -74,7 +74,7 @@ public class CategoryController : ControllerBase
             return ApiResponse.ServerError("Server error: " + ex.Message);
         }
     }
-   [HttpPut("{categoryId}")]
+    [HttpPut("{categoryId}")]
     public async Task<IActionResult> UpdateCategoryServiece(UpdateCategoryDto updateCategory, Guid categoryId)
     {
 
@@ -130,6 +130,24 @@ public class CategoryController : ControllerBase
             return ApiResponse.ServerError("Server error: " + ex.Message);
         }
 
+    }
+
+    [HttpGet("products")]
+    public async Task<IActionResult> GetCategoriesWithProducts(int pageNumber = 1, int pageSize = 10)
+    {
+        try
+        {
+            var pagedResult = await _categoryService.GetCategoriesWithProductsAsync(pageNumber, pageSize);
+            return Ok(ApiResponse.Success(pagedResult, "Categories with products returned successfully."));
+        }
+        catch (ApplicationException ex)
+        {
+            return StatusCode(500, ApiResponse.ServerError("Server error: " + ex.Message));
+        }
+        catch (System.Exception ex)
+        {
+            return StatusCode(500, ApiResponse.ServerError("Server error: " + ex.Message));
+        }
     }
 
 

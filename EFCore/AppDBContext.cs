@@ -44,10 +44,8 @@ public class AppDbContext : DbContext
 });
 
     modelBuilder.Entity<Category>()
-               .HasMany(c => c.Products)
-               //This means that every product belongs to a single category.
-               .WithOne(p => p.Category)
-               //CategoryId property in the Product entity 
+               .HasMany(c => c.Products) // many products has one category
+               .WithOne(p => p.Category)  //every product belongs to a single category.
                .HasForeignKey(p => p.CategoryId)
                .OnDelete(DeleteBehavior.Cascade);
   }

@@ -7,7 +7,18 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper.Configuration.Annotations;
 
-public class CategoryService
+
+public interface ICategoryService
+{
+    Task<Category> CreateCategoryServiceAsync(CreateCategoryDto newCategory);
+    Task<PagedResult<CategoryDto>> GetCategoriesAsync(int pageNumber, int pageSize);
+    Task<CategoryDto?> GetCategoryByIdServiceAsync(Guid categoryId);
+    Task<CategoryDto?> UpdateCategoryServiceAsync(UpdateCategoryDto updateCategory, Guid categoryId);
+    Task<bool> DeleteCategoryByIdServiceAsync(Guid categoryId);
+    Task<PagedResult<CategoryWithProductsDto>> GetCategoriesWithProductsAsync(int pageNumber, int pageSize);
+}
+
+public class CategoryService : ICategoryService
 {
 
     private readonly AppDbContext _appDbContext;
@@ -49,20 +60,27 @@ public class CategoryService
         }
 
     }
-    public async Task<List<CategoryDto>> GetCategoryServiceAsync()
+    public async Task<PagedResult<CategoryDto>> GetCategoriesAsync(int pageNumber, int pageSize)
     {
         try
         {
+            var totalCategories = await _appDbContext.Categories.CountAsync(); // Total count of categories
 
-            var categories = await _appDbContext.Categories.ToListAsync();
-            var categoriesData = _mapper.Map<List<CategoryDto>>(categories);
-            return categoriesData;
-        }
-        catch (DbUpdateException dbEx)
-        {
-            // Handle database update exceptions (like unique constraint violations)
-            Console.WriteLine($"Database Update Error: {dbEx.Message}");
-            throw new ApplicationException("An error occurred while saving to the database. Please check the data and try again.");
+            var categories = await _appDbContext.Categories
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize) // Take the number of records for the current page
+                .ToListAsync(); // Use ToListAsync for asynchronous operation
+
+            // Map to DTOs
+            var categoryDtos = _mapper.Map<List<CategoryDto>>(categories);
+
+            return new PagedResult<CategoryDto>
+            {
+                TotalCount = totalCategories,
+                PageSize = pageSize,
+                CurrentPage = pageNumber,
+                Items = categoryDtos
+            };
         }
         catch (Exception ex)
         {
@@ -73,7 +91,7 @@ public class CategoryService
 
     }
 
-    public async Task<CategoryDto> GetCategoryByIdServiceAsync(Guid categoryId)
+    public async Task<CategoryDto?> GetCategoryByIdServiceAsync(Guid categoryId)
     {
         try
         {
@@ -161,4 +179,27 @@ public class CategoryService
 
 
     }
+    public async Task<PagedResult<CategoryWithProductsDto>> GetCategoriesWithProductsAsync(int pageNumber, int pageSize)
+    {
+        var totalCategories = await _appDbContext.Categories.CountAsync(); // Total count of categories
+
+        var categories = await _appDbContext.Categories
+            .Include(c => c.Products) // Eager load products
+            .Skip((pageNumber - 1) * pageSize) // Skip for pagination
+            .Take(pageSize) // Take the number of records for the current page
+            .ToListAsync(); // Use ToListAsync for asynchronous operation
+
+        // Map to DTOs
+        var categoryWithProductsDtos = _mapper.Map<List<CategoryWithProductsDto>>(categories);
+
+        return new PagedResult<CategoryWithProductsDto>
+        {
+            TotalCount = totalCategories,
+            PageSize = pageSize,
+            CurrentPage = pageNumber,
+            Items = categoryWithProductsDtos
+        };
+    }
+
+
 }
