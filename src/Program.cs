@@ -9,17 +9,12 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllers();
 
-
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IShipmentSrvice, ShipmentService>();
-
-
-// Register your services
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 
-// Add AutoMapper
 builder.Services.AddAutoMapper(typeof(Program));
 
 // Configure Entity Framework Core with Npgsql
@@ -67,9 +62,3 @@ app.UseSwaggerUI(c =>
 
 app.MapControllers();
 app.Run();
-
-
-
-
-
-// shahad
