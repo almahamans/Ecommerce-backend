@@ -11,11 +11,11 @@ using AutoMapper.Configuration.Annotations;
 public interface ICategoryService
 {
     Task<Category> CreateCategoryServiceAsync(CreateCategoryDto newCategory);
-    Task<PagedResult<CategoryDto>> GetCategoriesAsync(int pageNumber, int pageSize);
+    Task<PaginatedResult<CategoryDto>> GetCategoriesAsync(QueryParameters queryParameters);
     Task<CategoryDto?> GetCategoryByIdServiceAsync(Guid categoryId);
     Task<CategoryDto?> UpdateCategoryServiceAsync(UpdateCategoryDto updateCategory, Guid categoryId);
     Task<bool> DeleteCategoryByIdServiceAsync(Guid categoryId);
-    Task<PagedResult<CategoryWithProductsDto>> GetCategoriesWithProductsAsync(int pageNumber, int pageSize);
+    Task<PaginatedResult<CategoryWithProductsDto>> GetCategoriesWithProductsAsync(int pageNumber, int pageSize);
 }
 
 public class CategoryService : ICategoryService
@@ -33,8 +33,6 @@ public class CategoryService : ICategoryService
     // create category service
     public async Task<Category> CreateCategoryServiceAsync(CreateCategoryDto newCategory)
     {
-
-        Console.WriteLine($"-------Test1----------");
 
         try
         {
@@ -60,35 +58,59 @@ public class CategoryService : ICategoryService
         }
 
     }
-    public async Task<PagedResult<CategoryDto>> GetCategoriesAsync(int pageNumber, int pageSize)
+    public async Task<PaginatedResult<CategoryDto>> GetCategoriesAsync(QueryParameters queryParameters)
     {
         try
         {
-            var totalCategories = await _appDbContext.Categories.CountAsync(); // Total count of categories
+            var query = _appDbContext.Categories.AsQueryable();
 
-            var categories = await _appDbContext.Categories
-                .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize) // Take the number of records for the current page
+            //searching by category name (if needed)
+            if (!string.IsNullOrWhiteSpace(queryParameters.SearchTerm))
+            {
+                query = query.Where(c => c.CategoryName.Contains(queryParameters.SearchTerm));
+            }
+
+            var totalCategories = await query.CountAsync(); // Total count of categories
+
+            // Sort by the specified property in descending order
+            if (!string.IsNullOrWhiteSpace(queryParameters.SortBy))
+            {
+                var sortProperties = queryParameters.SortBy.Split(',', StringSplitOptions.RemoveEmptyEntries);
+                foreach (var property in sortProperties)
+                {
+                    query = query.OrderByDescending(c => EF.Property<object>(c, property.Trim()));
+                }
+            }
+            else
+            {
+                query = query.OrderByDescending(c => c.CreatedAt); // Default sorting if no SortBy is provided
+            }
+
+            var categories = await query
+                .Skip((queryParameters.PageNumber - 1) * queryParameters.PageSize)
+                .Take(queryParameters.PageSize)
                 .ToListAsync(); // Use ToListAsync for asynchronous operation
 
-            // Map to DTOs
             var categoryDtos = _mapper.Map<List<CategoryDto>>(categories);
 
-            return new PagedResult<CategoryDto>
+            return new PaginatedResult<CategoryDto>
             {
+                Items = categoryDtos,
                 TotalCount = totalCategories,
-                PageSize = pageSize,
-                CurrentPage = pageNumber,
-                Items = categoryDtos
+                PageNumber = queryParameters.PageNumber,
+                PageSize = queryParameters.PageSize
             };
+        }
+        catch (DbUpdateException dbEx)
+        {
+            Console.WriteLine($"Database Update Error: {dbEx.Message}");
+            throw new ApplicationException("An error occurred while saving to the database. Please check the data and try again.");
         }
         catch (Exception ex)
         {
-            // Handle any other unexpected exceptions
             Console.WriteLine($"An unexpected error occurred: {ex.Message}");
             throw new ApplicationException("An unexpected error occurred. Please try again later.");
         }
-
     }
 
     public async Task<CategoryDto?> GetCategoryByIdServiceAsync(Guid categoryId)
@@ -179,7 +201,7 @@ public class CategoryService : ICategoryService
 
 
     }
-    public async Task<PagedResult<CategoryWithProductsDto>> GetCategoriesWithProductsAsync(int pageNumber, int pageSize)
+    public async Task<PaginatedResult<CategoryWithProductsDto>> GetCategoriesWithProductsAsync(int pageNumber, int pageSize)
     {
         var totalCategories = await _appDbContext.Categories.CountAsync(); // Total count of categories
 
@@ -192,12 +214,14 @@ public class CategoryService : ICategoryService
         // Map to DTOs
         var categoryWithProductsDtos = _mapper.Map<List<CategoryWithProductsDto>>(categories);
 
-        return new PagedResult<CategoryWithProductsDto>
+        return new PaginatedResult<CategoryWithProductsDto>
         {
+            Items = categoryWithProductsDtos,
             TotalCount = totalCategories,
-            PageSize = pageSize,
-            CurrentPage = pageNumber,
-            Items = categoryWithProductsDtos
+            PageNumber = pageNumber,
+            PageSize = pageSize
+
+
         };
     }
 

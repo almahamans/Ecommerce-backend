@@ -13,6 +13,7 @@ public class CategoryController : ControllerBase
     }
 
     [HttpPost]
+    // [Authorize("Admin")]
     public async Task<IActionResult> CreateCategory([FromBody] CreateCategoryDto newCategory)
     {
 
@@ -27,33 +28,35 @@ public class CategoryController : ControllerBase
         }
         catch (ApplicationException ex)
         {
-            return ApiResponse.ServerError("Server error: " + ex.Message);
+            return ApiResponse.ServerError("Server error: CreateCategory" + ex.Message);
         }
         catch (System.Exception ex)
         {
-            return ApiResponse.ServerError("Server error: " + ex.Message);
+            return ApiResponse.ServerError("Server error: CreateCategory" + ex.Message);
         }
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetCategories(int pageNumber = 1, int pageSize = 5)
+    // [Authorize("Admin, Customer")]
+    public async Task<IActionResult> GetCategories([FromQuery] QueryParameters queryParameters)
     {
         try
         {
-            var categories = await _categoryService.GetCategoriesAsync(pageNumber, pageSize);
-            return ApiResponse.Success(categories, "Categories are returned succesfully");
+            var categories = await _categoryService.GetCategoriesAsync(queryParameters);
+            return ApiResponse.Success(categories, "Categories are returned successfully");
         }
         catch (ApplicationException ex)
         {
-            return ApiResponse.ServerError("Server error: " + ex.Message);
+            return ApiResponse.ServerError("Server error: GetCategories - " + ex.Message);
         }
         catch (System.Exception ex)
         {
-            return ApiResponse.ServerError("Server error: " + ex.Message);
+            return ApiResponse.ServerError("Server error: GetCategories - " + ex.Message);
         }
     }
 
     [HttpGet("{categoryId}")]
+    // [Authorize("Admin, Customer")]
     public async Task<IActionResult> GetCategoryById(Guid categoryId)
     {
         try
@@ -67,15 +70,16 @@ public class CategoryController : ControllerBase
         }
         catch (ApplicationException ex)
         {
-            return ApiResponse.ServerError("Server error: " + ex.Message);
+            return ApiResponse.ServerError("Server error: GetCategoryById " + ex.Message);
         }
         catch (System.Exception ex)
         {
-            return ApiResponse.ServerError("Server error: " + ex.Message);
+            return ApiResponse.ServerError("Server error: GetCategoryById " + ex.Message);
         }
     }
     [HttpPut("{categoryId}")]
-    public async Task<IActionResult> UpdateCategoryServiece(UpdateCategoryDto updateCategory, Guid categoryId)
+    // [Authorize("Admin")]
+    public async Task<IActionResult> UpdateCategory(UpdateCategoryDto updateCategory, Guid categoryId)
     {
 
 
@@ -94,17 +98,18 @@ public class CategoryController : ControllerBase
         }
         catch (ApplicationException ex)
         {
-            return ApiResponse.ServerError("Server error: " + ex.Message);
+            return ApiResponse.ServerError("Server error: UpdateCategory " + ex.Message);
         }
         catch (System.Exception ex)
         {
-            return ApiResponse.ServerError("Server error: " + ex.Message);
+            return ApiResponse.ServerError("Server error: UpdateCategory" + ex.Message);
         }
 
     }
 
     [HttpDelete("{categoryId}")]
-    public async Task<IActionResult> DeletCategoryServiece(Guid categoryId)
+    // [Authorize("Admin")]
+    public async Task<IActionResult> DeletCategory(Guid categoryId)
     {
 
 
@@ -123,16 +128,17 @@ public class CategoryController : ControllerBase
         }
         catch (ApplicationException ex)
         {
-            return ApiResponse.ServerError("Server error: " + ex.Message);
+            return ApiResponse.ServerError("Server error: DeletCategory " + ex.Message);
         }
         catch (System.Exception ex)
         {
-            return ApiResponse.ServerError("Server error: " + ex.Message);
+            return ApiResponse.ServerError("Server error: DeletCategory " + ex.Message);
         }
 
     }
 
     [HttpGet("products")]
+    // [Authorize("Admin, Customer")]
     public async Task<IActionResult> GetCategoriesWithProducts(int pageNumber = 1, int pageSize = 10)
     {
         try
@@ -142,11 +148,11 @@ public class CategoryController : ControllerBase
         }
         catch (ApplicationException ex)
         {
-            return StatusCode(500, ApiResponse.ServerError("Server error: " + ex.Message));
+            return StatusCode(500, ApiResponse.ServerError("Server error: GetCategoriesWithProducts " + ex.Message));
         }
         catch (System.Exception ex)
         {
-            return StatusCode(500, ApiResponse.ServerError("Server error: " + ex.Message));
+            return StatusCode(500, ApiResponse.ServerError("Server error: GetCategoriesWithProducts" + ex.Message));
         }
     }
 

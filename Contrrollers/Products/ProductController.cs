@@ -22,6 +22,7 @@ public class ProductController : ControllerBase
 
     // create products
     [HttpPost]
+    // [Authorize("Admin")]
     public async Task<IActionResult> CreateProduct([FromBody] CreateProductDto newProduct)
     {
 
@@ -36,34 +37,37 @@ public class ProductController : ControllerBase
         }
         catch (ApplicationException ex)
         {
-            return ApiResponse.ServerError("Server error: " + ex.Message);
+            return ApiResponse.ServerError("Server error: CreateProduct" + ex.Message);
         }
         catch (System.Exception ex)
         {
-            return ApiResponse.ServerError("Server error: " + ex.Message);
+            return ApiResponse.ServerError("Server error: CreateProduct" + ex.Message);
         }
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetProducts(int pageNumber = 1, int pageSize = 10)
+    // [Authorize("Admin, Customer")]
+    [HttpGet]
+    public async Task<IActionResult> GetProducts([FromQuery] QueryParameters queryParameters)
     {
         try
         {
-            var products = await _productService.GetProductsServiceAsync(pageNumber, pageSize);
+            var products = await _productService.GetProductsServiceAsync(queryParameters);
 
-            return ApiResponse.Success(products, "Products are returned succesfully");
+            return ApiResponse.Success(products, "Products are returned successfully");
         }
         catch (ApplicationException ex)
         {
-            return ApiResponse.ServerError("Server error: " + ex.Message);
+            return ApiResponse.ServerError("Server error: GetProducts - " + ex.Message);
         }
         catch (System.Exception ex)
         {
-            return ApiResponse.ServerError("Server error: " + ex.Message);
+            return ApiResponse.ServerError("Server error: GetProducts - " + ex.Message);
         }
     }
 
     [HttpGet("{productId}")]
+    // [Authorize("Admin, Customer")]
     public async Task<IActionResult> GetProductById(Guid productId)
     {
         try
@@ -77,16 +81,17 @@ public class ProductController : ControllerBase
         }
         catch (ApplicationException ex)
         {
-            return ApiResponse.ServerError("Server error: " + ex.Message);
+            return ApiResponse.ServerError("Server error: GetProductById" + ex.Message);
         }
         catch (System.Exception ex)
         {
-            return ApiResponse.ServerError("Server error: " + ex.Message);
+            return ApiResponse.ServerError("Server error: GetProductById" + ex.Message);
         }
     }
 
     [HttpPut("{productId}")]
-    public async Task<IActionResult> UpdateProductServiece(UpdateProductDto updateProduct, Guid productId)
+    // [Authorize("Admin")]
+    public async Task<IActionResult> UpdateProduct(UpdateProductDto updateProduct, Guid productId)
     {
 
 
@@ -105,17 +110,18 @@ public class ProductController : ControllerBase
         }
         catch (ApplicationException ex)
         {
-            return ApiResponse.ServerError("Server error: " + ex.Message);
+            return ApiResponse.ServerError("Server error: UpdateProduct" + ex.Message);
         }
         catch (System.Exception ex)
         {
-            return ApiResponse.ServerError("Server error: " + ex.Message);
+            return ApiResponse.ServerError("Server error: UpdateProduct" + ex.Message);
         }
 
     }
 
     [HttpDelete("{productId}")]
-    public async Task<IActionResult> DeletProductServiece(Guid productId)
+    // [Authorize("Admin")]
+    public async Task<IActionResult> DeletProduct(Guid productId)
     {
 
 
@@ -134,11 +140,11 @@ public class ProductController : ControllerBase
         }
         catch (ApplicationException ex)
         {
-            return ApiResponse.ServerError("Server error: " + ex.Message);
+            return ApiResponse.ServerError("Server error: DeletProduct" + ex.Message);
         }
         catch (System.Exception ex)
         {
-            return ApiResponse.ServerError("Server error: " + ex.Message);
+            return ApiResponse.ServerError("Server error: DeletProduct" + ex.Message);
         }
 
     }

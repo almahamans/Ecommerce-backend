@@ -31,7 +31,7 @@ public record Product
     // FK
     public Guid CategoryId { get; set; }
 
-    // category refrence
+    //category refrence
     //converting the refernce to JSON can create a loop. 
     //Using [JsonIgnore] on one side of the relationship helps break this loop.
     [JsonIgnore]
