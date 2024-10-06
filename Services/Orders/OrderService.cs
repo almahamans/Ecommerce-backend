@@ -1,31 +1,59 @@
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 
-// public interface IOrderService{
-//     public Order CreateOrderSrvice(CreateOrderDto createOrderDto)
-// }
-public class OrderService{
+public interface IOrderService{
+    public Task<Order> CreateOrderSrvice(CreateOrderDto createOrderDto);
+    public Task<bool> DeleteOrderSrvice(Guid id);
+    public Task<PaginatedResult<Order>> GetAllOrdersService(QueryParameters queryParameters);
+    public Task<OrderDto> GetOrderByIdService(Guid id);
+    public Task<OrderDto> UpdateOrderSrvice(Guid id, UpdateOrderDto updateOrderDto);
+} 
+public class OrderService : IOrderService{
     readonly AppDbContext _appDbContext;
     readonly IMapper _mapper;
+   
     public OrderService(AppDbContext appDbContext, IMapper mapper){
         _appDbContext = appDbContext;
         _mapper = mapper;
     }
     public async Task<Order> CreateOrderSrvice(CreateOrderDto createOrderDto){
+        try{
         if(createOrderDto == null){
             return null;
         }else{
-            var order =  _mapper.Map<Order>(createOrderDto);
-            order.OrderStatus = OrderStatus.OnProgress;
-            // // //maybe in the frontend can print the value???????????
-            Console.WriteLine(order.OrderStatus);
-            await _appDbContext.Orders.AddAsync(order);
+            var newOrder = _mapper.Map<Order>(createOrderDto);
+            await _appDbContext.Orders.AddAsync(newOrder);
             await _appDbContext.SaveChangesAsync();
-            return order;  
+
+        // foreach (var orderproduct in createOrderDto.orderProducts){
+        // var newOrderProduct = new OrderProduct{
+        //     ProductQuantity = orderproduct.ProductQuantity,
+        //     ProductsPrice = orderproduct.ProductsPrice,
+        //     OrderId = orderproduct.OrderId
+        // };
+        //     await _appDbContext.OrderProducts.AddAsync(newOrderProduct);
+        // }
+        //     await _appDbContext.SaveChangesAsync();
+
+            var newShipment = new Shipment{
+            ShipmentStatus = ShipmentStatus.OnProgress,
+            OrderId = newOrder.OrderId,
+            Order = newOrder
+        };
+            await _appDbContext.Shipments.AddAsync(newShipment);
+            await _appDbContext.SaveChangesAsync();
+            newOrder.ShipmentId = newShipment.ShipmentId;
+            await _appDbContext.SaveChangesAsync();
+
+                return newOrder;  
+        }
+        }catch (Exception ex){
+            throw new ApplicationException($"Error in create order service: {ex.Message}");
         }
     }
     public async Task<bool> DeleteOrderSrvice(Guid id){
-        var order = await _appDbContext.Orders.FindAsync(id);
+        try{
+        var order = await _appDbContext.Orders.Include(o => o.OrderProducts).FirstOrDefaultAsync(o => o.OrderId == id);
         if(order == null){
             return false;
         }else{
@@ -33,37 +61,77 @@ public class OrderService{
             await _appDbContext.SaveChangesAsync();
             return true;  
         }
+        }catch (Exception ex){
+            throw new ApplicationException($"Error in delete order service: {ex.Message}");
+        }
     }
-    public async Task<List<OrderDto>> GetAllOrdersService(){
-        var order = await _appDbContext.Orders.ToListAsync();
-        if(order.Count() < 0){
-            Console.WriteLine("Empty List");
-            return null; 
-        }else{
-            var orderData = _mapper.Map<List<OrderDto>>(order);
-            return orderData;    
-        }  
+    public async Task<PaginatedResult<Order>> GetAllOrdersService(QueryParameters queryParameters){
+        try{
+            var query = _appDbContext.Orders.AsQueryable();
+            switch (queryParameters.SortBy?.ToLower()){
+                case "OrderDate":
+                    query = queryParameters.SortOrder.ToLower() == "desc"
+                        ? query.OrderByDescending(o => o.OrderDate)
+                        : query.OrderBy(o => o.OrderDate);
+                    break;
+                default:
+                    break;
+            }
+        var NumOforders = await query.CountAsync();
+        if (queryParameters.PageNumber < 1) queryParameters.PageNumber = 1;
+        if (queryParameters.PageSize < 1) queryParameters.PageSize = 5;
+        if (NumOforders < 0){
+            return null;
+        }
+        var orders = await query.Skip((queryParameters.PageNumber - 1) * queryParameters.PageSize).Take(queryParameters.PageSize).ToListAsync();
+        
+        // foreach(var order in orders){
+        //         Console.WriteLine(order.Shipment.ShipmentStatus);
+        // }
+
+        return new PaginatedResult<Order>{
+            Items = orders,
+            TotalCount = NumOforders,
+            PageNumber = queryParameters.PageNumber,
+            PageSize = queryParameters.PageSize
+        };
+        }catch (Exception ex){
+            throw new ApplicationException($"Error in getting orders service: {ex.Message}");
+        }
     }
     public async Task<OrderDto> GetOrderByIdService(Guid id){
+        try{
         var order = await _appDbContext.Orders.FindAsync(id);
-        if (order == null){
-            return null;
-        }
+            
+            if (order == null) return null;
+
         return _mapper.Map<OrderDto>(order);
+        }catch (Exception ex){
+            throw new ApplicationException($"Error in getting an order by id service: {ex.Message}");
+        }
     }
-    public async Task<OrderDto> UpdateOrderStatusSrvice(Guid id, UpdateOrderDto updateOrderDto){
+    public async Task<OrderDto> UpdateOrderSrvice(Guid id, UpdateOrderDto updateOrderDto){
+        try{
         var order = await _appDbContext.Orders.FindAsync(id);
-        if (order == null){
-            return null;
-        }
-        if(updateOrderDto == null){
-            return null;
-        }
-        order.OrderStatus = updateOrderDto.orderStatus ?? order.OrderStatus;
+        
+        if (order == null) return null;
+        if(updateOrderDto == null) return null;
+
+        // foreach(var orderProduct in updateOrderDto.orderProducts){
+        //     var newOrderProduct = new OrderProduct{
+        //         ProductQuantity = orderProduct.ProductQuantity,
+        //         ProductsPrice = orderProduct.ProductsPrice
+        //     };
+        //     order.OrderProducts.Add(orderProduct);
+        // }
+
         order.TotalAmount = updateOrderDto.TotalAmount ?? order.TotalAmount;
         _appDbContext.Orders.Update(order);
         await _appDbContext.SaveChangesAsync();
         var mappingOrder = _mapper.Map<OrderDto>(order);
         return mappingOrder;
+        }catch (Exception ex){
+            throw new ApplicationException($"Error in updating an order service: {ex.Message}");
+        }
     }
 }

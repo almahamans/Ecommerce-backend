@@ -1,9 +1,14 @@
+
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+
+using System.Diagnostics;
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
+
 builder.Services.AddControllers().AddNewtonsoftJson(options =>
     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
 );
@@ -11,6 +16,11 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<OrderService>();
 builder.Services.AddScoped<IAddressService, AddressService>();
 builder.Services.AddScoped<AuthService>();
+
+builder.Services.AddControllers();
+builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IShipmentSrvice, ShipmentService>();
+
 
 
 builder.Services.AddEndpointsApiExplorer();
@@ -49,5 +59,19 @@ var app = builder.Build();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseHttpsRedirection();
+app.Use(async (context, next) =>
+{
+    var clientIp = context.Connection.RemoteIpAddress?.ToString();
+    var stopwatch = Stopwatch.StartNew();
+    Console.WriteLine($"[{DateTime.UtcNow}] [Request] " +
+                      $"{context.Request.Method} {context.Request.Path}{context.Request.QueryString} " +
+                      $"from {clientIp}");
+
+    await next.Invoke();
+    stopwatch.Stop();
+    Console.WriteLine($"Time Taken: {stopwatch.ElapsedMilliseconds}");
+});
+app.UseAuthentication();
+app.UseAuthorization();
 app.MapControllers();
 app.Run();

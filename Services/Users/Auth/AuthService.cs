@@ -14,14 +14,13 @@ using Microsoft.IdentityModel.Tokens;
         private readonly AppDbContext _appDbContext;
         private readonly IConfiguration _configuration;
 
+        //adding interface 
+
         public AuthService(AppDbContext appDbContext, IConfiguration configuration)
         {
             _appDbContext = appDbContext;
             _configuration = configuration;
 
-            // Console.WriteLine($"JWT Key Length: {_configuration["Jwt:Key"].Length}");
-            // Console.WriteLine($"JWT Issuer: {_configuration["Jwt:Issuer"]}");
-            // Console.WriteLine($"JWT Audience: {_configuration["Jwt:Audience"]}");
         }
 
         // Register the user

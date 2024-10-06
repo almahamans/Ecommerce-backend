@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -10,9 +11,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Backend.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241006065337_nadiej")]
+    partial class nadiej
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,41 +24,6 @@ namespace Backend.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-<<<<<<< HEAD
-            modelBuilder.Entity("Address", b =>
-                {
-                    b.Property<Guid>("AddresId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasDefaultValueSql("uuid_generate_v4()");
-
-                    b.Property<string>("City")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.Property<string>("Neighberhood")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.Property<string>("Street")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("AddresId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Addresses");
-                });
-
-=======
->>>>>>> 74e8b3bd732f634116736b6b9d21c789fc882fc2
             modelBuilder.Entity("Order", b =>
                 {
                     b.Property<Guid>("OrderId")
@@ -63,42 +31,25 @@ namespace Backend.Migrations
                         .HasColumnType("uuid")
                         .HasDefaultValueSql("uuid_generate_v4()");
 
-<<<<<<< HEAD
-                    b.Property<string>("Image")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-=======
->>>>>>> 74e8b3bd732f634116736b6b9d21c789fc882fc2
                     b.Property<DateTime>("OrderDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
-<<<<<<< HEAD
-                    b.Property<int>("OrderStatus")
-                        .HasColumnType("integer");
-=======
                     b.Property<Guid>("ShipmentId")
                         .HasColumnType("uuid");
->>>>>>> 74e8b3bd732f634116736b6b9d21c789fc882fc2
 
                     b.Property<decimal>("TotalAmount")
                         .HasColumnType("numeric");
 
-<<<<<<< HEAD
-=======
                     b.Property<int>("shipmentStatus")
                         .HasColumnType("integer");
 
->>>>>>> 74e8b3bd732f634116736b6b9d21c789fc882fc2
                     b.HasKey("OrderId");
 
                     b.ToTable("Orders");
                 });
 
-<<<<<<< HEAD
-=======
             modelBuilder.Entity("OrderProduct", b =>
                 {
                     b.Property<Guid>("OrderId")
@@ -144,7 +95,6 @@ namespace Backend.Migrations
                     b.ToTable("Shipments");
                 });
 
->>>>>>> 74e8b3bd732f634116736b6b9d21c789fc882fc2
             modelBuilder.Entity("User", b =>
                 {
                     b.Property<Guid>("UserId")
@@ -189,22 +139,6 @@ namespace Backend.Migrations
                     b.ToTable("Users");
                 });
 
-<<<<<<< HEAD
-            modelBuilder.Entity("Address", b =>
-                {
-                    b.HasOne("User", "User")
-                        .WithMany("Addresses")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("User", b =>
-                {
-                    b.Navigation("Addresses");
-=======
             modelBuilder.Entity("OrderProduct", b =>
                 {
                     b.HasOne("Order", "Order")
@@ -233,7 +167,6 @@ namespace Backend.Migrations
 
                     b.Navigation("Shipment")
                         .IsRequired();
->>>>>>> 74e8b3bd732f634116736b6b9d21c789fc882fc2
                 });
 #pragma warning restore 612, 618
         }
