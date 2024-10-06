@@ -1,16 +1,16 @@
-public enum OrderStatus{
-    Pending,
-    Processing,
-    Shipped,
-    Delivered,
-    Canceled,
-    Returned,
-    OnProgress
-}
-public class Order{
-    public Guid OrderId {get; set;}
-    public OrderStatus OrderStatus {get; set;}
-    public DateTime OrderDate {get; set;} = DateTime.UtcNow;
-    public decimal TotalAmount {get; set;}
-    public string Image {get; set;} = string.Empty;
+using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
+public class Order
+{
+    [Required]
+    public Guid OrderId { get; set; }
+    public DateTime OrderDate { get; set; }
+    public decimal TotalAmount { get; set; }
+    public Guid ShipmentId { get; set; }
+    public ShipmentStatus shipmentStatus {get; set;}
+    [JsonIgnore]
+    public Shipment Shipment { get; set; }
+    [JsonIgnore]
+    public List<OrderProduct> OrderProducts { get; set; }
+
 }
