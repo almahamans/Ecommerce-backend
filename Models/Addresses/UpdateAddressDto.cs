@@ -1,7 +1,7 @@
 
 using System.ComponentModel.DataAnnotations;
 
-public record UpdateAddressDto
+public class UpdateAddressDto
 {
     [StringLength(50, ErrorMessage = "City must be between 3 and 50 characters.", MinimumLength = 3)]
     public  string? City { get; set; }
@@ -9,7 +9,7 @@ public record UpdateAddressDto
     [StringLength(100, ErrorMessage = "Neighberhood must be between 3 and 100 characters.", MinimumLength = 6)]
     public  string? Neighberhood { get; set; }
 
-    [StringLength(100, ErrorMessage = "street must be between 3 and 100 characters.", MinimumLength = 6)]
+    [StringLength(100, ErrorMessage = "street must be between 3 and 100 characters.", MinimumLength = 3)]
     public  string? Street { get; set; }
 
 }

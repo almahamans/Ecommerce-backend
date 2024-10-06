@@ -1,16 +1,14 @@
 
+using System.Text.Json.Serialization;
+
 public enum Role
 {
     Admin,
     Customer
 }
-
-public record User
+public class User
 {
-
     public Guid UserId { get; set; }
-    // public Guid AddressId { get; set; }
-    //obj address
     public Role Role { get; set; } = Role.Customer;
     public string UserName { get; set; }
     public string Password { get; set; }
@@ -18,5 +16,9 @@ public record User
     public string Phone { get; set; } = string.Empty;
     public string? Image { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+    public List<Address> Addresses { get; set; }
+    public List<Order> Orders { get; set; } = new List<Order>();
+
 
 }

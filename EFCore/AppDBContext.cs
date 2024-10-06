@@ -18,6 +18,9 @@ public class AppDbContext : DbContext
 
    public DbSet<User> Users { get; set; }
   public DbSet<Order> Orders { get; set; }
+  public DbSet<Address> Addresses { get; set; }
+
+
   public DbSet<Shipment> Shipments { get; set; }
   public DbSet<OrderProduct> OrderProducts { get; set; }
 
@@ -81,6 +84,22 @@ public class AppDbContext : DbContext
     });
 
 
+    modelBuilder.Entity<Address>(attribut =>
+    {
+      attribut.HasKey(a => a.AddresId);
+      attribut.Property(a => a.AddresId).HasDefaultValueSql("uuid_generate_v4()");
+      attribut.Property(a => a.City).HasMaxLength(50);
+      attribut.Property(a => a.Neighberhood).HasMaxLength(100);
+      attribut.Property(a => a.Street).HasMaxLength(500);
+    });
+    modelBuilder.Entity<User>()
+      .HasMany(u => u.Orders)
+      .WithOne(o => o.User)
+      .HasForeignKey(o => o.UserId)
+      .OnDelete(DeleteBehavior.Cascade);
+
+
+
     modelBuilder.Entity<Shipment>(attribut =>
     {
       attribut.HasKey(s => s.ShipmentId);
@@ -98,18 +117,26 @@ public class AppDbContext : DbContext
 
     modelBuilder.Entity<OrderProduct>(attribut =>
     {
-    attribut.Property(op => op.ProductQuantity);
-    attribut.Property(op => op.ProductsPrice);
+      attribut.Property(op => op.ProductQuantity);
+      attribut.Property(op => op.ProductsPrice);
     });
-  
+
     modelBuilder.Entity<OrderProduct>()
-    .HasKey(op => new {op.OrderId});//adding product key also >> composite primary key
+    .HasKey(op => new { op.OrderId });//adding product key also >> composite primary key
 
     modelBuilder.Entity<OrderProduct>()
     .HasOne(op => op.Order)
     .WithMany(o => o.OrderProducts)
     .HasForeignKey(op => op.OrderId)
     .OnDelete(DeleteBehavior.Cascade);
+
+    modelBuilder.Entity<User>()
+.HasMany(u => u.Addresses)
+.WithOne(a => a.User)
+.HasForeignKey(a => a.UserId)
+.OnDelete(DeleteBehavior.Cascade);
+
+
 
 
   }
