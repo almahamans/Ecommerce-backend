@@ -3,4 +3,5 @@ public class OrderDto{
     public decimal TotalAmount { get; set; }
     public Guid ShipmentId { get; set; }
     public ShipmentStatus shipmentStatus {get; set;}
+    public List<OrderProduct> OrderProducts { get; set; }
 }

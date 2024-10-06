@@ -25,17 +25,17 @@ public class OrderService : IOrderService{
             await _appDbContext.Orders.AddAsync(newOrder);
             await _appDbContext.SaveChangesAsync();
 
-        // foreach (var orderproduct in createOrderDto.orderProducts){
-        // var newOrderProduct = new OrderProduct{
-        //     ProductQuantity = orderproduct.ProductQuantity,
-        //     ProductsPrice = orderproduct.ProductsPrice,
-        //     OrderId = orderproduct.OrderId
-        // };
-        //     await _appDbContext.OrderProducts.AddAsync(newOrderProduct);
-        // }
-        //     await _appDbContext.SaveChangesAsync();
-
-        var newShipment = new Shipment{
+        foreach (var orderproduct in createOrderDto.OrderProducts){
+        var newOrderProduct = new OrderProduct{
+            ProductQuantity = orderproduct.ProductQuantity,
+            ProductsPrice = orderproduct.ProductsPrice,
+            OrderId = orderproduct.OrderId
+        };
+            await _appDbContext.OrderProducts.AddAsync(newOrderProduct);
+            
+        }
+                await _appDbContext.SaveChangesAsync();
+                var newShipment = new Shipment{
             ShipmentStatus = ShipmentStatus.OnProgress,
             OrderId = newOrder.OrderId,
             Order = newOrder
@@ -67,7 +67,7 @@ public class OrderService : IOrderService{
     }
     public async Task<PaginatedResult<Order>> GetAllOrdersService(QueryParameters queryParameters){
         try{
-            var query = _appDbContext.Orders.AsQueryable();
+            var query = _appDbContext.Orders.Include(o => o.OrderProducts).AsQueryable();
             switch (queryParameters.SortBy?.ToLower()){
                 case "OrderDate":
                     query = queryParameters.SortOrder.ToLower() == "desc"
@@ -84,10 +84,6 @@ public class OrderService : IOrderService{
             return null;
         }
         var orders = await query.Skip((queryParameters.PageNumber - 1) * queryParameters.PageSize).Take(queryParameters.PageSize).ToListAsync();
-        
-        // foreach(var order in orders){
-        //         Console.WriteLine(order.Shipment.ShipmentStatus);
-        // }
 
         return new PaginatedResult<Order>{
             Items = orders,

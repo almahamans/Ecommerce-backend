@@ -10,7 +10,5 @@ public class Order
     public ShipmentStatus shipmentStatus {get; set;}
     [JsonIgnore]
     public Shipment Shipment { get; set; }
-    [JsonIgnore]
     public List<OrderProduct> OrderProducts { get; set; }
-
 }
