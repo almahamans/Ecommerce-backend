@@ -33,30 +33,30 @@ public class OrderService : IOrderService
                 await _appDbContext.Orders.AddAsync(newOrder);
                 newOrder.UserId = createOrderDto.UserId;
                 await _appDbContext.SaveChangesAsync();
-                // foreach (var orderproduct in createOrderDto.orderProducts){
-                // var newOrderProduct = new OrderProduct{
-                //     ProductQuantity = orderproduct.ProductQuantity,
-                //     ProductsPrice = orderproduct.ProductsPrice,
-                //     OrderId = orderproduct.OrderId
-                // };
-                //     await _appDbContext.OrderProducts.AddAsync(newOrderProduct);
-                // }
-                //     await _appDbContext.SaveChangesAsync();
 
-                var newShipment = new Shipment
-                {
-                    ShipmentStatus = ShipmentStatus.OnProgress,
-                    OrderId = newOrder.OrderId,
-                    Order = newOrder
-                };
-                await _appDbContext.Shipments.AddAsync(newShipment);
-                await _appDbContext.SaveChangesAsync();
-                newOrder.ShipmentId = newShipment.ShipmentId;
-                await _appDbContext.SaveChangesAsync();
-
-                return newOrder;
-            }
+        foreach (var orderproduct in createOrderDto.OrderProducts){
+        var newOrderProduct = new OrderProduct{
+            ProductQuantity = orderproduct.ProductQuantity,
+            ProductsPrice = orderproduct.ProductsPrice,
+            OrderId = orderproduct.OrderId
+        };
+            await _appDbContext.OrderProducts.AddAsync(newOrderProduct);
+            
         }
+                await _appDbContext.SaveChangesAsync();
+                var newShipment = new Shipment{
+            ShipmentStatus = ShipmentStatus.OnProgress,
+            OrderId = newOrder.OrderId,
+            Order = newOrder
+        };
+            await _appDbContext.Shipments.AddAsync(newShipment);
+            await _appDbContext.SaveChangesAsync();
+            newOrder.ShipmentId = newShipment.ShipmentId;
+            await _appDbContext.SaveChangesAsync();
+
+                return newOrder;  
+
+            }}
         catch (Exception ex)
         {
             throw new ApplicationException($"Error in create order service: {ex.Message}");
@@ -83,13 +83,13 @@ public class OrderService : IOrderService
             throw new ApplicationException($"Error in delete order service: {ex.Message}");
         }
     }
-    public async Task<PaginatedResult<Order>> GetAllOrdersService(QueryParameters queryParameters)
-    {
-        try
-        {
-            var query = _appDbContext.Orders.Include(o => o.User).AsQueryable();
-            switch (queryParameters.SortBy?.ToLower())
-            {
+
+
+    public async Task<PaginatedResult<Order>> GetAllOrdersService(QueryParameters queryParameters){
+        try{
+            var query = _appDbContext.Orders.Include(o => o.OrderProducts).Include(o => o.User).AsQueryable();
+            switch (queryParameters.SortBy?.ToLower()){
+
                 case "OrderDate":
                     query = queryParameters.SortOrder.ToLower() == "desc"
                         ? query.OrderByDescending(o => o.OrderDate)
@@ -98,6 +98,7 @@ public class OrderService : IOrderService
                 default:
                     break;
             }
+
             var NumOforders = await query.CountAsync();
             if (queryParameters.PageNumber < 1) queryParameters.PageNumber = 1;
             if (queryParameters.PageSize < 1) queryParameters.PageSize = 5;

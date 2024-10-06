@@ -6,5 +6,6 @@ public class CreateOrderDto{
 
 
     // public List<OrderProduct> orderProducts { get; set; }
+    public List<CreateOrderProductDto> OrderProducts { get; set; } = new List<CreateOrderProductDto>();
 }
 

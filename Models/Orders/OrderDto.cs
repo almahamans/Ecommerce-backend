@@ -6,4 +6,5 @@ public class OrderDto
     public ShipmentStatus shipmentStatus { get; set; }
     public User User { get; set; }
 
+    public List<OrderProduct> OrderProducts { get; set; }
 }

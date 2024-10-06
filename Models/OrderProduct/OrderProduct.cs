@@ -6,5 +6,4 @@ public class OrderProduct{
     public Guid OrderId { get; set; }
     [JsonIgnore]
     public Order? Order { get; set; }
-    
 }
