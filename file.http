@@ -1,0 +1,127 @@
+
+//create new user
+POST  http://localhost:5125/api/v1/auth/register
+Content-Type: application/json
+
+{
+ 
+ "UserName": "shahd",
+  "Password" : "dhggf2333",
+  "Email" : "shahd@gmail.com"
+}
+
+###
+//create new Address
+POST  http://localhost:5125/api/v1/address
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI5ZDQ5OTZlZC1iZTJjLTQwNmItODI4Yy0yNDMyZWI3YTc5YjUiLCJ1bmlxdWVfbmFtZSI6Im5vb3IiLCJyb2xlIjoiQ3VzdG9tZXIiLCJuYmYiOjE3Mjc5NjAwMDIsImV4cCI6MTcyNzk2MDMwMiwiaWF0IjoxNzI3OTYwMDAyLCJpc3MiOiJMb2NhbGhvc3RJc3N1ZXIiLCJhdWQiOiJMb2NhbGhvc3RBdWRpZW5jZSJ9.7p4qbZ8_X9nL24M0r0uCQzpzvCtNFC-2u_4piXiNCHw
+Content-Type: application/json
+
+{
+  "City": "Tabuk",
+  "Neighberhood" : "al-manamah",
+  "Street" : " bin majed",
+  "UserId" : "4201ba59-7b60-43e7-9520-408de89d7942"
+}
+
+###
+//Customer Login
+POST  http://localhost:5125/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "Password" : "dhggf2333",
+  "Email" : "noor@gmail.com"
+
+}
+
+###
+// Admin Login - shahad
+POST  http://localhost:5125/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "Password" : "dhggf2333",
+  "Email" : "rehab@gmail.com"
+
+}
+###
+
+// The id is for Shahad user - you have to change the token every 5 min
+PUT  http://localhost:5125/api/v1/users/create-admin/38bb1aab-014f-447a-a1a3-6ab905d9eb8d
+//Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI0MjAxYmE1OS03YjYwLTQzZTctOTUyMC00MDhkZTg5ZDc5NDIiLCJ1bmlxdWVfbmFtZSI6IlNoYWhhZCIsInJvbGUiOiJBZG1pbiIsIm5iZiI6MTcyNzk0MTU3OCwiZXhwIjoxNzI3OTQxODc3LCJpYXQiOjE3Mjc5NDE1NzgsImlzcyI6IkxvY2FsaG9zdElzc3VlciIsImF1ZCI6IkxvY2FsaG9zdEF1ZGllbmNlIn0.r4WFwwZjKquZGFxlSsXbh_tQbXcOTLroXC4SjBjopkM
+###
+
+//get all users
+GET http://localhost:5125/api/v1/users
+//Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIzMzMzMTJkZS1iN2NiLTRhNzUtYWJjZS0wNTU5MmQ4Njg0MjkiLCJ1bmlxdWVfbmFtZSI6Im1haGEiLCJyb2xlIjoiQ3VzdG9tZXIiLCJuYmYiOjE3Mjc5NTUyMjAsImV4cCI6MTcyNzk1NTUyMCwiaWF0IjoxNzI3OTU1MjIwLCJpc3MiOiJMb2NhbGhvc3RJc3N1ZXIiLCJhdWQiOiJMb2NhbGhvc3RBdWRpZW5jZSJ9.eb_ErWSyvSe6xud8215rwAr-KGAZ_h76rFJLJRbIAUk
+###
+
+//get  user by id
+
+GET http://localhost:5125/api/v1/users/profile/9d4996ed-be2c-406b-828c-2432eb7a79b5
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI5ZDQ5OTZlZC1iZTJjLTQwNmItODI4Yy0yNDMyZWI3YTc5YjUiLCJ1bmlxdWVfbmFtZSI6Im5vb3IiLCJyb2xlIjoiQ3VzdG9tZXIiLCJuYmYiOjE3Mjc5NjA2NTIsImV4cCI6MTcyNzk2MDk1MiwiaWF0IjoxNzI3OTYwNjUyLCJpc3MiOiJMb2NhbGhvc3RJc3N1ZXIiLCJhdWQiOiJMb2NhbGhvc3RBdWRpZW5jZSJ9.x9Z3bLTgcvnsYC72MTQZlhDSmgdm5WViwk8zz0p6bvw
+###
+GET http://localhost:5125/api/v1/users/Searching?sortBy=UserName&sortOrder=asc&pageNumber=1&pageSize=10&searchTerm=noor
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI0MjAxYmE1OS03YjYwLTQzZTctOTUyMC00MDhkZTg5ZDc5NDIiLCJ1bmlxdWVfbmFtZSI6IlNoYWhhZCIsInJvbGUiOiJBZG1pbiIsIm5iZiI6MTcyNzk0MTU3OCwiZXhwIjoxNzI3OTQxODc3LCJpYXQiOjE3Mjc5NDE1NzgsImlzcyI6IkxvY2FsaG9zdElzc3VlciIsImF1ZCI6IkxvY2FsaG9zdEF1ZGllbmNlIn0.r4WFwwZjKquZGFxlSsXbh_tQbXcOTLroXC4SjBjopkM
+###
+
+//paginated
+GET http://localhost:5125/api/v1/users/paginated?pageNumber=2&pageSize=1
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI0MjAxYmE1OS03YjYwLTQzZTctOTUyMC00MDhkZTg5ZDc5NDIiLCJ1bmlxdWVfbmFtZSI6IlNoYWhhZCIsInJvbGUiOiJBZG1pbiIsIm5iZiI6MTcyNzk0MDgwNywiZXhwIjoxNzI3OTQxMTA3LCJpYXQiOjE3Mjc5NDA4MDcsImlzcyI6IkxvY2FsaG9zdElzc3VlciIsImF1ZCI6IkxvY2FsaG9zdEF1ZGllbmNlIn0.UVSBuOgHZyImeEkJdM1TrPqKY9qoFIC8xrtZqft7iyU
+
+
+###
+//get all addresses
+GET http://localhost:5125/api/v1/address
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIzOGJiMWFhYi0wMTRmLTQ0N2EtYTFhMy02YWI5MDVkOWViOGQiLCJ1bmlxdWVfbmFtZSI6InJlaGFiIiwicm9sZSI6IkFkbWluIiwibmJmIjoxNzI3OTYwMDYzLCJleHAiOjE3Mjc5NjAzNjMsImlhdCI6MTcyNzk2MDA2MywiaXNzIjoiTG9jYWxob3N0SXNzdWVyIiwiYXVkIjoiTG9jYWxob3N0QXVkaWVuY2UifQ.BvQ3HsyFchpHIaRQkHSjvtsipImYxmmS_nonV603SQk
+###
+
+GET http://localhost:5125/api/v1/address/58473c14-77c2-493e-9bd1-6980534d16b0
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI5ZDQ5OTZlZC1iZTJjLTQwNmItODI4Yy0yNDMyZWI3YTc5YjUiLCJ1bmlxdWVfbmFtZSI6Im5vb3IiLCJyb2xlIjoiQ3VzdG9tZXIiLCJuYmYiOjE3Mjc5NDQ1NTcsImV4cCI6MTcyNzk0NDg1NywiaWF0IjoxNzI3OTQ0NTU3LCJpc3MiOiJMb2NhbGhvc3RJc3N1ZXIiLCJhdWQiOiJMb2NhbGhvc3RBdWRpZW5jZSJ9.V89CyEsscmrQ_qZP3qPf7kr9OPeTsWDSUsVSzmosfVI
+
+###
+// i have to handel if the the adderes not found
+//update address
+PUT  http://localhost:5125/api/v1/address/58473c14-77c2-493e-9bd1-6980534d16b0
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI5ZDQ5OTZlZC1iZTJjLTQwNmItODI4Yy0yNDMyZWI3YTc5YjUiLCJ1bmlxdWVfbmFtZSI6Im5vb3IiLCJyb2xlIjoiQ3VzdG9tZXIiLCJuYmYiOjE3Mjc5NDU0NzQsImV4cCI6MTcyNzk0NTc3NCwiaWF0IjoxNzI3OTQ1NDc0LCJpc3MiOiJMb2NhbGhvc3RJc3N1ZXIiLCJhdWQiOiJMb2NhbGhvc3RBdWRpZW5jZSJ9.os0tZFMvWMBlKKwc-2tV-ExOf4ZomNd-9ZFQ4jw7Q_U
+Content-Type: application/json
+
+{
+  "Neighberhood" : "al-sahafa"
+}
+
+###
+// delete address
+DELETE http://localhost:5125/api/v1/address/58473c14-77c2-493e-9bd1-6980534d16b0
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI5ZDQ5OTZlZC1iZTJjLTQwNmItODI4Yy0yNDMyZWI3YTc5YjUiLCJ1bmlxdWVfbmFtZSI6Im5vb3IiLCJyb2xlIjoiQ3VzdG9tZXIiLCJuYmYiOjE3Mjc5NDQ5ODgsImV4cCI6MTcyNzk0NTI4OCwiaWF0IjoxNzI3OTQ0OTg4LCJpc3MiOiJMb2NhbGhvc3RJc3N1ZXIiLCJhdWQiOiJMb2NhbGhvc3RBdWRpZW5jZSJ9.IFBWxGO0Nm7eQPqhhtDtrxJ-WI3Sf9__x-oUoTkyaBo
+
+###
+
+//update user
+PUT  http://localhost:5125/api/v1/users/22b98130-9ec7-441a-b177-bf202b5b91f6
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI5ZDQ5OTZlZC1iZTJjLTQwNmItODI4Yy0yNDMyZWI3YTc5YjUiLCJ1bmlxdWVfbmFtZSI6Im5vb3IiLCJyb2xlIjoiQ3VzdG9tZXIiLCJuYmYiOjE3Mjc5NDU4NDksImV4cCI6MTcyNzk0NjE0OSwiaWF0IjoxNzI3OTQ1ODQ5LCJpc3MiOiJMb2NhbGhvc3RJc3N1ZXIiLCJhdWQiOiJMb2NhbGhvc3RBdWRpZW5jZSJ9.1lYehJ276iNJOlqtABNbxmIcJFteRwzGeKlQszVUYlc
+Content-Type: application/json
+
+{
+  "Neighberhood" : "al-sahafa"
+}
+###
+// delete user
+DELETE http://localhost:5125/api/v1/users/22b98130-9ec7-441a-b177-bf202b5b91f6
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI0MjAxYmE1OS03YjYwLTQzZTctOTUyMC00MDhkZTg5ZDc5NDIiLCJ1bmlxdWVfbmFtZSI6IlNoYWhhZCIsInJvbGUiOiJBZG1pbiIsIm5iZiI6MTcyNzk0NTY4NCwiZXhwIjoxNzI3OTQ1OTg0LCJpYXQiOjE3Mjc5NDU2ODQsImlzcyI6IkxvY2FsaG9zdElzc3VlciIsImF1ZCI6IkxvY2FsaG9zdEF1ZGllbmNlIn0.Er641gdXXhfnh9Ojh-d7mSKjtau0GFc8oGNc-lGbkf4
+
+###
+POST http://localhost:5125/api/v1/orders
+Content-Type: application/json
+
+{
+  "TotalAmount" : 54444,
+  "UserId" : "799d50c3-8582-4f37-8124-100ef75d9b7c"
+}
+
+###
+GET http://localhost:5125/api/v1/orders
+
+
+###
+GET http://localhost:5125/api/v1/orders/82a7069c-3833-4d7e-ba00-f2929caa5497

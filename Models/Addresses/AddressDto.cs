@@ -1,16 +1,18 @@
 
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
-public record AddressDto
+public class AddressDto
 {
     [StringLength(50, ErrorMessage = "City must be between 3 and 50 characters.", MinimumLength = 3)]
-    public  string? City { get; set; }
+    public string? City { get; set; }
 
     [StringLength(100, ErrorMessage = "Neighberhood must be between 3 and 100 characters.", MinimumLength = 6)]
-    public  string? Neighberhood { get; set; }
+    public string? Neighberhood { get; set; }
 
     [StringLength(100, ErrorMessage = "street must be between 3 and 100 characters.", MinimumLength = 6)]
-    public  string? Street { get; set; }
+    public string? Street { get; set; }
+    public Guid UserId { get; set; } 
 
 }
 
