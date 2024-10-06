@@ -45,6 +45,7 @@ public class ShipmentController : ControllerBase{
             return ApiResponse.NotFound($"Error in deleting shipment controller: {ex.Message}");
         }
     }
+    [Authorize("Admin")]
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetShipmentById(Guid id){
         if (!ModelState.IsValid){
