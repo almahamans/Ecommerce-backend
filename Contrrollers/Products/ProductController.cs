@@ -1,12 +1,10 @@
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-
-[ApiController]
-[Route("api/products")]
 
 public class ProductController : ControllerBase
 {
@@ -17,8 +15,6 @@ public class ProductController : ControllerBase
     {
         _productService = productService;
     }
-
-
 
     // create products
     [HttpPost]
@@ -116,7 +112,6 @@ public class ProductController : ControllerBase
         {
             return ApiResponse.ServerError("Server error: UpdateProduct" + ex.Message);
         }
-
     }
 
     [HttpDelete("{productId}")]
@@ -147,8 +142,8 @@ public class ProductController : ControllerBase
             return ApiResponse.ServerError("Server error: DeletProduct" + ex.Message);
         }
 
+
     }
-
-
-
 }
+
+

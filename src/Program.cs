@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
@@ -7,6 +8,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllers();
+
+
+builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IShipmentSrvice, ShipmentService>();
+
 
 // Register your services
 builder.Services.AddScoped<IProductService, ProductService>();
@@ -33,6 +40,18 @@ if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
 }
+app.Use(async (context, next) =>
+{
+    var clientIp = context.Connection.RemoteIpAddress?.ToString();
+    var stopwatch = Stopwatch.StartNew();
+    Console.WriteLine($"[{DateTime.UtcNow}] [Request] " +
+                      $"{context.Request.Method} {context.Request.Path}{context.Request.QueryString} " +
+                      $"from {clientIp}");
+
+    await next.Invoke();
+    stopwatch.Stop();
+    Console.WriteLine($"Time Taken: {stopwatch.ElapsedMilliseconds}");
+});
 
 // Middleware order is important
 app.UseHttpsRedirection();
@@ -45,9 +64,8 @@ app.UseSwaggerUI(c =>
     c.RoutePrefix = string.Empty;
 });
 
-// Map controllers
+
 app.MapControllers();
-// ???
 app.Run();
 
 
