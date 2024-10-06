@@ -30,9 +30,6 @@ public class ProductService : IProductService
     // create product service
     public async Task<ProductDto> CreateProductServiceAsync(CreateProductDto newProduct)
     {
-
-
-
         try
         {
             var slug = newProduct.ProductName.Replace(" ", "-");

@@ -5,5 +5,5 @@ public record UpdateProductDto
     public decimal? Price { get; set; }
     public int? Quantity { get; set; }
     public string? Image { get; set; }
-
+    public List<OrderProduct>? orderProducts { get; set; }
 }

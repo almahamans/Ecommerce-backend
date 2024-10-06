@@ -5,6 +5,5 @@ public class OrderDto
     public Guid ShipmentId { get; set; }
     public ShipmentStatus shipmentStatus { get; set; }
     public User User { get; set; }
-
     public List<OrderProduct> OrderProducts { get; set; }
 }
