@@ -9,8 +9,8 @@ public interface IUserService
     public Task<UserDto> UpdateToAdminByIdServiceAsync(Guid userId);
     public Task<PaginatedResult<User>> GetUsersSearchByServiceAsync(QueryParameters queryParameters);
 
-    public Task<PaginatedResult<User>> GetUsersPaginationServiceAsync(int pageNumber, int pageSize);
-    public Task<List<User>> GetUsersServiceAsync();
+   // public Task<PaginatedResult<User>> GetUsersPaginationServiceAsync(int pageNumber, int pageSize);
+  //  public Task<List<User>> GetUsersServiceAsync();
     public Task<UserDto> GetUserByIdServiceAsync(Guid userId);
     public Task<UserDto> CreateUserServiceAsync(CreateUserDto newUser);
     public Task<UserDto> UpdateUserByIdServiceAsync(Guid userId, UpdateUserDto updateUser);
@@ -60,7 +60,7 @@ public class UserService : IUserService
     {
         try
         {
-            var query = _appDbContext.Users.AsQueryable();
+            var query = _appDbContext.Users.Include(u => u.Addresses).AsQueryable();
 
             if (!string.IsNullOrEmpty(queryParameters.SearchTerm))
             {
@@ -113,55 +113,55 @@ public class UserService : IUserService
         }
     }
 
-    public async Task<PaginatedResult<User>> GetUsersPaginationServiceAsync(int pageNumber, int pageSize)
-    {
+    // public async Task<PaginatedResult<User>> GetUsersPaginationServiceAsync(int pageNumber, int pageSize)
+    // {
 
-        try
-        {
-            var totalCount = await _appDbContext.Users.CountAsync();
+    //     try
+    //     {
+    //         var totalCount = await _appDbContext.Users.CountAsync();
 
-            if (pageNumber < 1) pageNumber = 1;
-            if (pageSize < 1) pageSize = 10;
+    //         if (pageNumber < 1) pageNumber = 1;
+    //         if (pageSize < 1) pageSize = 10;
 
-            var users = await _appDbContext.Users
-                .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize)
-                .ToListAsync();
+    //         var users = await _appDbContext.Users
+    //             .Skip((pageNumber - 1) * pageSize)
+    //             .Take(pageSize)
+    //             .ToListAsync();
 
-            return new PaginatedResult<User>
-            {
-                Items = users,
-                TotalCount = totalCount,
-                PageNumber = pageNumber,
-                PageSize = pageSize
-            };
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"An unexpected error occurred: {ex.Message}");
-            throw new ApplicationException("An unexpected error occurred. Please try again later." + ex.Message);
-        }
-    }
+    //         return new PaginatedResult<User>
+    //         {
+    //             Items = users,
+    //             TotalCount = totalCount,
+    //             PageNumber = pageNumber,
+    //             PageSize = pageSize
+    //         };
+    //     }
+    //     catch (Exception ex)
+    //     {
+    //         Console.WriteLine($"An unexpected error occurred: {ex.Message}");
+    //         throw new ApplicationException("An unexpected error occurred. Please try again later." + ex.Message);
+    //     }
+    // }
 
-    public async Task<List<User>> GetUsersServiceAsync()
-    {
+    // public async Task<List<User>> GetUsersServiceAsync()
+    // {
 
-        try
-        {
-            var users = await _appDbContext.Users.Include(u => u.Addresses).ToListAsync();
-            return users;
-        }
-        catch (DbUpdateException dbEx)
-        {
-            Console.WriteLine($"DbUpdateException: {dbEx.Message}\nStack Trace: {dbEx.StackTrace}");
-            throw new ApplicationException("An error occurred while saving to the database. Please check the data and try again.");
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Exception: {ex.Message}\nStack Trace: {ex.StackTrace}");
-            throw new ApplicationException("An unexpected error occurred. Please try again later.");
-        }
-    }
+    //     try
+    //     {
+    //         var users = await _appDbContext.Users.Include(u => u.Addresses).ToListAsync();
+    //         return users;
+    //     }
+    //     catch (DbUpdateException dbEx)
+    //     {
+    //         Console.WriteLine($"DbUpdateException: {dbEx.Message}\nStack Trace: {dbEx.StackTrace}");
+    //         throw new ApplicationException("An error occurred while saving to the database. Please check the data and try again.");
+    //     }
+    //     catch (Exception ex)
+    //     {
+    //         Console.WriteLine($"Exception: {ex.Message}\nStack Trace: {ex.StackTrace}");
+    //         throw new ApplicationException("An unexpected error occurred. Please try again later.");
+    //     }
+    // }
 
     public async Task<UserDto> GetUserByIdServiceAsync(Guid userId)
     {

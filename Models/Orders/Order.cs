@@ -12,5 +12,8 @@ public class Order
     public Shipment Shipment { get; set; }
     [JsonIgnore]
     public List<OrderProduct> OrderProducts { get; set; }
+        public Guid UserId { get; set; }
+
+        public User User { get; set; }
 
 }

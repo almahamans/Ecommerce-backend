@@ -5,9 +5,9 @@ Content-Type: application/json
 
 {
  
- "UserName": "rehab",
+ "UserName": "shahd",
   "Password" : "dhggf2333",
-  "Email" : "rehab@gmail.com"
+  "Email" : "shahd@gmail.com"
 }
 
 ###
@@ -109,3 +109,19 @@ Content-Type: application/json
 // delete user
 DELETE http://localhost:5125/api/v1/users/22b98130-9ec7-441a-b177-bf202b5b91f6
 Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI0MjAxYmE1OS03YjYwLTQzZTctOTUyMC00MDhkZTg5ZDc5NDIiLCJ1bmlxdWVfbmFtZSI6IlNoYWhhZCIsInJvbGUiOiJBZG1pbiIsIm5iZiI6MTcyNzk0NTY4NCwiZXhwIjoxNzI3OTQ1OTg0LCJpYXQiOjE3Mjc5NDU2ODQsImlzcyI6IkxvY2FsaG9zdElzc3VlciIsImF1ZCI6IkxvY2FsaG9zdEF1ZGllbmNlIn0.Er641gdXXhfnh9Ojh-d7mSKjtau0GFc8oGNc-lGbkf4
+
+###
+POST http://localhost:5125/api/v1/orders
+Content-Type: application/json
+
+{
+  "TotalAmount" : 54444,
+  "UserId" : "799d50c3-8582-4f37-8124-100ef75d9b7c"
+}
+
+###
+GET http://localhost:5125/api/v1/orders
+
+
+###
+GET http://localhost:5125/api/v1/orders/82a7069c-3833-4d7e-ba00-f2929caa5497

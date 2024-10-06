@@ -21,7 +21,6 @@ namespace Backend.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-<<<<<<< HEAD
             modelBuilder.Entity("Address", b =>
                 {
                     b.Property<Guid>("AddresId")
@@ -54,8 +53,6 @@ namespace Backend.Migrations
                     b.ToTable("Addresses");
                 });
 
-=======
->>>>>>> 74e8b3bd732f634116736b6b9d21c789fc882fc2
             modelBuilder.Entity("Order", b =>
                 {
                     b.Property<Guid>("OrderId")
@@ -63,42 +60,30 @@ namespace Backend.Migrations
                         .HasColumnType("uuid")
                         .HasDefaultValueSql("uuid_generate_v4()");
 
-<<<<<<< HEAD
-                    b.Property<string>("Image")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-=======
->>>>>>> 74e8b3bd732f634116736b6b9d21c789fc882fc2
                     b.Property<DateTime>("OrderDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
-<<<<<<< HEAD
-                    b.Property<int>("OrderStatus")
-                        .HasColumnType("integer");
-=======
                     b.Property<Guid>("ShipmentId")
                         .HasColumnType("uuid");
->>>>>>> 74e8b3bd732f634116736b6b9d21c789fc882fc2
 
                     b.Property<decimal>("TotalAmount")
                         .HasColumnType("numeric");
 
-<<<<<<< HEAD
-=======
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
                     b.Property<int>("shipmentStatus")
                         .HasColumnType("integer");
 
->>>>>>> 74e8b3bd732f634116736b6b9d21c789fc882fc2
                     b.HasKey("OrderId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Orders");
                 });
 
-<<<<<<< HEAD
-=======
             modelBuilder.Entity("OrderProduct", b =>
                 {
                     b.Property<Guid>("OrderId")
@@ -144,7 +129,6 @@ namespace Backend.Migrations
                     b.ToTable("Shipments");
                 });
 
->>>>>>> 74e8b3bd732f634116736b6b9d21c789fc882fc2
             modelBuilder.Entity("User", b =>
                 {
                     b.Property<Guid>("UserId")
@@ -189,7 +173,6 @@ namespace Backend.Migrations
                     b.ToTable("Users");
                 });
 
-<<<<<<< HEAD
             modelBuilder.Entity("Address", b =>
                 {
                     b.HasOne("User", "User")
@@ -201,10 +184,17 @@ namespace Backend.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("User", b =>
+            modelBuilder.Entity("Order", b =>
                 {
-                    b.Navigation("Addresses");
-=======
+                    b.HasOne("User", "User")
+                        .WithMany("Orders")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("OrderProduct", b =>
                 {
                     b.HasOne("Order", "Order")
@@ -233,7 +223,13 @@ namespace Backend.Migrations
 
                     b.Navigation("Shipment")
                         .IsRequired();
->>>>>>> 74e8b3bd732f634116736b6b9d21c789fc882fc2
+                });
+
+            modelBuilder.Entity("User", b =>
+                {
+                    b.Navigation("Addresses");
+
+                    b.Navigation("Orders");
                 });
 #pragma warning restore 612, 618
         }

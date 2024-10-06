@@ -28,9 +28,9 @@ public class UserController : ControllerBase
         return ApiResponse.Success(user, "User is now is Admin");
     }
 
-    // GET => /api/users => Get all the users
-    [Authorize(Roles = "Admin")]
-    [HttpGet("Searching")]
+
+   // [Authorize(Roles = "Admin")]
+    [HttpGet]
     public async Task<IActionResult> GetUsers([FromQuery] QueryParameters queryParameters)
     {
         try
@@ -49,25 +49,25 @@ public class UserController : ControllerBase
         }
     }
 
-    [Authorize(Roles = "Admin")]
-    [HttpGet("paginated")]
-    public async Task<IActionResult> GetUsers([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 5)
-    {
-        try
-        {
-            var users = await _userService.GetUsersPaginationServiceAsync(pageNumber, pageSize);
-            return ApiResponse.Success(users);
-        }
-        catch (ApplicationException ex)
-        {
-            return ApiResponse.ServerError(ex.Message);
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Exception : {ex.Message}");
-            return ApiResponse.ServerError("An unexpected error occurred.");
-        }
-    }
+    // [Authorize(Roles = "Admin")]
+    // [HttpGet("paginated")]
+    // public async Task<IActionResult> GetUsers([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 5)
+    // {
+    //     try
+    //     {
+    //         var users = await _userService.GetUsersPaginationServiceAsync(pageNumber, pageSize);
+    //         return ApiResponse.Success(users);
+    //     }
+    //     catch (ApplicationException ex)
+    //     {
+    //         return ApiResponse.ServerError(ex.Message);
+    //     }
+    //     catch (Exception ex)
+    //     {
+    //         Console.WriteLine($"Exception : {ex.Message}");
+    //         return ApiResponse.ServerError("An unexpected error occurred.");
+    //     }
+    // }
 
 
     // [HttpPost]
@@ -95,28 +95,28 @@ public class UserController : ControllerBase
     // }
 
     //[Authorize(Roles = "Admin")]
-    [HttpGet]
-    public async Task<IActionResult> GetUsers()
-    {
-        try
-        {
-            var users = await _userService.GetUsersServiceAsync();
-            if (users == null || !users.Any())
-            {
-                return ApiResponse.NotFound("There are no users yet");
-            }
-            return ApiResponse.Success(users, "Users are returned succesfully");
-        }
-        catch (ApplicationException ex)
-        {
+    // [HttpGet]
+    // public async Task<IActionResult> GetUsers()
+    // {
+    //     try
+    //     {
+    //         var users = await _userService.GetUsersServiceAsync();
+    //         if (users == null || !users.Any())
+    //         {
+    //             return ApiResponse.NotFound("There are no users yet");
+    //         }
+    //         return ApiResponse.Success(users, "Users are returned succesfully");
+    //     }
+    //     catch (ApplicationException ex)
+    //     {
 
-            return ApiResponse.ServerError("Server error: " + ex.Message);
-        }
-        catch (System.Exception ex)
-        {
-            return ApiResponse.ServerError("Server error: " + ex.Message);
-        }
-    }
+    //         return ApiResponse.ServerError("Server error: " + ex.Message);
+    //     }
+    //     catch (System.Exception ex)
+    //     {
+    //         return ApiResponse.ServerError("Server error: " + ex.Message);
+    //     }
+    // }
 
 
     [Authorize(Roles = "Customer")]
