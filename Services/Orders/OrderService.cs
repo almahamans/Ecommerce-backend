@@ -20,26 +20,26 @@ public class OrderService : IOrderService{
         try{
         if(createOrderDto == null){
             return null;
-        }else{            
-            foreach(var orderproduct in createOrderDto.orderProducts){
-            var newOrderProduct = new OrderProduct{
-                ProductQuantity = orderproduct.ProductQuantity,
-                ProductsPrice = orderproduct.ProductsPrice
-            };
-                await _appDbContext.OrderProducts.AddAsync(newOrderProduct);
-            }
-            await _appDbContext.SaveChangesAsync();
-
+        }else{
             var newOrder = _mapper.Map<Order>(createOrderDto);
             await _appDbContext.Orders.AddAsync(newOrder);
             await _appDbContext.SaveChangesAsync();
 
-            var newShipment = new Shipment
-            {
-                ShipmentStatus = ShipmentStatus.OnProgress,
-                OrderId = newOrder.OrderId,
-                Order = newOrder
-            };
+        // foreach (var orderproduct in createOrderDto.orderProducts){
+        // var newOrderProduct = new OrderProduct{
+        //     ProductQuantity = orderproduct.ProductQuantity,
+        //     ProductsPrice = orderproduct.ProductsPrice,
+        //     OrderId = orderproduct.OrderId
+        // };
+        //     await _appDbContext.OrderProducts.AddAsync(newOrderProduct);
+        // }
+        //     await _appDbContext.SaveChangesAsync();
+
+            var newShipment = new Shipment{
+            ShipmentStatus = ShipmentStatus.OnProgress,
+            OrderId = newOrder.OrderId,
+            Order = newOrder
+        };
             await _appDbContext.Shipments.AddAsync(newShipment);
             await _appDbContext.SaveChangesAsync();
             newOrder.ShipmentId = newShipment.ShipmentId;
@@ -65,9 +65,8 @@ public class OrderService : IOrderService{
     }
     public async Task<PaginatedResult<Order>> GetAllOrdersService(QueryParameters queryParameters){
         try{
-            var query = _appDbContext.Orders.Include(o => o.Shipment).Include(o => o.OrderProducts).AsQueryable();
-            switch (queryParameters.SortBy?.ToLower())
-            {
+            var query = _appDbContext.Orders.Include(o => o.Shipment).AsQueryable();
+            switch (queryParameters.SortBy?.ToLower()){
                 case "OrderDate":
                     query = queryParameters.SortOrder.ToLower() == "desc"
                         ? query.OrderByDescending(o => o.OrderDate)
@@ -84,9 +83,9 @@ public class OrderService : IOrderService{
         }
         var orders = await query.Skip((queryParameters.PageNumber - 1) * queryParameters.PageSize).Take(queryParameters.PageSize).ToListAsync();
         
-        foreach(var order in orders){
-                Console.WriteLine(order.Shipment.ShipmentStatus);
-        }
+        // foreach(var order in orders){
+        //         Console.WriteLine(order.Shipment.ShipmentStatus);
+        // }
 
         return new PaginatedResult<Order>{
             Items = orders,
@@ -100,10 +99,10 @@ public class OrderService : IOrderService{
     }
     public async Task<OrderDto> GetOrderByIdService(Guid id){
         try{
-        var order = await _appDbContext.Orders.Include(o => o.Shipment).Include(o => o.OrderProducts).FirstOrDefaultAsync(o => o.OrderId == id);
-            if (order == null){
-                return null;
-            }
+        var order = await _appDbContext.Orders.FindAsync(id);
+            
+            if (order == null) return null;
+
         return _mapper.Map<OrderDto>(order);
         }catch (Exception ex){
             throw new ApplicationException($"Error in getting an order by id service: {ex.Message}");
@@ -111,18 +110,18 @@ public class OrderService : IOrderService{
     }
     public async Task<OrderDto> UpdateOrderSrvice(Guid id, UpdateOrderDto updateOrderDto){
         try{
-        var order = await _appDbContext.Orders.Include(o => o.OrderProducts).FirstOrDefaultAsync(o => o.OrderId == id);
+        var order = await _appDbContext.Orders.FindAsync(id);
         
         if (order == null) return null;
         if(updateOrderDto == null) return null;
 
-        foreach(var orderProduct in updateOrderDto.orderProducts){
-            var newOrderProduct = new OrderProduct{
-                ProductQuantity = orderProduct.ProductQuantity,
-                ProductsPrice = orderProduct.ProductsPrice
-            };
-            order.OrderProducts.Add(orderProduct);
-        }
+        // foreach(var orderProduct in updateOrderDto.orderProducts){
+        //     var newOrderProduct = new OrderProduct{
+        //         ProductQuantity = orderProduct.ProductQuantity,
+        //         ProductsPrice = orderProduct.ProductsPrice
+        //     };
+        //     order.OrderProducts.Add(orderProduct);
+        // }
 
         order.TotalAmount = updateOrderDto.TotalAmount ?? order.TotalAmount;
         _appDbContext.Orders.Update(order);

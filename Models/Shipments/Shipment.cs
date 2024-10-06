@@ -15,7 +15,6 @@ public class Shipment{
     public ShipmentStatus ShipmentStatus { get; set; }
     public DateTime ShipmentDate { get; set; }
     public DateTime DeliveryDate { get; set; }
- //not really important
     public Guid OrderId { get; set; }
     [JsonIgnore]
     public Order Order { get; set; }

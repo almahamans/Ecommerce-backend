@@ -44,6 +44,22 @@ namespace Backend.Migrations
                     b.ToTable("Orders");
                 });
 
+            modelBuilder.Entity("OrderProduct", b =>
+                {
+                    b.Property<Guid>("OrderId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("ProductQuantity")
+                        .HasColumnType("integer");
+
+                    b.Property<decimal>("ProductsPrice")
+                        .HasColumnType("numeric");
+
+                    b.HasKey("OrderId");
+
+                    b.ToTable("OrderProducts");
+                });
+
             modelBuilder.Entity("Shipment", b =>
                 {
                     b.Property<Guid>("ShipmentId")
@@ -117,6 +133,17 @@ namespace Backend.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("OrderProduct", b =>
+                {
+                    b.HasOne("Order", "Order")
+                        .WithMany("OrderProducts")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
+                });
+
             modelBuilder.Entity("Shipment", b =>
                 {
                     b.HasOne("Order", "Order")
@@ -130,8 +157,9 @@ namespace Backend.Migrations
 
             modelBuilder.Entity("Order", b =>
                 {
-                    b.Navigation("Shipment")
-                        .IsRequired();
+                    b.Navigation("OrderProducts");
+
+                    b.Navigation("Shipment");
                 });
 #pragma warning restore 612, 618
         }

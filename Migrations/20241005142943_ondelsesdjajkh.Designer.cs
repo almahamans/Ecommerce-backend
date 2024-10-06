@@ -11,8 +11,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Backend.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241004164626_ondelsesd")]
-    partial class ondelsesd
+    [Migration("20241005142943_ondelsesdjajkh")]
+    partial class ondelsesdjajkh
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -45,6 +45,22 @@ namespace Backend.Migrations
                     b.HasKey("OrderId");
 
                     b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("OrderProduct", b =>
+                {
+                    b.Property<Guid>("OrderId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("ProductQuantity")
+                        .HasColumnType("integer");
+
+                    b.Property<decimal>("ProductsPrice")
+                        .HasColumnType("numeric");
+
+                    b.HasKey("OrderId");
+
+                    b.ToTable("OrderProducts");
                 });
 
             modelBuilder.Entity("Shipment", b =>
@@ -120,6 +136,17 @@ namespace Backend.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("OrderProduct", b =>
+                {
+                    b.HasOne("Order", "Order")
+                        .WithMany("OrderProducts")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
+                });
+
             modelBuilder.Entity("Shipment", b =>
                 {
                     b.HasOne("Order", "Order")
@@ -133,8 +160,9 @@ namespace Backend.Migrations
 
             modelBuilder.Entity("Order", b =>
                 {
-                    b.Navigation("Shipment")
-                        .IsRequired();
+                    b.Navigation("OrderProducts");
+
+                    b.Navigation("Shipment");
                 });
 #pragma warning restore 612, 618
         }

@@ -8,6 +8,7 @@ public class OrderController : ControllerBase{
     {
         _iorderService = iorderService;
     }
+    
     [HttpPost]
     public async Task<IActionResult> CreateOrder([FromBody] CreateOrderDto createOrderDto){      
         if(!ModelState.IsValid){
@@ -54,9 +55,9 @@ public class OrderController : ControllerBase{
             return ApiResponse.NotFound($"error in deleting order (controller).{ex.Message}");
         }
     }
-    // [Authorize("Admin")]
+    [Authorize("Admin")]
     [HttpPut("{id:guid}")]
-    public async Task<IActionResult> UpdateOrderById(Guid id, [FromBody] UpdateOrderDto updateOrderDto){
+    public async Task<IActionResult> UpdateOrderById(Guid id, UpdateOrderDto updateOrderDto){
         if (id == null){
             return ApiResponse.BadRequest("no id found");
         }
@@ -64,7 +65,7 @@ public class OrderController : ControllerBase{
             var order = await _iorderService.UpdateOrderSrvice(id, updateOrderDto);
             return Ok(order);  
         }catch (Exception ex){
-            return ApiResponse.NotFound($"Not entered data. {ex.Message}");
+            return ApiResponse.NotFound($"No entered data. {ex.Message}");
         }
     }
 }
