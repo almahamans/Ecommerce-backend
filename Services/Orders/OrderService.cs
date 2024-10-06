@@ -35,7 +35,7 @@ public class OrderService : IOrderService{
         // }
         //     await _appDbContext.SaveChangesAsync();
 
-            var newShipment = new Shipment{
+        var newShipment = new Shipment{
             ShipmentStatus = ShipmentStatus.OnProgress,
             OrderId = newOrder.OrderId,
             Order = newOrder
