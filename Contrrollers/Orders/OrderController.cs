@@ -31,6 +31,7 @@ public class OrderController : ControllerBase{
             return ApiResponse.NotFound($"error in geting orders (controller). {ex.Message}");
         }        
     }
+    [Authorize("Admin")]
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetOrderById(Guid id){
         if(id == null){
@@ -55,7 +56,6 @@ public class OrderController : ControllerBase{
             return ApiResponse.NotFound($"error in deleting order (controller).{ex.Message}");
         }
     }
-    [Authorize("Admin")]
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> UpdateOrderById(Guid id, UpdateOrderDto updateOrderDto){
         if (id == null){

@@ -39,6 +39,9 @@ namespace Backend.Migrations
                     b.Property<decimal>("TotalAmount")
                         .HasColumnType("numeric");
 
+                    b.Property<int>("shipmentStatus")
+                        .HasColumnType("integer");
+
                     b.HasKey("OrderId");
 
                     b.ToTable("Orders");
@@ -159,7 +162,8 @@ namespace Backend.Migrations
                 {
                     b.Navigation("OrderProducts");
 
-                    b.Navigation("Shipment");
+                    b.Navigation("Shipment")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

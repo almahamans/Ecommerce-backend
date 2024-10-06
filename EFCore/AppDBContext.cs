@@ -66,7 +66,6 @@ public class AppDbContext : DbContext
     .WithMany(o => o.OrderProducts)
     .HasForeignKey(op => op.OrderId)
     .OnDelete(DeleteBehavior.Cascade);
-
   }
 }
 

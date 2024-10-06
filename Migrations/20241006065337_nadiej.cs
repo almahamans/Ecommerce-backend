@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Backend.Migrations
 {
     /// <inheritdoc />
-    public partial class ondelsesdjajkh : Migration
+    public partial class nadiej : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -18,7 +18,8 @@ namespace Backend.Migrations
                     OrderId = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "uuid_generate_v4()"),
                     OrderDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
                     TotalAmount = table.Column<decimal>(type: "numeric", nullable: false),
-                    ShipmentId = table.Column<Guid>(type: "uuid", nullable: false)
+                    ShipmentId = table.Column<Guid>(type: "uuid", nullable: false),
+                    shipmentStatus = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {

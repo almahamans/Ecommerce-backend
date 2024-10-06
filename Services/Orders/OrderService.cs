@@ -43,6 +43,8 @@ public class OrderService : IOrderService{
             await _appDbContext.Shipments.AddAsync(newShipment);
             await _appDbContext.SaveChangesAsync();
             newOrder.ShipmentId = newShipment.ShipmentId;
+            await _appDbContext.SaveChangesAsync();
+
                 return newOrder;  
         }
         }catch (Exception ex){
@@ -65,7 +67,7 @@ public class OrderService : IOrderService{
     }
     public async Task<PaginatedResult<Order>> GetAllOrdersService(QueryParameters queryParameters){
         try{
-            var query = _appDbContext.Orders.Include(o => o.Shipment).AsQueryable();
+            var query = _appDbContext.Orders.AsQueryable();
             switch (queryParameters.SortBy?.ToLower()){
                 case "OrderDate":
                     query = queryParameters.SortOrder.ToLower() == "desc"

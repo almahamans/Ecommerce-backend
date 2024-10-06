@@ -11,8 +11,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Backend.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241005142943_ondelsesdjajkh")]
-    partial class ondelsesdjajkh
+    [Migration("20241006065337_nadiej")]
+    partial class nadiej
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -41,6 +41,9 @@ namespace Backend.Migrations
 
                     b.Property<decimal>("TotalAmount")
                         .HasColumnType("numeric");
+
+                    b.Property<int>("shipmentStatus")
+                        .HasColumnType("integer");
 
                     b.HasKey("OrderId");
 
@@ -162,7 +165,8 @@ namespace Backend.Migrations
                 {
                     b.Navigation("OrderProducts");
 
-                    b.Navigation("Shipment");
+                    b.Navigation("Shipment")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }
