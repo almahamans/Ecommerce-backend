@@ -6,10 +6,7 @@ using AutoMapper;
 
 public class MappingProfile : Profile
 {
-    public MappingProfile()
-    {
-
-
+    public MappingProfile(){
         CreateMap<Product, ProductDto>();
         CreateMap<CreateProductDto, Product>();
 
@@ -18,7 +15,7 @@ public class MappingProfile : Profile
         CreateMap<Category, CategoryWithProductsDto>()
        .ForMember(dest => dest.Products, opt => opt.MapFrom(src => src.Products)); // to avoid null values and associate category with products.
 
-         CreateMap<Order, OrderDto>().ReverseMap();
+        CreateMap<Order, OrderDto>().ReverseMap();
         CreateMap<OrderDto, PaginatedResult<OrderDto>>().ReverseMap();
         CreateMap<CreateOrderDto, Order>();
         CreateMap<UpdateOrderDto, OrderDto>();
@@ -35,6 +32,10 @@ public class MappingProfile : Profile
         CreateMap<User, UserDto>();
         CreateMap<UserDto, User>();
         CreateMap<CreateUserDto, User>();
+
+         CreateMap<Address, AddressDto>();
+        CreateMap<AddressDto, Address>();
+        CreateMap<CreateAddressDto, Address>();
     }
 }
        

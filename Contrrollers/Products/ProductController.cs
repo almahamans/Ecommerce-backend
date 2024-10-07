@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
@@ -20,7 +21,7 @@ public class ProductController : ControllerBase
 
     // create products
     [HttpPost]
-    // [Authorize("Admin")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> CreateProduct([FromBody] CreateProductDto newProduct)
     {
 
@@ -44,7 +45,7 @@ public class ProductController : ControllerBase
     }
 
     [HttpGet]
-    // [Authorize("Admin, Customer")]
+    [Authorize(Roles = "Admin, Customer")]
     [HttpGet]
     public async Task<IActionResult> GetProducts([FromQuery] QueryParameters queryParameters)
     {
@@ -65,7 +66,7 @@ public class ProductController : ControllerBase
     }
 
     [HttpGet("{productId}")]
-    // [Authorize("Admin, Customer")]
+    [Authorize(Roles = "Admin, Customer")]
     public async Task<IActionResult> GetProductById(Guid productId)
     {
         try
@@ -88,7 +89,7 @@ public class ProductController : ControllerBase
     }
 
     [HttpPut("{productId}")]
-    // [Authorize("Admin")]
+    [Authorize(Roles = "Admin, Customer")]
     public async Task<IActionResult> UpdateProduct(UpdateProductDto updateProduct, Guid productId)
     {
 
@@ -117,7 +118,7 @@ public class ProductController : ControllerBase
     }
 
     [HttpDelete("{productId}")]
-    // [Authorize("Admin")]
+    [Authorize(Roles = "Admin, Customer")]
     public async Task<IActionResult> DeletProduct(Guid productId)
     {
 

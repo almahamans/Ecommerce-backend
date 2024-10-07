@@ -30,9 +30,6 @@ public class ProductService : IProductService
     // create product service
     public async Task<ProductDto> CreateProductServiceAsync(CreateProductDto newProduct)
     {
-
-
-
         try
         {
             var slug = newProduct.ProductName.Replace(" ", "-");
@@ -40,24 +37,29 @@ public class ProductService : IProductService
             var product = _mapper.Map<Product>(newProduct);
             await _appDbContext.Products.AddAsync(product);
             await _appDbContext.SaveChangesAsync();
+
+            foreach(var orderProducts in newProduct.OrderProducts){
+                var newOrderProduct = new OrderProduct{
+                    ProductQuantity = orderProducts.ProductQuantity,
+                    ProductsPrice = orderProducts.ProductsPrice,
+                    ProductId = orderProducts.ProductId
+                };
+                await _appDbContext.OrderProducts.AddAsync(newOrderProduct);
+            }
+            await _appDbContext.SaveChangesAsync();
+
             var productData = _mapper.Map<ProductDto>(product);
             return productData;
-        }
-        catch (DbUpdateException dbEx)
-        {
+        }catch (DbUpdateException dbEx){
             // Handle database update exceptions (like unique constraint violations)
             Console.WriteLine($"Database Update Error: {dbEx.Message}");
             throw new ApplicationException("An error occurred while saving to the database. Please check the data and try again.");
-        }
-        catch (Exception ex)
-        {
+        }catch (Exception ex){
             // Handle any other unexpected exceptions
             Console.WriteLine($"An unexpected error occurred: {ex.Message}");
             throw new ApplicationException("An unexpected error occurred. Please try again later.");
         }
-
     }
-
     // get products and the category associated with it
     public async Task<PaginatedResult<ProductDto>> GetProductsServiceAsync(QueryParameters queryParameters)
     {

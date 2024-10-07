@@ -1,8 +1,11 @@
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.IdentityModel.Tokens.Jwt; // Corrected from JWT to Jwt
 using System.Diagnostics;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.OpenApi.Models;
-
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.Extensions.Configuration;
+using Microsoft.OpenApi.Models; // Added for OpenApiInfo and OpenApiSecurityScheme
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,86 +16,76 @@ DotNetEnv.Env.Load();
 var jwtKey = Environment.GetEnvironmentVariable("Jwt__Key") ?? throw new InvalidOperationException("JWT Key is missing in environment variables.");
 var jwtIssuer = Environment.GetEnvironmentVariable("Jwt__Issuer") ?? throw new InvalidOperationException("JWT Issuer is missing in environment variables.");
 var jwtAudience = Environment.GetEnvironmentVariable("Jwt__Audience") ?? throw new InvalidOperationException("JWT Audience is missing in environment variables.");
-var connectionDb = Environment.GetEnvironmentVariable("DataBase__Connection") ?? throw new InvalidOperationException("JWT Audience is missing in environment variables.");
-
+var connectionDb = Environment.GetEnvironmentVariable("DataBase__Connection") ?? throw new InvalidOperationException("Database connection string is missing in environment variables.");
 
 // Add services to the container.
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddNewtonsoftJson(options =>
+        options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+    );
 
-
-builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IAddressService, AddressService>();
+builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IShipmentSrvice, ShipmentService>();
-
-
-// Register your services
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
+
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Group5 E-commerce API", Version = "v1" });
+});
 
 // Add AutoMapper
 builder.Services.AddAutoMapper(typeof(Program));
 
-// setup the following lines in your startup file
+// CORS configuration
 builder.Services.AddCors(options =>
-    {
-
-        // you can create multiple policies to use specifically for each controller
-        options.AddPolicy("AllowSpecificOrigins", builder =>
-        {
-            builder.WithOrigins("http://localhost:5125")// Specify the allowed origins
-                  .AllowAnyMethod() // Allows all methods
-                                    // .WithMethods("GET, POST") // Allows only specific methods
-                  .AllowAnyHeader() // Allows all headers
-                                    // .WithHeaders("Content-Type", "Authorization") // Allow Specific Headers
-                  .AllowCredentials(); // Allows credentials like cookies, authorization headers, etc.
-        });
-    });
-
-
-// Configure Entity Framework Core with Npgsql
-builder.Services.AddDbContext<AppDbContext>(options =>
-options.UseNpgsql(connectionDb));
-
-// Add Swagger
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = " group 5 e-commerce API", Version = "v1" });
-    // Add JWT Authentication to Swagger
-    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    options.AddPolicy("AllowSpecificOrigins", builder =>
     {
-        In = ParameterLocation.Header,
-        Description = "Please enter a valid token",
-        Name = "Authorization",
-        Type = SecuritySchemeType.Http,
-        BearerFormat = "JWT",
-        Scheme = "Bearer"
-    });
-
-    c.AddSecurityRequirement(new OpenApiSecurityRequirement
-    {
-        {
-            new OpenApiSecurityScheme
-            {
-                Reference = new OpenApiReference
-                {
-                    Type = ReferenceType.SecurityScheme,
-                    Id = "Bearer"
-                }
-            },
-            Array.Empty<string>()
-        }
+        builder.WithOrigins("http://localhost:5125") // Specify the allowed origins
+              .AllowAnyMethod() // Allows all methods
+              .AllowAnyHeader() // Allows all headers
+              .AllowCredentials(); // Allows credentials like cookies, authorization headers, etc.
     });
 });
 
+// Configure Entity Framework Core with Npgsql
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseNpgsql(connectionDb));
+
+var key = Encoding.ASCII.GetBytes(jwtKey); // Corrected to use jwtKey directly
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.RequireHttpsMetadata = false;
+    options.SaveToken = true;
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(key),
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidIssuer = jwtIssuer, // Corrected to use jwtIssuer directly
+        ValidAudience = jwtAudience, // Corrected to use jwtAudience directly
+        ClockSkew = TimeSpan.Zero
+    };
+});
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
 }
+
 app.Use(async (context, next) =>
 {
     var clientIp = context.Connection.RemoteIpAddress?.ToString();
@@ -104,14 +97,13 @@ app.Use(async (context, next) =>
     await next.Invoke();
     stopwatch.Stop();
     Console.WriteLine($"[{DateTime.UtcNow}] [Response]" +
-                            $"Status Code: {context.Response.StatusCode}, " +
-                            $"Time Taken: {stopwatch.ElapsedMilliseconds} ms");
-    Console.WriteLine($"After Calling: {context.Response.StatusCode}");
+                      $"Status Code: {context.Response.StatusCode}, " +
+                      $"Time Taken: {stopwatch.ElapsedMilliseconds} ms");
 });
 
 // Middleware order is important
 app.UseHttpsRedirection();
-app.UseCors("MyAllowSpecificOrigins");
+app.UseCors("AllowSpecificOrigins"); // Corrected to match the defined CORS policy
 app.UseAuthentication();
 app.UseAuthorization(); // Ensure you have this to enable authorization
 app.UseSwagger();
@@ -121,12 +113,6 @@ app.UseSwaggerUI(c =>
     c.RoutePrefix = string.Empty;
 });
 
-
 app.MapControllers();
+
 app.Run();
-
-
-
-
-
-// shahad

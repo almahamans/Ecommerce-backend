@@ -36,6 +36,5 @@ public record Product
     //Using [JsonIgnore] on one side of the relationship helps break this loop.
     [JsonIgnore]
     public Category? Category { get; set; }
-
-
+    public List<OrderProduct> OrderProducts { get; set; }
 }

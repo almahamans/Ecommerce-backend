@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
@@ -13,7 +14,7 @@ public class CategoryController : ControllerBase
     }
 
     [HttpPost]
-    // [Authorize("Admin")]
+     [Authorize(Roles = "Admin, Customer")]
     public async Task<IActionResult> CreateCategory([FromBody] CreateCategoryDto newCategory)
     {
 
@@ -37,7 +38,7 @@ public class CategoryController : ControllerBase
     }
 
     [HttpGet]
-    // [Authorize("Admin, Customer")]
+     [Authorize(Roles = "Admin, Customer")]
     public async Task<IActionResult> GetCategories([FromQuery] QueryParameters queryParameters)
     {
         try
@@ -56,7 +57,7 @@ public class CategoryController : ControllerBase
     }
 
     [HttpGet("{categoryId}")]
-    // [Authorize("Admin, Customer")]
+     [Authorize(Roles = "Admin, Customer")]
     public async Task<IActionResult> GetCategoryById(Guid categoryId)
     {
         try
@@ -78,7 +79,7 @@ public class CategoryController : ControllerBase
         }
     }
     [HttpPut("{categoryId}")]
-    // [Authorize("Admin")]
+     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> UpdateCategory(UpdateCategoryDto updateCategory, Guid categoryId)
     {
 
@@ -108,7 +109,7 @@ public class CategoryController : ControllerBase
     }
 
     [HttpDelete("{categoryId}")]
-    // [Authorize("Admin")]
+     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> DeletCategory(Guid categoryId)
     {
 
@@ -138,7 +139,7 @@ public class CategoryController : ControllerBase
     }
 
     [HttpGet("products")]
-    // [Authorize("Admin, Customer")]
+    [Authorize(Roles = "Admin, Customer")]
     public async Task<IActionResult> GetCategoriesWithProducts(int pageNumber = 1, int pageSize = 10)
     {
         try
