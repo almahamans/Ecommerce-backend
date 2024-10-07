@@ -14,7 +14,7 @@ public class CategoryController : ControllerBase
     }
 
     [HttpPost]
-     [Authorize(Roles = "Admin, Customer")]
+    //  [Authorize(Roles = "Admin, Customer")]
     public async Task<IActionResult> CreateCategory([FromBody] CreateCategoryDto newCategory)
     {
 
@@ -79,7 +79,7 @@ public class CategoryController : ControllerBase
         }
     }
     [HttpPut("{categoryId}")]
-     [Authorize(Roles = "Admin")]
+    //  [Authorize(Roles = "Admin")]
     public async Task<IActionResult> UpdateCategory(UpdateCategoryDto updateCategory, Guid categoryId)
     {
 
@@ -109,7 +109,7 @@ public class CategoryController : ControllerBase
     }
 
     [HttpDelete("{categoryId}")]
-     [Authorize(Roles = "Admin")]
+    //  [Authorize(Roles = "Admin")]
     public async Task<IActionResult> DeletCategory(Guid categoryId)
     {
 
@@ -139,7 +139,7 @@ public class CategoryController : ControllerBase
     }
 
     [HttpGet("products")]
-    [Authorize(Roles = "Admin, Customer")]
+    // [Authorize(Roles = "Admin, Customer")]
     public async Task<IActionResult> GetCategoriesWithProducts(int pageNumber = 1, int pageSize = 10)
     {
         try

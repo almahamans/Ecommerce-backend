@@ -18,6 +18,14 @@ var jwtIssuer = Environment.GetEnvironmentVariable("Jwt__Issuer") ?? throw new I
 var jwtAudience = Environment.GetEnvironmentVariable("Jwt__Audience") ?? throw new InvalidOperationException("JWT Audience is missing in environment variables.");
 var connectionDb = Environment.GetEnvironmentVariable("DataBase__Connection") ?? throw new InvalidOperationException("Database connection string is missing in environment variables.");
 
+System.Console.WriteLine($"Connection DB {connectionDb}");
+
+// Configure Entity Framework Core with Npgsql
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseNpgsql(connectionDb));
+
+System.Console.WriteLine("DB successfully");
+
 // Add services to the container.
 builder.Services.AddControllers()
     .AddNewtonsoftJson(options =>
@@ -25,7 +33,7 @@ builder.Services.AddControllers()
     );
 
 builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IAddressService, AddressService>();
+//builder.Services.AddScoped<IAddressService, AddressService>();
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IShipmentSrvice, ShipmentService>();
@@ -53,9 +61,7 @@ builder.Services.AddCors(options =>
     });
 });
 
-// Configure Entity Framework Core with Npgsql
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(connectionDb));
+
 
 var key = Encoding.ASCII.GetBytes(jwtKey); // Corrected to use jwtKey directly
 builder.Services.AddAuthentication(options =>

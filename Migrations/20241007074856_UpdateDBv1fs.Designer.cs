@@ -11,8 +11,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Backend.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241007020124_alltheentities")]
-    partial class alltheentities
+    [Migration("20241007074856_UpdateDBv1fs")]
+    partial class UpdateDBv1fs
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -23,38 +23,6 @@ namespace Backend.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
-
-            modelBuilder.Entity("Address", b =>
-                {
-                    b.Property<Guid>("AddresId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasDefaultValueSql("uuid_generate_v4()");
-
-                    b.Property<string>("City")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.Property<string>("Neighberhood")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.Property<string>("Street")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("AddresId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Addresses");
-                });
 
             modelBuilder.Entity("Category", b =>
                 {
@@ -254,17 +222,6 @@ namespace Backend.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("Address", b =>
-                {
-                    b.HasOne("User", "User")
-                        .WithMany("Addresses")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("Order", b =>
                 {
                     b.HasOne("User", "User")
@@ -337,8 +294,6 @@ namespace Backend.Migrations
 
             modelBuilder.Entity("User", b =>
                 {
-                    b.Navigation("Addresses");
-
                     b.Navigation("Orders");
                 });
 #pragma warning restore 612, 618

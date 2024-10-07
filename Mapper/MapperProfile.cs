@@ -33,9 +33,9 @@ public class MappingProfile : Profile
         CreateMap<UserDto, User>();
         CreateMap<CreateUserDto, User>();
 
-         CreateMap<Address, AddressDto>();
-        CreateMap<AddressDto, Address>();
-        CreateMap<CreateAddressDto, Address>();
+        //  CreateMap<Address, AddressDto>();
+        // CreateMap<AddressDto, Address>();
+        // CreateMap<CreateAddressDto, Address>();
     }
 }
        

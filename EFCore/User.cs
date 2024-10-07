@@ -17,7 +17,7 @@ public class User
     public string? Image { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-    public List<Address> Addresses { get; set; }
+    // public List<Address> Addresses { get; set; }
     public List<Order> Orders { get; set; } = new List<Order>();
 
 

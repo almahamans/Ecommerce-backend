@@ -1,6 +1,6 @@
 
 //create new user
-POST  http://localhost:5125/api/v1/auth/register
+POST  http://localhost:5000/api/v1/auth/register
 Content-Type: application/json
 
 {
@@ -12,7 +12,7 @@ Content-Type: application/json
 
 ###
 //create new Address
-POST  http://localhost:5125/api/v1/address
+POST  http://localhost:5000/api/v1/address
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI5ZDQ5OTZlZC1iZTJjLTQwNmItODI4Yy0yNDMyZWI3YTc5YjUiLCJ1bmlxdWVfbmFtZSI6Im5vb3IiLCJyb2xlIjoiQ3VzdG9tZXIiLCJuYmYiOjE3Mjc5NjAwMDIsImV4cCI6MTcyNzk2MDMwMiwiaWF0IjoxNzI3OTYwMDAyLCJpc3MiOiJMb2NhbGhvc3RJc3N1ZXIiLCJhdWQiOiJMb2NhbGhvc3RBdWRpZW5jZSJ9.7p4qbZ8_X9nL24M0r0uCQzpzvCtNFC-2u_4piXiNCHw
 Content-Type: application/json
 
@@ -25,7 +25,7 @@ Content-Type: application/json
 
 ###
 //Customer Login
-POST  http://localhost:5125/api/v1/auth/login
+POST  http://localhost:5000/api/v1/auth/login
 Content-Type: application/json
 
 {
@@ -36,7 +36,7 @@ Content-Type: application/json
 
 ###
 // Admin Login - shahad
-POST  http://localhost:5125/api/v1/auth/login
+POST  http://localhost:5000/api/v1/auth/login
 Content-Type: application/json
 
 {
