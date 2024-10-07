@@ -52,8 +52,6 @@ public class AppDbContext : DbContext
     {
       entity.HasKey(u => u.UserId);
       entity.Property(u => u.UserId).HasDefaultValueSql("uuid_generate_v4()");
-      //  entity.HasKey(a => a.AddressId);
-      //  entity.Property(a => a.AddressId).HasDefaultValueSql("uuid_generate_v4()");
       entity.Property(u => u.UserName).IsRequired().HasMaxLength(100);
       entity.Property(u => u.Email).IsRequired().HasMaxLength(100);
       entity.HasIndex(u => u.Email).IsUnique();
@@ -61,6 +59,21 @@ public class AppDbContext : DbContext
       entity.Property(u => u.Role);
       entity.Property(u => u.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
     });
+
+    modelBuilder.Entity<Address>(attribut =>
+    {
+      attribut.HasKey(a => a.AddresId);
+      attribut.Property(a => a.AddresId).HasDefaultValueSql("uuid_generate_v4()");
+      attribut.Property(a => a.City).HasMaxLength(50);
+      attribut.Property(a => a.Neighberhood).HasMaxLength(100);
+      attribut.Property(a => a.Street).HasMaxLength(500);
+    });
+
+    modelBuilder.Entity<User>()
+    .HasMany(u => u.Addresses)
+    .WithOne(a => a.User)
+    .HasForeignKey(a => a.UserId)
+    .OnDelete(DeleteBehavior.Cascade);
 
     modelBuilder.Entity<Order>(attribut =>
     {
@@ -72,15 +85,6 @@ public class AppDbContext : DbContext
       attribut.Property(o => o.OrderId).HasDefaultValueSql("uuid_generate_v4()");
       attribut.Property(o => o.TotalAmount).IsRequired();
       attribut.Property(o => o.OrderDate).HasDefaultValueSql("CURRENT_TIMESTAMP");
-    });
-
-    modelBuilder.Entity<Address>(attribut =>
-    {
-      attribut.HasKey(a => a.AddresId);
-      attribut.Property(a => a.AddresId).HasDefaultValueSql("uuid_generate_v4()");
-      attribut.Property(a => a.City).HasMaxLength(50);
-      attribut.Property(a => a.Neighberhood).HasMaxLength(100);
-      attribut.Property(a => a.Street).HasMaxLength(500);
     });
 
     modelBuilder.Entity<User>()
@@ -124,18 +128,7 @@ public class AppDbContext : DbContext
     .WithMany(p => p.OrderProducts)
     .HasForeignKey(op => op.ProductId)
     .OnDelete(DeleteBehavior.Cascade);
-
-    modelBuilder.Entity<User>()
-    .HasMany(u => u.Addresses)
-    .WithOne(a => a.User)
-    .HasForeignKey(a => a.UserId)
-    .OnDelete(DeleteBehavior.Cascade);
-
-
-
-
   }
-
 }
 
 

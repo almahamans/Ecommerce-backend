@@ -57,14 +57,19 @@ public class OrderService : IOrderService
             throw new ApplicationException($"Error in create order service: {ex.Message}");
         }
     }
-    public async Task<bool> DeleteOrderSrvice(Guid id)
-    {
+    public async Task<bool> DeleteOrderSrvice(Guid id){
         try{
-            var order = await _appDbContext.Orders.Include(o => o.OrderProducts).FirstOrDefaultAsync(o => o.OrderId == id);
+            var order = await _appDbContext.Orders
+            .Include(o => o.Shipment)
+            .Include(o => o.OrderProducts)
+            .FirstOrDefaultAsync(o => o.OrderId == id);
+
             if (order == null) return false;
+
             _appDbContext.Orders.Remove(order);
             await _appDbContext.SaveChangesAsync();
-                return true;
+            
+            return true;
         }catch (Exception ex){
             throw new ApplicationException($"Error in delete order service: {ex.Message}");
         }
