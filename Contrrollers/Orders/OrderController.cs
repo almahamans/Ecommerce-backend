@@ -31,11 +31,8 @@ public class OrderController : ControllerBase{
             return ApiResponse.NotFound($"error in geting orders (controller). {ex.Message}");
         }        
     }
-<<<<<<< HEAD
+
   //  [Authorize("Admin")]
-=======
-    // [Authorize("Admin")]
->>>>>>> e57a5a802a6ecc302db9b46a4ea81392c2b3630d
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetOrderById(Guid id){
         if(id == null){

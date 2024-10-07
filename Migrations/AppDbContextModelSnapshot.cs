@@ -116,13 +116,18 @@ namespace Backend.Migrations
                     b.Property<Guid>("OrderId")
                         .HasColumnType("uuid");
 
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uuid");
+
                     b.Property<int>("ProductQuantity")
                         .HasColumnType("integer");
 
                     b.Property<decimal>("ProductsPrice")
                         .HasColumnType("numeric");
 
-                    b.HasKey("OrderId");
+                    b.HasKey("OrderId", "ProductId");
+
+                    b.HasIndex("ProductId");
 
                     b.ToTable("OrderProducts");
                 });
@@ -276,7 +281,15 @@ namespace Backend.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Product", "Product")
+                        .WithMany("OrderProducts")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Order");
+
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("Product", b =>
@@ -312,6 +325,11 @@ namespace Backend.Migrations
 
                     b.Navigation("Shipment")
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Product", b =>
+                {
+                    b.Navigation("OrderProducts");
                 });
 
             modelBuilder.Entity("User", b =>

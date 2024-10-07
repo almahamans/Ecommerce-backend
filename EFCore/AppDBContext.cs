@@ -111,7 +111,7 @@ public class AppDbContext : DbContext
     });
 
     modelBuilder.Entity<OrderProduct>()
-    .HasKey(op => new { op.OrderId, op.ProductId }); //composite primary key
+    .HasKey(op => new { op.OrderId, op.ProductId }); 
 
     modelBuilder.Entity<OrderProduct>()
     .HasOne(op => op.Order)
