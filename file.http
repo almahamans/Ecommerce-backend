@@ -1,49 +1,70 @@
 
-//create new user
-POST  http://localhost:5125/api/v1/auth/register
+//create new order (order table) => customer
+POST  http://localhost:5000/api/v1/orders
+Content-Type: application/json
+
+{
+ "totalAmount": 200
+}
+
+###
+//get all orders => customer
+Get  http://localhost:5000/api/v1/orders
+
+
+###
+//get order by id => admin
+Get  http://localhost:5000/api/v1/orders/{}
+
+
+###
+// update order => customer
+PUT  http://localhost:5000/api/v1/orders/{}
+Content-Type: application/json
+
+{
+  "totalAmount": 210
+}
+###
+
+// delete an order => customer
+DELETE  http://localhost:5000/api/v1/orders/{}
+Content-Type: application/json
+
+###
+
+//create new shipment (shipment table) => admin << can done auto when create shipment>>
+POST  http://localhost:5000/api/v1/shipments
 Content-Type: application/json
 
 {
  
- "UserName": "shahd",
-  "Password" : "dhggf2333",
-  "Email" : "shahd@gmail.com"
 }
 
 ###
-//create new Address
-POST  http://localhost:5125/api/v1/address
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI5ZDQ5OTZlZC1iZTJjLTQwNmItODI4Yy0yNDMyZWI3YTc5YjUiLCJ1bmlxdWVfbmFtZSI6Im5vb3IiLCJyb2xlIjoiQ3VzdG9tZXIiLCJuYmYiOjE3Mjc5NjAwMDIsImV4cCI6MTcyNzk2MDMwMiwiaWF0IjoxNzI3OTYwMDAyLCJpc3MiOiJMb2NhbGhvc3RJc3N1ZXIiLCJhdWQiOiJMb2NhbGhvc3RBdWRpZW5jZSJ9.7p4qbZ8_X9nL24M0r0uCQzpzvCtNFC-2u_4piXiNCHw
-Content-Type: application/json
+//get all shipments => admin
+Get  http://localhost:5000/api/v1/shipments
 
-{
-  "City": "Tabuk",
-  "Neighberhood" : "al-manamah",
-  "Street" : " bin majed",
-  "UserId" : "4201ba59-7b60-43e7-9520-408de89d7942"
-}
 
 ###
-//Customer Login
-POST  http://localhost:5125/api/v1/auth/login
-Content-Type: application/json
+//get shipments by id => admin
+Get  http://localhost:5000/api/v1/shipments/{}
 
-{
-  "Password" : "dhggf2333",
-  "Email" : "noor@gmail.com"
-
-}
 
 ###
-// Admin Login - shahad
-POST  http://localhost:5125/api/v1/auth/login
+// update shipments => admin
+PUT  http://localhost:5000/api/v1/shipments/{}
 Content-Type: application/json
 
 {
-  "Password" : "dhggf2333",
-  "Email" : "rehab@gmail.com"
-
+  "ShipmentDate": 01/02/24
 }
+###
+
+// delete shipment => admin
+DELETE  http://localhost:5000/api/v1/shipments/{}
+Content-Type: application/json
+
 ###
 
 // The id is for Shahad user - you have to change the token every 5 min
