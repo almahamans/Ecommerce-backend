@@ -13,8 +13,8 @@ public class CategoryController : ControllerBase
         _categoryService = categoryService;
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost]
-    //  [Authorize(Roles = "Admin, Customer")]
     public async Task<IActionResult> CreateCategory([FromBody] CreateCategoryDto newCategory)
     {
 
@@ -107,9 +107,8 @@ public class CategoryController : ControllerBase
         }
 
     }
-
+    [Authorize(Roles = "Admin")]
     [HttpDelete("{categoryId}")]
-    //  [Authorize(Roles = "Admin")]
     public async Task<IActionResult> DeletCategory(Guid categoryId)
     {
 

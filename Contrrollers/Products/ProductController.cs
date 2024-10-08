@@ -20,8 +20,8 @@ public class ProductController : ControllerBase
     }
 
     // create products
+    [Authorize(Roles = "Admin")]
     [HttpPost]
-    // [Authorize(Roles = "Admin")]
     public async Task<IActionResult> CreateProduct([FromBody] CreateProductDto newProduct)
     {
 
@@ -66,7 +66,7 @@ public class ProductController : ControllerBase
     }
 
     [HttpGet("{productId}")]
-    [Authorize(Roles = "Admin, Customer")]
+   // [Authorize(Roles = "Admin, Customer")]
     public async Task<IActionResult> GetProductById(Guid productId)
     {
         try
@@ -89,7 +89,7 @@ public class ProductController : ControllerBase
     }
 
     [HttpPut("{productId}")]
-    [Authorize(Roles = "Admin, Customer")]
+    //[Authorize(Roles = "Admin")]
     public async Task<IActionResult> UpdateProduct(UpdateProductDto updateProduct, Guid productId)
     {
 

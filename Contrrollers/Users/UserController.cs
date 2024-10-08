@@ -120,7 +120,7 @@ public class UserController : ControllerBase
 
 
     [Authorize(Roles = "Customer")]
-    [HttpGet("profile/{userId}")]
+    [HttpGet("{userId}")]
     public async Task<IActionResult> GetUser(Guid userId)
     {
         var user = await _userService.GetUserByIdServiceAsync(userId);
