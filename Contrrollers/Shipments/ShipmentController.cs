@@ -7,7 +7,7 @@ public class ShipmentController : ControllerBase{
     public ShipmentController(IShipmentSrvice ishipmentSrvice){
         _ishipmentSrvice = ishipmentSrvice;
     }
-    // [Authorize("Admin")]
+     [Authorize(Roles = "Admin")]
     [HttpPost]
     public async Task<IActionResult> CrerateShipment(){
         if (!ModelState.IsValid){
@@ -58,7 +58,9 @@ public class ShipmentController : ControllerBase{
             return ApiResponse.NotFound($"Error in finding a shipment controller: {ex.Message}");
         }
     }
+
     [Authorize("Admin")]
+
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> UpdateShipmentInfo(Guid id, UpdateShipmentDto updateShipmentDto){
         if (!ModelState.IsValid){

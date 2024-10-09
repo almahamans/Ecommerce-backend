@@ -16,7 +16,7 @@ public class UserController : ControllerBase
 
     }
 
-    //[Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
     [HttpPut("create-admin/{userId}")]
     public async Task<IActionResult> UpdateToAdmin(Guid userId)
     {
@@ -29,7 +29,7 @@ public class UserController : ControllerBase
     }
 
 
-   // [Authorize(Roles = "Admin")]
+   [Authorize(Roles = "Admin")]
     [HttpGet]
     public async Task<IActionResult> GetUsers([FromQuery] QueryParameters queryParameters)
     {
@@ -120,7 +120,7 @@ public class UserController : ControllerBase
 
 
     [Authorize(Roles = "Customer")]
-    [HttpGet("profile/{userId}")]
+    [HttpGet("{userId}")]
     public async Task<IActionResult> GetUser(Guid userId)
     {
         var user = await _userService.GetUserByIdServiceAsync(userId);

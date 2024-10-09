@@ -78,7 +78,7 @@ using Microsoft.IdentityModel.Tokens;
                 new Claim(ClaimTypes.Name, user.UserName), // User's name.
                 new Claim(ClaimTypes.Role, user.Role.ToString()) // User's role, determining access level.
             }),
-                Expires = DateTime.UtcNow.AddMinutes(5), // Set the token to expire in 1 minute from creation.
+                Expires = DateTime.UtcNow.AddMinutes(300), // Set the token to expire in 1 minute from creation.
                 // Expires = DateTime.UtcNow.AddDays(2), // Set the token to expire in 2 hours from creation.
                 // Expires = DateTime.UtcNow.AddHours(2),
 

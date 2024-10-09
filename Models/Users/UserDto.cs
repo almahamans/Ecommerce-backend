@@ -6,7 +6,7 @@ public class UserDto
   public required string Email { get; set; }
   public string? Phone { get; set; }
   public string? Image { get; set; }
-  public List<AddressDto> Addresses { get; set; }
+  // public List<AddressDto> Addresses { get; set; }
 
 
 

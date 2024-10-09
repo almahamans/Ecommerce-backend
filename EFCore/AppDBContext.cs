@@ -16,7 +16,7 @@ public class AppDbContext : DbContext
   public DbSet<Category> Categories { get; set; }
   public DbSet<User> Users { get; set; }
   public DbSet<Order> Orders { get; set; }
-  public DbSet<Address> Addresses { get; set; }
+  //public DbSet<Address> Addresses { get; set; }
   public DbSet<Shipment> Shipments { get; set; }
   public DbSet<OrderProduct> OrderProducts { get; set; }
 
@@ -33,7 +33,7 @@ public class AppDbContext : DbContext
      entity.Property(p => p.Image).IsRequired();
      entity.Property(p => p.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
    });
-    
+
     modelBuilder.Entity<Category>(entity =>
     {
       entity.HasKey(category => category.CategoryId);
@@ -60,20 +60,20 @@ public class AppDbContext : DbContext
       entity.Property(u => u.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
     });
 
-    modelBuilder.Entity<Address>(attribut =>
-    {
-      attribut.HasKey(a => a.AddresId);
-      attribut.Property(a => a.AddresId).HasDefaultValueSql("uuid_generate_v4()");
-      attribut.Property(a => a.City).HasMaxLength(50);
-      attribut.Property(a => a.Neighberhood).HasMaxLength(100);
-      attribut.Property(a => a.Street).HasMaxLength(500);
-    });
+    // modelBuilder.Entity<Address>(attribut =>
+    // {
+    //   attribut.HasKey(a => a.AddresId);
+    //   attribut.Property(a => a.AddresId).HasDefaultValueSql("uuid_generate_v4()");
+    //   attribut.Property(a => a.City).HasMaxLength(50);
+    //   attribut.Property(a => a.Neighberhood).HasMaxLength(100);
+    //   attribut.Property(a => a.Street).HasMaxLength(500);
+    // });
 
-    modelBuilder.Entity<User>()
-    .HasMany(u => u.Addresses)
-    .WithOne(a => a.User)
-    .HasForeignKey(a => a.UserId)
-    .OnDelete(DeleteBehavior.Cascade);
+    // modelBuilder.Entity<User>()
+    // .HasMany(u => u.Addresses)
+    // .WithOne(a => a.User)
+    // .HasForeignKey(a => a.UserId)
+    // .OnDelete(DeleteBehavior.Cascade);
 
     modelBuilder.Entity<Order>(attribut =>
     {
@@ -115,7 +115,7 @@ public class AppDbContext : DbContext
     });
 
     modelBuilder.Entity<OrderProduct>()
-    .HasKey(op => new { op.OrderId, op.ProductId }); 
+    .HasKey(op => new { op.OrderId, op.ProductId });
 
     modelBuilder.Entity<OrderProduct>()
     .HasOne(op => op.Order)

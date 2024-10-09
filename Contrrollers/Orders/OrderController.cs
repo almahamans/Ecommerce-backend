@@ -32,7 +32,7 @@ public class OrderController : ControllerBase{
         }        
     }
 
-  //  [Authorize("Admin")]
+  [Authorize(Roles = "Admin, Customer")]
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetOrderById(Guid id){
         if(id == null){

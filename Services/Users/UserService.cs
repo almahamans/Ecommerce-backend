@@ -60,7 +60,7 @@ public class UserService : IUserService
     {
         try
         {
-            var query = _appDbContext.Users.Include(u => u.Addresses).AsQueryable();
+            var query = _appDbContext.Users.AsQueryable();
 
             if (!string.IsNullOrEmpty(queryParameters.SearchTerm))
             {
@@ -168,7 +168,7 @@ public class UserService : IUserService
         try
         {
 
-            var user = await _appDbContext.Users.Include(u => u.Addresses).FirstOrDefaultAsync(u => u.UserId == userId);
+            var user = await _appDbContext.Users.FirstOrDefaultAsync(u => u.UserId == userId);
             var userData = _mapper.Map<UserDto>(user);
             return userData;
         }
