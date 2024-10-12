@@ -62,7 +62,7 @@ public class ShipmentController : ControllerBase{
     [Authorize("Admin")]
 
     [HttpPut("{id:guid}")]
-    public async Task<IActionResult> UpdateShipmentInfo(Guid id, UpdateShipmentDto updateShipmentDto){
+    public async Task<IActionResult> UpdateShipmentInfo(Guid id, ShipmentUpdateDto updateShipmentDto){
         if (!ModelState.IsValid){
             return ApiResponse.BadRequest();
         }

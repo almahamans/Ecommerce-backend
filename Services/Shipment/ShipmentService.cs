@@ -6,7 +6,7 @@ public interface IShipmentSrvice{
     public Task<bool> DeleteShipmentSrvice(Guid id);
     public Task<PaginatedResult<Shipment>> GetAllShipmentsService(QueryParameters queryParameters);
     public Task<ShipmentDto> GetShipmentByIdService(Guid id);
-    public Task<ShipmentDto> UpdateShipmentSrvice(Guid id, UpdateShipmentDto updateShipmentDto);
+    public Task<ShipmentDto> UpdateShipmentSrvice(Guid id, ShipmentUpdateDto updateShipmentDto);
 }
 public class ShipmentService : IShipmentSrvice{
     readonly AppDbContext _appDbContext;
@@ -17,15 +17,11 @@ public class ShipmentService : IShipmentSrvice{
         _mapper = mapper;
     }
     public async Task<Shipment> CreateShipmentSrvice(){
-        CreateShipmentDto createShipmentDto = new CreateShipmentDto();
+        ShipmentCreateDto createShipmentDto = new ShipmentCreateDto();
         try
         {
         var mapShipment = _mapper.Map<Shipment>(createShipmentDto);
-
-        // Order order = new Order();
-        // await _appDbContext.Shipments.Include(o => o.Order).FirstOrDefaultAsync(mapShipment.OrderId == order.OrderId);
         mapShipment.ShipmentStatus = ShipmentStatus.OnProgress;
-
         await _appDbContext.Shipments.AddAsync(mapShipment);
         await _appDbContext.SaveChangesAsync();
             return mapShipment;
@@ -36,14 +32,14 @@ public class ShipmentService : IShipmentSrvice{
     public async Task<bool> DeleteShipmentSrvice(Guid id){
         try{
         var foundShipment = await _appDbContext.Shipments.FindAsync(id);
-       if(foundShipment == null){
-        return false;
-       }else{
-        _appDbContext.Shipments.Remove(foundShipment);
-        await _appDbContext.SaveChangesAsync();
-        return true;
-       }
-       }catch (Exception ex){
+        if(foundShipment == null){
+            return false;
+        }else{
+            _appDbContext.Shipments.Remove(foundShipment);
+            await _appDbContext.SaveChangesAsync();
+            return true;
+        }
+        }catch (Exception ex){
             throw new ApplicationException($"Error in delete shipment service: {ex.Message}");
         }
     }
@@ -89,17 +85,17 @@ public class ShipmentService : IShipmentSrvice{
             throw new ApplicationException($"Error in getting a shipment by id service: {ex.Message}");
         }
     }
-    public async Task<ShipmentDto> UpdateShipmentSrvice(Guid id, UpdateShipmentDto updateShipmentDto){
-        try{
-        var shipment = await _appDbContext.Shipments.FindAsync(id);
+    public async Task<ShipmentDto> UpdateShipmentSrvice(Guid id, ShipmentUpdateDto updateShipmentDto){
+        if (updateShipmentDto == null){
+            throw new ArgumentNullException(nameof(updateShipmentDto), "Update data must be provided.");
+        }
         
-        if (shipment == null) return null;
-        if (updateShipmentDto == null) return null;
-
-        shipment.ShipmentDate = updateShipmentDto.ShipmentDate ?? shipment.ShipmentDate;
-        shipment.DeliveryDate = updateShipmentDto.DeliveryDate ?? shipment.DeliveryDate;
-        shipment.ShipmentStatus = updateShipmentDto.ShipmentStatus ?? shipment.ShipmentStatus;
-
+        try{
+        var shipment = await _appDbContext.Shipments.FindAsync(id);      
+        if(shipment == null){
+            throw new KeyNotFoundException($"Order with ID {id} not found.");
+        }
+        _mapper.Map(updateShipmentDto, shipment);
         _appDbContext.Shipments.Update(shipment);
         await _appDbContext.SaveChangesAsync();
         

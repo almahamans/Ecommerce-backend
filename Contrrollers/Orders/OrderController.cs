@@ -10,7 +10,7 @@ public class OrderController : ControllerBase{
     }
     
     [HttpPost]
-    public async Task<IActionResult> CreateOrder([FromBody] CreateOrderDto createOrderDto){      
+    public async Task<IActionResult> CreateOrder([FromBody] OrderCreateDto createOrderDto){      
         if(!ModelState.IsValid){
             return ApiResponse.BadRequest();
         }
@@ -58,13 +58,16 @@ public class OrderController : ControllerBase{
         }
     }
     [HttpPut("{id:guid}")]
-    public async Task<IActionResult> UpdateOrderById(Guid id, UpdateOrderDto updateOrderDto){
-        if (id == null){
-            return ApiResponse.BadRequest("no id found");
+    public async Task<IActionResult> UpdateOrderById(Guid id, OrderUpdateDto updateOrderDto){
+        if (updateOrderDto == null){
+            return ApiResponse.BadRequest("Update data must be provided.");
         }
         try{
             var order = await _iorderService.UpdateOrderSrvice(id, updateOrderDto);
-            return Ok(order);  
+            if(order == null){
+                return ApiResponse.NotFound("No id fount");
+            }
+            return ApiResponse.Success(order);  
         }catch (Exception ex){
             return ApiResponse.NotFound($"No entered data. {ex.Message}");
         }

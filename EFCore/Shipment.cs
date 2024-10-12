@@ -1,7 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
-public enum ShipmentStatus
-{
+public enum ShipmentStatus{
     Pending = 5,
     Shipped = 1,
     Delivered = 2,
@@ -18,6 +17,4 @@ public class Shipment{
     public Guid OrderId { get; set; }
     [JsonIgnore]
     public Order Order { get; set; }
-    
-    
 }

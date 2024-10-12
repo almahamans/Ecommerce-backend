@@ -17,16 +17,19 @@ public class MappingProfile : Profile
 
         CreateMap<Order, OrderDto>().ReverseMap();
         CreateMap<OrderDto, PaginatedResult<OrderDto>>().ReverseMap();
-        CreateMap<CreateOrderDto, Order>();
-        CreateMap<UpdateOrderDto, OrderDto>();
+        CreateMap<OrderCreateDto, Order>();
+        CreateMap<OrderUpdateDto, Order>()
+        .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null)); //onlu non-null values mapp to OrderDto 
 
         CreateMap<ShipmentStatus, Order>().ReverseMap();
         CreateMap<ShipmentStatus, OrderDto>().ReverseMap();
         CreateMap<Shipment, Order>().ReverseMap();
         CreateMap<Shipment, OrderDto>().ReverseMap();
-
-        CreateMap<CreateShipmentDto, Shipment>();
-        CreateMap<UpdateShipmentDto, ShipmentDto>();
+        CreateMap<ShipmentUpdateDto, Shipment>();
+        
+        CreateMap<Shipment, ShipmentDto>();
+        CreateMap<ShipmentUpdateDto, Shipment>()
+        .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
         CreateMap<Shipment, ShipmentDto>().ReverseMap();
 
         CreateMap<User, UserDto>();

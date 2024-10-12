@@ -7,5 +7,5 @@ public record CreateProductDto
     public int Quantity { get; set; }
     public string? Image { get; set; }
     public Guid CategoryId { get; set; } // fk for category
-    public List<CreateOrderProductDto> OrderProducts { get; set; } = new List<CreateOrderProductDto>();
+    public List<OrderProductCreateDto> OrderProducts { get; set; } = new List<OrderProductCreateDto>();
 }

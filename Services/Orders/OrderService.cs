@@ -3,23 +3,22 @@ using Microsoft.EntityFrameworkCore;
 
 public interface IOrderService
 {
-    public Task<Order> CreateOrderSrvice(CreateOrderDto createOrderDto);
+    public Task<Order> CreateOrderSrvice(OrderCreateDto createOrderDto);
     public Task<bool> DeleteOrderSrvice(Guid id);
     public Task<PaginatedResult<Order>> GetAllOrdersService(QueryParameters queryParameters);
     public Task<OrderDto> GetOrderByIdService(Guid id);
-    public Task<OrderDto> UpdateOrderSrvice(Guid id, UpdateOrderDto updateOrderDto);
+    public Task<OrderDto> UpdateOrderSrvice(Guid id, OrderUpdateDto updateOrderDto);
 }
 public class OrderService : IOrderService
 {
     readonly AppDbContext _appDbContext;
     readonly IMapper _mapper;
 
-    public OrderService(AppDbContext appDbContext, IMapper mapper)
-    {
+    public OrderService(AppDbContext appDbContext, IMapper mapper){
         _appDbContext = appDbContext;
         _mapper = mapper;
     }
-    public async Task<Order> CreateOrderSrvice(CreateOrderDto createOrderDto)
+    public async Task<Order> CreateOrderSrvice(OrderCreateDto createOrderDto)
     {
         try
         {
@@ -27,8 +26,8 @@ public class OrderService : IOrderService
             return null;
         }else{
             var newOrder = _mapper.Map<Order>(createOrderDto);
-            await _appDbContext.Orders.AddAsync(newOrder);
             newOrder.UserId = createOrderDto.UserId;
+            await _appDbContext.Orders.AddAsync(newOrder);
             await _appDbContext.SaveChangesAsync();
 
         foreach (var orderproduct in createOrderDto.OrderProducts){
@@ -43,8 +42,7 @@ public class OrderService : IOrderService
 
             var newShipment = new Shipment{
             ShipmentStatus = ShipmentStatus.OnProgress,
-            OrderId = newOrder.OrderId,
-            Order = newOrder
+            OrderId = newOrder.OrderId
         };
             await _appDbContext.Shipments.AddAsync(newShipment);
             await _appDbContext.SaveChangesAsync();
@@ -59,10 +57,7 @@ public class OrderService : IOrderService
     }
     public async Task<bool> DeleteOrderSrvice(Guid id){
         try{
-            var order = await _appDbContext.Orders
-            .Include(o => o.Shipment)
-            .Include(o => o.OrderProducts)
-            .FirstOrDefaultAsync(o => o.OrderId == id);
+            var order = await _appDbContext.Orders.FirstOrDefaultAsync(o => o.OrderId == id);
 
             if (order == null) return false;
 
@@ -125,17 +120,19 @@ public class OrderService : IOrderService
             throw new ApplicationException($"Error in getting an order by id service: {ex.Message}");
         }
     }
-    public async Task<OrderDto> UpdateOrderSrvice(Guid id, UpdateOrderDto updateOrderDto){
-        try
-        {
+    public async Task<OrderDto> UpdateOrderSrvice(Guid id, OrderUpdateDto updateOrderDto){
+        if (updateOrderDto == null){
+            throw new ArgumentNullException(nameof(updateOrderDto), "Update data must be provided.");
+        }
+        try{
             var order = await _appDbContext.Orders.FindAsync(id);
-
-            if (order == null) return null;
-            if (updateOrderDto == null) return null;
-//need to include orderProduct also <future work?>
-            order.TotalAmount = updateOrderDto.TotalAmount ?? order.TotalAmount;
+            if (order == null){
+                throw new KeyNotFoundException($"Order with ID {id} not found.");
+            }
+            _mapper.Map(updateOrderDto, order);
             _appDbContext.Orders.Update(order);
             await _appDbContext.SaveChangesAsync();
+//to return result in orderDto
             var mappingOrder = _mapper.Map<OrderDto>(order);
             return mappingOrder;
         }catch (Exception ex){
