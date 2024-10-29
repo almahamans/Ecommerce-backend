@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Backend.Migrations
 {
     /// <inheritdoc />
-    public partial class UpdateDBv1fs : Migration
+    public partial class initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -76,7 +76,7 @@ namespace Backend.Migrations
                     OrderDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
                     TotalAmount = table.Column<decimal>(type: "numeric", nullable: false),
                     ShipmentId = table.Column<Guid>(type: "uuid", nullable: false),
-                    shipmentStatus = table.Column<int>(type: "integer", nullable: false),
+                    ShipmentStatus = table.Column<int>(type: "integer", nullable: false),
                     UserId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>

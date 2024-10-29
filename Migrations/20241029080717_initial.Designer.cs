@@ -11,8 +11,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Backend.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241007074856_UpdateDBv1fs")]
-    partial class UpdateDBv1fs
+    [Migration("20241029080717_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -66,14 +66,14 @@ namespace Backend.Migrations
                     b.Property<Guid>("ShipmentId")
                         .HasColumnType("uuid");
 
+                    b.Property<int>("ShipmentStatus")
+                        .HasColumnType("integer");
+
                     b.Property<decimal>("TotalAmount")
                         .HasColumnType("numeric");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
-
-                    b.Property<int>("shipmentStatus")
-                        .HasColumnType("integer");
 
                     b.HasKey("OrderId");
 

@@ -63,14 +63,14 @@ namespace Backend.Migrations
                     b.Property<Guid>("ShipmentId")
                         .HasColumnType("uuid");
 
+                    b.Property<int>("ShipmentStatus")
+                        .HasColumnType("integer");
+
                     b.Property<decimal>("TotalAmount")
                         .HasColumnType("numeric");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
-
-                    b.Property<int>("shipmentStatus")
-                        .HasColumnType("integer");
 
                     b.HasKey("OrderId");
 
