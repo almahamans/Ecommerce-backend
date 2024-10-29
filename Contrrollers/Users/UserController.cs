@@ -29,7 +29,7 @@ public class UserController : ControllerBase
     }
 
 
-   [Authorize(Roles = "Admin")]
+//    [Authorize(Roles = "Admin")]
     [HttpGet]
     public async Task<IActionResult> GetUsers([FromQuery] QueryParameters queryParameters)
     {
