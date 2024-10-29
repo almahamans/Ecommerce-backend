@@ -4,9 +4,9 @@ Content-Type: application/json
 
 {
  
- "UserName": "maha",
-  "Password" : "dhgf23",
-  "Email" : "mahaa@gmail.com"
+ "UserName": "mahaaa",
+  "Password" : "dhgf23a",
+  "Email" : "mahaaa@gmail.com"
 }
 
 ###
@@ -28,8 +28,8 @@ POST  https://ecommerce-backend-g27b.onrender.com/api/v1/auth/login
 Content-Type: application/json
 
 {
-  "Password" : "dhgf23",
-  "Email" : "mahaa@gmail.com"
+  "Password" : "dhgf23a",
+  "Email" : "mahaaa@gmail.com"
 
 }
 
@@ -51,19 +51,19 @@ Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI3NDBh
 ###
 
 //get all users -admin auth
-GET http://localhost:5000/api/v1/users
-Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI3NDBhYWRiNS01NDQ2LTQ1MTEtODU4YS1jZGM2Y2FiZjMxNjUiLCJ1bmlxdWVfbmFtZSI6InNoYWhkIiwicm9sZSI6IkFkbWluIiwibmJmIjoxNzI4MjkzNTY3LCJleHAiOjE3MjgzMTE1NjcsImlhdCI6MTcyODI5MzU2NywiaXNzIjoiTG9jYWxob3N0SXNzdWVyIiwiYXVkIjoiTG9jYWxob3N0QXVkaWVuY2UifQ.6-bVu-tgdoyrARTNEowgv6H7vQK1bmSmCFmr70QCjMI
+GET https://ecommerce-backend-g27b.onrender.com/api/v1/users
+
 ###
 
 //get user by id -customer auth
 
-GET http://localhost:5000/api/v1/users/41b8e212-0318-42b8-ad5b-3aae4bdd29d0
-Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI0MWI4ZTIxMi0wMzE4LTQyYjgtYWQ1Yi0zYWFlNGJkZDI5ZDAiLCJ1bmlxdWVfbmFtZSI6InJlaGFiIiwicm9sZSI6IkN1c3RvbWVyIiwibmJmIjoxNzI4MjkzNjYxLCJleHAiOjE3MjgzMTE2NjEsImlhdCI6MTcyODI5MzY2MSwiaXNzIjoiTG9jYWxob3N0SXNzdWVyIiwiYXVkIjoiTG9jYWxob3N0QXVkaWVuY2UifQ.-XgKdt3nLdzzdYjx6UfQ7KoTbA7YhUNo5-V1FGKTHu0
+GET https://ecommerce-backend-g27b.onrender.com/api/v1/users/41b8e212-0318-42b8-ad5b-3aae4bdd29d0
+
 ###
 
 // user searching - admin auth
-GET http://localhost:5000/api/v1/users?sortBy=UserName&sortOrder=asc&pageNumber=1&pageSize=10&searchTerm=shahd
-Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI3NDBhYWRiNS01NDQ2LTQ1MTEtODU4YS1jZGM2Y2FiZjMxNjUiLCJ1bmlxdWVfbmFtZSI6InNoYWhkIiwicm9sZSI6IkFkbWluIiwibmJmIjoxNzI4MjkzNTY3LCJleHAiOjE3MjgzMTE1NjcsImlhdCI6MTcyODI5MzU2NywiaXNzIjoiTG9jYWxob3N0SXNzdWVyIiwiYXVkIjoiTG9jYWxob3N0QXVkaWVuY2UifQ.6-bVu-tgdoyrARTNEowgv6H7vQK1bmSmCFmr70QCjMI
+GET https://ecommerce-backend-g27b.onrender.com/api/v1/users?sortBy=UserName&sortOrder=asc&pageNumber=1&pageSize=10&searchTerm=shahd
+
 
 ###
 
@@ -99,7 +99,7 @@ POST  https://ecommerce-backend-g27b.onrender.com/api/categories
 Content-Type: application/json 
 
 {
-  "categoryName" : "dghc"
+  "categoryName" : "dghc1"
 }
 
 ###
@@ -125,7 +125,7 @@ Content-Type: application/json
   "Description": "good ",
   "Price" : 400,
    "Quantity": 33,
-   "categoryId": "0c5abc35-9cfe-429a-8afb-0b1d67fc3b9c",
+   "categoryId": "600d2527-4255-4cfd-a7ea-9917a353b2c4",
     "Image": "wwww"
 
 }
@@ -133,7 +133,7 @@ Content-Type: application/json
 
 ### 
 //create new order => customer
-POST   http://localhost:5000/api/orders
+POST  https://ecommerce-backend-g27b.onrender.com/api/v1/orders
 Content-Type: application/json 
 
 {
@@ -141,25 +141,25 @@ Content-Type: application/json
 } 
 ###
 //get all orders => customer
-GET  http://localhost:5000/api/orders
+GET  https://ecommerce-backend-g27b.onrender.com/api/v1/orders
 
 ###
 //get order by id => admin auth
-GET  http://localhost:5000/api/orders/{}
+GET  https://ecommerce-backend-g27b.onrender.com/api/v1/orders/{}
 
 ###
 //delete order by id => customer
-DELETE   http://localhost:5000/api/orders/{}
+DELETE   https://ecommerce-backend-g27b.onrender.com/api/v1/orders/{}
 
 ###
-PUT http://localhost:5000/api/orders/{}
+PUT https://ecommerce-backend-g27b.onrender.com/api/v1/orders/{}
 {
   "shipmentDate": 08/10/24
 }
 
 ### 
 //create new shipment => admin
-POST   http://localhost:5000/api/shipments
+POST   https://ecommerce-backend-g27b.onrender.com/api/v1/shipments
 Content-Type: application/json 
 
 {
@@ -167,14 +167,14 @@ Content-Type: application/json
 } 
 ###
 //get all shipment => admin
-GET  http://localhost:5000/api/shipments
+GET  https://ecommerce-backend-g27b.onrender.com/api/v1/shipments
 
 ###
 //get shipment by id => admin auth
-GET  http://localhost:5000/api/shipments/{}
+GET  https://ecommerce-backend-g27b.onrender.com/api/v1/shipments/{}
 
 ###
 //delete shipment by id => admin
-DELETE   http://localhost:5000/api/shipment/{}
+DELETE  https://ecommerce-backend-g27b.onrender.com/api/v1/shipment/{}
 
 ###

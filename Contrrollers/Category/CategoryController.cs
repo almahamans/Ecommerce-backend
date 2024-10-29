@@ -3,7 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
 [Route("api/categories")]
+#pragma warning disable CA1050 // Declare types in namespaces
 public class CategoryController : ControllerBase
+#pragma warning restore CA1050 // Declare types in namespaces
 {
 
     private readonly ICategoryService _categoryService;
