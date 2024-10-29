@@ -16,7 +16,7 @@ public class UserController : ControllerBase
 
     }
 
-    [Authorize(Roles = "Admin")]
+    // [Authorize(Roles = "Admin")] 
     [HttpPut("create-admin/{userId}")]
     public async Task<IActionResult> UpdateToAdmin(Guid userId)
     {
@@ -119,7 +119,7 @@ public class UserController : ControllerBase
     // }
 
 
-    [Authorize(Roles = "Customer")]
+    // [Authorize(Roles = "Customer")]
     [HttpGet("{userId}")]
     public async Task<IActionResult> GetUser(Guid userId)
     {
@@ -130,7 +130,7 @@ public class UserController : ControllerBase
         }
         return ApiResponse.Success(user, "User is returned succesfully");
     }
-    [Authorize(Roles = "Customer")]
+    // [Authorize(Roles = "Customer")]
     [HttpPut("{userId}")]
     public async Task<IActionResult> UpdateUser(Guid userId, [FromBody] UpdateUserDto updateUserDto)
     {
@@ -148,7 +148,7 @@ public class UserController : ControllerBase
 
     }
 
-    [Authorize(Roles = "Admin")]
+    // [Authorize(Roles = "Admin")]
     [HttpDelete("{userId}")]
     public async Task<IActionResult> DeleteUser(Guid userId)
     {
