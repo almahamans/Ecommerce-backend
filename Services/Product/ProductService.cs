@@ -63,25 +63,25 @@ public class ProductService : IProductService
     // get products and the category associated with it
     public async Task<PaginatedResult<ProductDto>> GetProductsServiceAsync(QueryParameters queryParameters)
     {
-        try
-        {
+        try{
             var query = _appDbContext.Products.AsQueryable();
-
-            if (!string.IsNullOrWhiteSpace(queryParameters.SearchTerm))
-            {
-                query = query.Where(p => p.ProductName.Contains(queryParameters.SearchTerm) ||
-                                          p.Description.Contains(queryParameters.SearchTerm));
+            // If searchTerm is provided and not empty, apply filtering
+            if (!string.IsNullOrWhiteSpace(queryParameters.SearchTerm)){
+                // Convert searchTerm to lowercase for case-insensitive search
+                var searchTermLower = queryParameters.SearchTerm.ToLower();
+                // Apply case-insensitive search for both ProductName and Description
+                query = query.Where(p => p.ProductName.ToLower().Contains(searchTermLower) ||
+                                          p.Description.ToLower().Contains(searchTermLower));
+                Console.WriteLine("Filtering applied based on searchTerm.");
+            }else{
+                // If searchTerm is empty or null, show all products
+                Console.WriteLine("No searchTerm provided, returning all products.");
             }
-
             var totalProducts = await query.CountAsync();
-
             // Sort by the specified property in descending order
-            if (!string.IsNullOrWhiteSpace(queryParameters.SortBy))
-            {
+            if (!string.IsNullOrWhiteSpace(queryParameters.SortBy)){
                 query = query.OrderByDescending(p => EF.Property<object>(p, queryParameters.SortBy));
-            }
-            else
-            {
+            }else{
                 query = query.OrderByDescending(p => p.CreatedAt); // Default sorting if no SortBy is provided
             }
 
@@ -112,6 +112,57 @@ public class ProductService : IProductService
             throw new ApplicationException("An unexpected error occurred. Please try again later.");
         }
     }
+    // public async Task<PaginatedResult<ProductDto>> GetProductsServiceAsync(QueryParameters queryParameters)
+    // {
+    //     try
+    //     {
+    //         var query = _appDbContext.Products.AsQueryable();
+
+    //         if (!string.IsNullOrWhiteSpace(queryParameters.SearchTerm))
+    //         {
+    //             query = query.Where(p => p.ProductName.Contains(queryParameters.SearchTerm) ||
+    //                                       p.Description.Contains(queryParameters.SearchTerm));
+    //         }
+
+    //         var totalProducts = await query.CountAsync();
+
+    //         // Sort by the specified property in descending order
+    //         if (!string.IsNullOrWhiteSpace(queryParameters.SortBy))
+    //         {
+    //             query = query.OrderByDescending(p => EF.Property<object>(p, queryParameters.SortBy));
+    //         }
+    //         else
+    //         {
+    //             query = query.OrderByDescending(p => p.CreatedAt); // Default sorting if no SortBy is provided
+    //         }
+
+    //         var products = await query
+    //             .Include(p => p.Category)
+    //             .Skip((queryParameters.PageNumber - 1) * queryParameters.PageSize)
+    //             .Take(queryParameters.PageSize)
+    //             .ToListAsync();
+
+    //         var productsData = _mapper.Map<List<ProductDto>>(products);
+
+    //         return new PaginatedResult<ProductDto>
+    //         {
+    //             Items = productsData,
+    //             TotalCount = totalProducts,
+    //             PageNumber = queryParameters.PageNumber,
+    //             PageSize = queryParameters.PageSize
+    //         };
+    //     }
+    //     catch (DbUpdateException dbEx)
+    //     {
+    //         Console.WriteLine($"Database Update Error: {dbEx.Message}");
+    //         throw new ApplicationException("An error occurred while saving to the database. Please check the data and try again.");
+    //     }
+    //     catch (Exception ex)
+    //     {
+    //         Console.WriteLine($"An unexpected error occurred: {ex.Message}");
+    //         throw new ApplicationException("An unexpected error occurred. Please try again later.");
+    //     }
+    // }
     public async Task<ProductDto?> GetProductByIdServiceAsync(Guid productId)
     {
         try

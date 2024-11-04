@@ -99,7 +99,7 @@ POST  https://ecommerce-backend-g27b.onrender.com/api/categories
 Content-Type: application/json 
 
 {
-  "categoryName" : "dghc1"
+  "categoryName" : "Rings"
 }
 
 ###
@@ -121,24 +121,49 @@ POST  https://ecommerce-backend-g27b.onrender.com/api/products
 Content-Type: application/json 
 
 {
-  "ProductName" : "phones",
-  "Description": "good ",
-  "Price" : 400,
-   "Quantity": 33,
-   "categoryId": "600d2527-4255-4cfd-a7ea-9917a353b2c4",
-    "Image": "wwww"
+  "ProductName" : "ring 4",
+  "Description": "nice 4",
+  "Price" : 3003,
+   "Quantity": 3,
+   "categoryId": "7fe691c6-30e6-4de3-a802-5465797d71f0",
+   "category": "Ring",
+    "Image": "https://th.bing.com/th?id=OIP.Fzdt9_RozttihNz0vCytNQHaIu&w=230&h=271&c=8&rs=1&qlt=90&o=6&dpr=1.4&pid=3.1&rm=2"
 
 }
 
 
+###
+
+GET  https://ecommerce-backend-g27b.onrender.com/api/products
+Content-Type: application/json 
+
+###
+
+PUT  https://ecommerce-backend-g27b.onrender.com/api/products/9af53c38-246b-46e0-bed7-acd5ad862e78
+Content-Type: application/json 
+
+{
+  "Image": "https://th.bing.com/th/id/OIP.2mtBm9_zqoJ_JftaM-9GqgHaHa?w=175&h=180&c=7&r=0&o=5&dpr=1.4&pid=1.7"
+
+}
+
+###
+
+DELETE  https://ecommerce-backend-g27b.onrender.com/api/products/89081077-bf6e-46ee-be27-7a2b9c41107d
+Content-Type: application/json 
+
 ### 
 //create new order => customer
+
+
 POST  https://ecommerce-backend-g27b.onrender.com/api/v1/orders
 Content-Type: application/json 
 
 {
-  "totalAmount" : 200
+  "totalAmount" : 300
 } 
+
+
 ###
 //get all orders => customer
 GET  https://ecommerce-backend-g27b.onrender.com/api/v1/orders
