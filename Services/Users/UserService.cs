@@ -62,21 +62,21 @@ public class UserService : IUserService
         {
             var query = _appDbContext.Users.AsQueryable();
 
-            if (!string.IsNullOrEmpty(queryParameters.SearchTerm))
+            if (!string.IsNullOrEmpty(queryParameters.searchTerm))
             {
-                var lowerCaseSearchTerm = queryParameters.SearchTerm.ToLower();
+                var lowerCaseSearchTerm = queryParameters.searchTerm.ToLower();
                 query = query.Where(u => u.UserName.ToLower().Contains(lowerCaseSearchTerm));
             }
 
-            switch (queryParameters.SortBy?.ToLower())
+            switch (queryParameters.sortBy?.ToLower())
             {
                 case "UserName":
-                    query = queryParameters.SortOrder.ToLower() == "desc"
+                    query = queryParameters.sortOrder.ToLower() == "desc"
                         ? query.OrderByDescending(u => u.UserName)
                         : query.OrderBy(u => u.UserName);
                     break;
                 case "CreatedAt":
-                    query = queryParameters.SortOrder.ToLower() == "desc"
+                    query = queryParameters.sortOrder.ToLower() == "desc"
                         ? query.OrderByDescending(u => u.CreatedAt)
                         : query.OrderBy(u => u.CreatedAt);
                     break;
@@ -88,12 +88,12 @@ public class UserService : IUserService
 
             var totalCount = await query.CountAsync();
 
-            if (queryParameters.PageNumber < 1) queryParameters.PageNumber = 1;
-            if (queryParameters.PageSize < 1) queryParameters.PageSize = 10;
+            if (queryParameters.pageNumber < 1) queryParameters.pageNumber = 1;
+            if (queryParameters.pageSize < 1) queryParameters.pageSize = 10;
 
             var users = await query
-                .Skip((queryParameters.PageNumber - 1) * queryParameters.PageSize)
-                .Take(queryParameters.PageSize)
+                .Skip((queryParameters.pageNumber - 1) * queryParameters.pageSize)
+                .Take(queryParameters.pageSize)
                 .ToListAsync();
 
 
@@ -102,8 +102,8 @@ public class UserService : IUserService
             {
                 Items = users,
                 TotalCount = totalCount,
-                PageNumber = queryParameters.PageNumber,
-                PageSize = queryParameters.PageSize
+                PageNumber = queryParameters.pageNumber,
+                PageSize = queryParameters.pageSize
             };
         }
         catch (Exception ex)

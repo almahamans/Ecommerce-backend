@@ -1,12 +1,12 @@
 //create new user
-POST  https://ecommerce-backend-g27b.onrender.com/api/v1/auth/register
+POST  http://localhost:5000/api/v1/auth/register
 Content-Type: application/json
 
 {
  
- "UserName": "mahaaa",
-  "Password" : "dhgf23a",
-  "Email" : "mahaaa@gmail.com"
+ "UserName": "maaaa",
+  "Password" : "dhf23a",
+  "Email" : "maaaa@gmail.com"
 }
 
 ###
@@ -28,8 +28,8 @@ POST  https://ecommerce-backend-g27b.onrender.com/api/v1/auth/login
 Content-Type: application/json
 
 {
-  "Password" : "dhgf23a",
-  "Email" : "mahaaa@gmail.com"
+  "Password" : "dhf23a",
+  "Email" : "maaaa@gmail.com"
 
 }
 

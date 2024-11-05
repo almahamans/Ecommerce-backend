@@ -65,17 +65,17 @@ public class CategoryService : ICategoryService
             var query = _appDbContext.Categories.AsQueryable();
 
             //searching by category name (if needed)
-            if (!string.IsNullOrWhiteSpace(queryParameters.SearchTerm))
+            if (!string.IsNullOrWhiteSpace(queryParameters.searchTerm))
             {
-                query = query.Where(c => c.CategoryName.Contains(queryParameters.SearchTerm));
+                query = query.Where(c => c.CategoryName.Contains(queryParameters.searchTerm));
             }
 
             var totalCategories = await query.CountAsync(); // Total count of categories
 
             // Sort by the specified property in descending order
-            if (!string.IsNullOrWhiteSpace(queryParameters.SortBy))
+            if (!string.IsNullOrWhiteSpace(queryParameters.sortBy))
             {
-                var sortProperties = queryParameters.SortBy.Split(',', StringSplitOptions.RemoveEmptyEntries);
+                var sortProperties = queryParameters.sortBy.Split(',', StringSplitOptions.RemoveEmptyEntries);
                 foreach (var property in sortProperties)
                 {
                     query = query.OrderByDescending(c => EF.Property<object>(c, property.Trim()));
@@ -87,8 +87,8 @@ public class CategoryService : ICategoryService
             }
 
             var categories = await query
-                .Skip((queryParameters.PageNumber - 1) * queryParameters.PageSize)
-                .Take(queryParameters.PageSize)
+                .Skip((queryParameters.pageNumber - 1) * queryParameters.pageSize)
+                .Take(queryParameters.pageSize)
                 .ToListAsync(); // Use ToListAsync for asynchronous operation
 
             var categoryDtos = _mapper.Map<List<CategoryDto>>(categories);
@@ -97,8 +97,8 @@ public class CategoryService : ICategoryService
             {
                 Items = categoryDtos,
                 TotalCount = totalCategories,
-                PageNumber = queryParameters.PageNumber,
-                PageSize = queryParameters.PageSize
+                PageNumber = queryParameters.pageNumber,
+                PageSize = queryParameters.pageSize
             };
         }
         catch (DbUpdateException dbEx)
