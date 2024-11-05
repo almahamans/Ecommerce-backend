@@ -78,6 +78,16 @@ public class ProductService : IProductService
                 Console.WriteLine("No searchTerm provided, returning all products.");
             }
             var totalProducts = await query.CountAsync();
+            // Determine sorting order based on SortOrder parameter
+            if (!string.IsNullOrWhiteSpace(queryParameters.SortBy)){
+                if (queryParameters.SortOrder?.ToLower() == "asc"){
+                    query = query.OrderBy(p => EF.Property<object>(p, queryParameters.SortBy));
+                }else{
+                    query = query.OrderByDescending(p => EF.Property<object>(p, queryParameters.SortBy));
+                }
+            }else{
+                query = query.OrderBy(p => p.CreatedAt); // Default sorting if no SortBy is provided
+            }
             // Sort by the specified property in descending order
             if (!string.IsNullOrWhiteSpace(queryParameters.SortBy)){
                 query = query.OrderByDescending(p => EF.Property<object>(p, queryParameters.SortBy));
@@ -112,57 +122,6 @@ public class ProductService : IProductService
             throw new ApplicationException("An unexpected error occurred. Please try again later.");
         }
     }
-    // public async Task<PaginatedResult<ProductDto>> GetProductsServiceAsync(QueryParameters queryParameters)
-    // {
-    //     try
-    //     {
-    //         var query = _appDbContext.Products.AsQueryable();
-
-    //         if (!string.IsNullOrWhiteSpace(queryParameters.SearchTerm))
-    //         {
-    //             query = query.Where(p => p.ProductName.Contains(queryParameters.SearchTerm) ||
-    //                                       p.Description.Contains(queryParameters.SearchTerm));
-    //         }
-
-    //         var totalProducts = await query.CountAsync();
-
-    //         // Sort by the specified property in descending order
-    //         if (!string.IsNullOrWhiteSpace(queryParameters.SortBy))
-    //         {
-    //             query = query.OrderByDescending(p => EF.Property<object>(p, queryParameters.SortBy));
-    //         }
-    //         else
-    //         {
-    //             query = query.OrderByDescending(p => p.CreatedAt); // Default sorting if no SortBy is provided
-    //         }
-
-    //         var products = await query
-    //             .Include(p => p.Category)
-    //             .Skip((queryParameters.PageNumber - 1) * queryParameters.PageSize)
-    //             .Take(queryParameters.PageSize)
-    //             .ToListAsync();
-
-    //         var productsData = _mapper.Map<List<ProductDto>>(products);
-
-    //         return new PaginatedResult<ProductDto>
-    //         {
-    //             Items = productsData,
-    //             TotalCount = totalProducts,
-    //             PageNumber = queryParameters.PageNumber,
-    //             PageSize = queryParameters.PageSize
-    //         };
-    //     }
-    //     catch (DbUpdateException dbEx)
-    //     {
-    //         Console.WriteLine($"Database Update Error: {dbEx.Message}");
-    //         throw new ApplicationException("An error occurred while saving to the database. Please check the data and try again.");
-    //     }
-    //     catch (Exception ex)
-    //     {
-    //         Console.WriteLine($"An unexpected error occurred: {ex.Message}");
-    //         throw new ApplicationException("An unexpected error occurred. Please try again later.");
-    //     }
-    // }
     public async Task<ProductDto?> GetProductByIdServiceAsync(Guid productId)
     {
         try
@@ -194,7 +153,6 @@ public class ProductService : IProductService
             {
                 return null;
             }
-
             product.ProductName = updateProduct.ProductName ?? product.ProductName;
             product.Price = updateProduct.Price ?? product.Price;
             product.Description = updateProduct.Description ?? product.Description;
@@ -212,16 +170,12 @@ public class ProductService : IProductService
             Console.WriteLine($"An unexpected error occurred: {ex.Message}");
             throw new ApplicationException("An unexpected error occurred. Please try again later.");
         }
-
-
     }
 
 
     public async Task<bool> DeleteProductByIdServiceAsync(Guid productId)
     {
-
-        try
-        {
+        try{
             var product = await _appDbContext.Products.FindAsync(productId);
             if (product == null)
             {
@@ -244,9 +198,5 @@ public class ProductService : IProductService
             Console.WriteLine($"An unexpected error occurred: {ex.Message}");
             throw new ApplicationException("An unexpected error occurred. Please try again later.");
         }
-
-
-
     }
-
 }
