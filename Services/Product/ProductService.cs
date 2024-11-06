@@ -67,9 +67,9 @@ public class ProductService : IProductService
         {
             var query = _appDbContext.Products.AsQueryable();
 
-            if (!string.IsNullOrWhiteSpace(queryParameters.searchTerm))
+            if (!string.IsNullOrWhiteSpace(queryParameters.SearchTerm))
             {
-                var searchTermLower = queryParameters.searchTerm.ToLower();
+                var searchTermLower = queryParameters.SearchTerm.ToLower();
                 query = query.Where(p => p.ProductName.ToLower().Contains(searchTermLower) ||
                                          p.Description.ToLower().Contains(searchTermLower));
                 Console.WriteLine("Filtering applied based on searchTerm.");
@@ -78,15 +78,15 @@ public class ProductService : IProductService
             var totalProducts = await query.CountAsync();
 
             // Apply sorting based on sortBy and sortOrder
-            if (!string.IsNullOrWhiteSpace(queryParameters.sortBy))
+            if (!string.IsNullOrWhiteSpace(queryParameters.SortBy))
             {
-                if (queryParameters.sortOrder?.ToLower() == "asc")
+                if (queryParameters.SortOrder?.ToLower() == "asc")
                 {
-                    query = query.OrderBy(p => EF.Property<object>(p, queryParameters.sortBy));
+                    query = query.OrderBy(p => EF.Property<object>(p, queryParameters.SortBy));
                 }
                 else
                 {
-                    query = query.OrderByDescending(p => EF.Property<object>(p, queryParameters.sortBy));
+                    query = query.OrderByDescending(p => EF.Property<object>(p, queryParameters.SortBy));
                 }
             }
             else
@@ -96,8 +96,8 @@ public class ProductService : IProductService
 
             var products = await query
                 .Include(p => p.Category)
-                .Skip((queryParameters.pageNumber - 1) * queryParameters.pageSize)
-                .Take(queryParameters.pageSize)
+                .Skip((queryParameters.PageNumber - 1) * queryParameters.PageSize)
+                .Take(queryParameters.PageSize)
                 .ToListAsync();
 
             var productsData = _mapper.Map<List<ProductDto>>(products);
@@ -106,8 +106,8 @@ public class ProductService : IProductService
             {
                 Items = productsData,
                 TotalCount = totalProducts,
-                PageNumber = queryParameters.pageNumber,
-                PageSize = queryParameters.pageSize
+                PageNumber = queryParameters.PageNumber,
+                PageSize = queryParameters.PageSize
             };
         }
         catch (DbUpdateException dbEx)

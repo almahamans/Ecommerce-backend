@@ -78,9 +78,9 @@ public class OrderService : IOrderService
             .Include(o => o.User)
             .AsQueryable();
 
-            switch (queryParameters.sortBy?.ToLower()){
+            switch (queryParameters.SortBy?.ToLower()){
                 case "OrderDate":
-                    query = queryParameters.sortOrder.ToLower() == "desc"
+                    query = queryParameters.SortOrder.ToLower() == "desc"
                         ? query.OrderByDescending(o => o.OrderDate)
                         : query.OrderBy(o => o.OrderDate);
                     break;
@@ -89,17 +89,17 @@ public class OrderService : IOrderService
             }
 
             var NumOforders = await query.CountAsync();
-            if (queryParameters.pageNumber < 1) queryParameters.pageNumber = 1;
-            if (queryParameters.pageSize < 1) queryParameters.pageSize = 5;
+            if (queryParameters.PageNumber < 1) queryParameters.PageNumber = 1;
+            if (queryParameters.PageSize < 1) queryParameters.PageSize = 5;
             if (NumOforders < 0) return null;
             
-            var orders = await query.Skip((queryParameters.pageNumber - 1) * queryParameters.pageSize).Take(queryParameters.pageSize).ToListAsync();
+            var orders = await query.Skip((queryParameters.PageNumber - 1) * queryParameters.PageSize).Take(queryParameters.PageSize).ToListAsync();
             return new PaginatedResult<Order>
             {
                 Items = orders,
                 TotalCount = NumOforders,
-                PageNumber = queryParameters.pageNumber,
-                PageSize = queryParameters.pageSize
+                PageNumber = queryParameters.PageNumber,
+                PageSize = queryParameters.PageSize
             };
         }catch (Exception ex){
             throw new ApplicationException($"Error in getting orders service: {ex.Message}");

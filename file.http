@@ -24,7 +24,7 @@ Content-Type: application/json
 
 ###
 //Customer Login
-POST  https://ecommerce-backend-g27b.onrender.com/api/v1/auth/login
+POST  http://localhost:5000/api/v1/auth/login
 Content-Type: application/json
 
 {
@@ -99,7 +99,7 @@ POST  https://ecommerce-backend-g27b.onrender.com/api/categories
 Content-Type: application/json 
 
 {
-  "categoryName" : "Rings"
+  "categoryName" : "Necklaces"
 }
 
 ###
@@ -109,7 +109,7 @@ GET  https://ecommerce-backend-g27b.onrender.com/api/categories
 
 ###
 // delete categories - admin auth
-DELETE   https://ecommerce-backend-g27b.onrender.com/api/categories/f7c7451a-3c5a-446a-b2fe-b725b63eca8e
+DELETE   http://localhost:5000/api/categories/642a8635-0702-4367-bf93-056f90195628
 
 
 ###

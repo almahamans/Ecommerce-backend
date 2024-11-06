@@ -1,8 +1,8 @@
 public class QueryParameters
 {
-    public int pageNumber { get; set; } = 1;
-    public int pageSize { get; set; } = 10;
-    public string searchTerm { get; set; } = string.Empty;
-    public string sortBy { get; set; } = string.Empty;
-    public string sortOrder { get; set; } = "asc";
+    public int PageNumber { get; set; } = 1;
+    public int PageSize { get; set; } = 10;
+    public string SearchTerm { get; set; } = string.Empty;
+    public string SortBy { get; set; } = string.Empty;
+    public string SortOrder { get; set; } = "asc";
 }

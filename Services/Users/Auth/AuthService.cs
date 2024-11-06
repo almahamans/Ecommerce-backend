@@ -63,10 +63,7 @@ using Microsoft.IdentityModel.Tokens;
 
             // Convert the secret key from the configuration into a byte array.
             var jwtKey = _configuration["Jwt:Key"] ?? throw new InvalidOperationException("JWT Key is missing in configuration.");
-
             var key = Encoding.ASCII.GetBytes(jwtKey);
-
-
             // settings for token: Describe the token using SecurityTokenDescriptor.
             var tokenDescriptor = new SecurityTokenDescriptor
             {

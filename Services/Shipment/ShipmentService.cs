@@ -47,9 +47,9 @@ public class ShipmentService : IShipmentSrvice{
         try
         {
             var query = _appDbContext.Shipments.AsQueryable();
-            switch (queryParameters.sortBy?.ToLower()){
+            switch (queryParameters.SortBy?.ToLower()){
                 case "OrderDate":
-                    query = queryParameters.sortOrder.ToLower() == "desc"
+                    query = queryParameters.SortOrder.ToLower() == "desc"
                         ? query.OrderByDescending(s => s.ShipmentDate)
                         : query.OrderBy(s => s.ShipmentDate);
                     break;
@@ -57,20 +57,20 @@ public class ShipmentService : IShipmentSrvice{
                     break;
             }
             var NumOfShipments = await query.CountAsync();
-            if (queryParameters.pageNumber < 1) queryParameters.pageNumber = 1;
-            if (queryParameters.pageSize < 1) queryParameters.pageSize = 5;
+            if (queryParameters.PageNumber < 1) queryParameters.PageNumber = 1;
+            if (queryParameters.PageSize < 1) queryParameters.PageSize = 5;
             if (NumOfShipments < 0)
             {
                 Console.WriteLine("There is no shipments");
                 return null;
             }
-            var shipments = await query.Skip((queryParameters.pageNumber - 1) * queryParameters.pageSize).Take(queryParameters.pageSize).ToListAsync();
+            var shipments = await query.Skip((queryParameters.PageNumber - 1) * queryParameters.PageSize).Take(queryParameters.PageSize).ToListAsync();
             return new PaginatedResult<Shipment>
             {
                 Items = shipments,
                 TotalCount = NumOfShipments,
-                PageNumber = queryParameters.pageNumber,
-                PageSize = queryParameters.pageSize
+                PageNumber = queryParameters.PageNumber,
+                PageSize = queryParameters.PageSize
             };
         }catch (Exception ex){
             throw new ApplicationException($"Error in getting shipments service: {ex.Message}");
