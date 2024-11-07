@@ -14,6 +14,8 @@ public class MappingProfile : Profile
         CreateMap<CreateCategoryDto, Category>();
         CreateMap<Category, CategoryWithProductsDto>()
        .ForMember(dest => dest.Products, opt => opt.MapFrom(src => src.Products)); // to avoid null values and associate category with products.
+        
+        CreateMap<Product, List<CategoryWithProductsDto>>().ReverseMap();
 
         CreateMap<Order, OrderDto>().ReverseMap();
         CreateMap<OrderDto, PaginatedResult<OrderDto>>().ReverseMap();

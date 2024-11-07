@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper.Configuration.Annotations;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 
 public interface ICategoryService
@@ -16,6 +17,7 @@ public interface ICategoryService
     Task<CategoryDto?> UpdateCategoryServiceAsync(UpdateCategoryDto updateCategory, Guid categoryId);
     Task<bool> DeleteCategoryByIdServiceAsync(Guid categoryId);
     Task<PaginatedResult<CategoryWithProductsDto>> GetCategoriesWithProductsAsync(int pageNumber, int pageSize);
+    Task<List<CategoryWithProductsDto?>> GetProductsByCategoryIdServiceAsync(Guid categoryId);
 }
 
 public class CategoryService : ICategoryService
@@ -124,15 +126,36 @@ public class CategoryService : ICategoryService
             }
             var categoryDate = _mapper.Map<CategoryDto>(category);
             return categoryDate;
-        }
-        catch (Exception ex)
-        {
+        }catch (Exception ex){
             // Handle any other unexpected exceptions
             Console.WriteLine($"An unexpected error occurred: {ex.Message}");
             throw new ApplicationException("An unexpected error occurred. Please try again later.");
         }
+    }
+    public async Task<List<CategoryWithProductsDto>> GetProductsByCategoryIdServiceAsync(Guid categoryId)
+    {
+            var products = await _appDbContext.Products
+                                   .Where(x => x.CategoryId == categoryId)
+                                   .ToListAsync();
+            if (products == null || !products.Any())  return [];
+            if (categoryId == Guid.Empty) throw new ArgumentException("Invalid category ID.");
 
-
+          return  new List<CategoryWithProductsDto>{
+            new CategoryWithProductsDto {
+                CategoryId = categoryId,
+                CategoryName = "Sample Category",
+                Slug = "sample-category",          
+                CreatedAt = DateTime.UtcNow,      
+                Products = products.Select(p => new ProductDto
+                {
+                    ProductId = p.ProductId,    
+                    ProductName = p.ProductName,           
+                    Price = p.Price,
+                    Description = p.Description,
+                    Image = p.Image
+                }).ToList()
+             }  
+            };      
     }
 
     public async Task<CategoryDto?> UpdateCategoryServiceAsync(UpdateCategoryDto updateCategory, Guid categoryId)

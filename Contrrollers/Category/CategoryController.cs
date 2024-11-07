@@ -15,7 +15,7 @@ public class CategoryController : ControllerBase
         _categoryService = categoryService;
     }
 
-    [Authorize(Roles = "Admin")]
+    // [Authorize(Roles = "Admin")]
     [HttpPost]
     public async Task<IActionResult> CreateCategory([FromBody] CreateCategoryDto newCategory)
     {
@@ -40,7 +40,7 @@ public class CategoryController : ControllerBase
     }
 
     [HttpGet]
-    [Authorize(Roles = "Admin, Customer")]
+    // [Authorize(Roles = "Admin, Customer")]
     public async Task<IActionResult> GetCategories([FromQuery] QueryParameters queryParameters)
     {
         try
@@ -59,7 +59,7 @@ public class CategoryController : ControllerBase
     }
 
     [HttpGet("{categoryId}")]
-    [Authorize(Roles = "Admin, Customer")]
+    // [Authorize(Roles = "Admin, Customer")]
     public async Task<IActionResult> GetCategoryById(Guid categoryId)
     {
         try
@@ -81,7 +81,7 @@ public class CategoryController : ControllerBase
         }
     }
     [HttpPut("{categoryId}")]
-    [Authorize(Roles = "Admin")]
+    // [Authorize(Roles = "Admin")]
     public async Task<IActionResult> UpdateCategory(UpdateCategoryDto updateCategory, Guid categoryId)
     {
 
@@ -109,7 +109,7 @@ public class CategoryController : ControllerBase
         }
 
     }
-    [Authorize(Roles = "Admin")]
+    // [Authorize(Roles = "Admin")]
     [HttpDelete("{categoryId}")]
     public async Task<IActionResult> DeletCategory(Guid categoryId)
     {
@@ -140,7 +140,7 @@ public class CategoryController : ControllerBase
     }
 
     [HttpGet("products")]
-    [Authorize(Roles = "Admin, Customer")]
+    // [Authorize(Roles = "Admin, Customer")]
     public async Task<IActionResult> GetCategoriesWithProducts(int pageNumber = 1, int pageSize = 10)
     {
         try
@@ -155,6 +155,25 @@ public class CategoryController : ControllerBase
         catch (System.Exception ex)
         {
             return StatusCode(500, ApiResponse.ServerError("Server error: GetCategoriesWithProducts" + ex.Message));
+        }
+    }
+
+    [HttpGet("products/{categoryId}")]
+    // [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> GetProductsByCategoryId(Guid categoryId)
+    {
+        try
+        {
+            var pagedResult = await _categoryService.GetProductsByCategoryIdServiceAsync(categoryId);
+            return Ok(ApiResponse.Success(pagedResult, "products with category returned successfully."));
+        }
+        catch (ApplicationException ex)
+        {
+            return StatusCode(500, ApiResponse.ServerError("Server error: GetProductsByCategoryIdServiceAsync " + ex.Message));
+        }
+        catch (System.Exception ex)
+        {
+            return StatusCode(500, ApiResponse.ServerError("Server error: GetProductsByCategoryIdServiceAsync" + ex.Message));
         }
     }
 

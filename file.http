@@ -117,24 +117,24 @@ DELETE   http://localhost:5000/api/categories/642a8635-0702-4367-bf93-056f901956
 //products 
 
 // creat productb - admin auth
-POST  https://ecommerce-backend-g27b.onrender.com/api/products
+POST  http://localhost:5000/api/products
 Content-Type: application/json 
 
 {
-  "ProductName" : "ring 4",
-  "Description": "nice 4",
-  "Price" : 3003,
-   "Quantity": 3,
-   "categoryId": "7fe691c6-30e6-4de3-a802-5465797d71f0",
-   "category": "Ring",
-    "Image": "https://th.bing.com/th?id=OIP.Fzdt9_RozttihNz0vCytNQHaIu&w=230&h=271&c=8&rs=1&qlt=90&o=6&dpr=1.4&pid=3.1&rm=2"
+  "ProductName" : "Necklace1",
+  "Description": "nice 1",
+  "Price" : 503,
+   "Quantity": 2,
+   "categoryId": "5fdc7d7c-c85e-4f5e-8cac-0aee2809a414",
+   "category": "Necklace",
+    "Image": "https://th.bing.com/th/id/OIP.4_vET3Od_LvlExQVLFVARAHaHa?w=174&h=196&c=7&r=0&o=5&dpr=1.4&pid=1.7"
 
 }
 
 
 ###
 
-GET  https://ecommerce-backend-g27b.onrender.com/api/products
+GET  http://localhost:5000/api/categories/products/5fdc7d7c-c85e-4f5e-8cac-0aee2809a414
 Content-Type: application/json 
 
 ###
