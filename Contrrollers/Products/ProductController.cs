@@ -20,7 +20,7 @@ public class ProductController : ControllerBase
     }
 
     // create products
-    // [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     public async Task<IActionResult> CreateProduct([FromBody] CreateProductDto newProduct)
     {
@@ -45,7 +45,7 @@ public class ProductController : ControllerBase
     }
 
     [HttpGet]
-    // [Authorize(Roles = "Admin, Customer")]
+    [Authorize(Roles = "Admin, Customer")]
     [HttpGet]
     public async Task<IActionResult> GetProducts([FromQuery] QueryParameters queryParameters)
     {
