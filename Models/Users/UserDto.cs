@@ -7,8 +7,4 @@ public class UserDto
   public string? Phone { get; set; }
   public string? Image { get; set; }
   // public List<AddressDto> Addresses { get; set; }
-
-
-
-
 }

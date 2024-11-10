@@ -13,10 +13,7 @@ public record Product
     [Required]
     [StringLength(150)]
     public string ProductName { get; set; } = string.Empty;
-
-    [StringLength(1000)]
     public string Description { get; set; } = string.Empty;
-    // slug is for creating a readable URL.
     public string Slug { get; set; } = string.Empty;
 
     [Required]

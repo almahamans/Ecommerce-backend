@@ -4,9 +4,9 @@ Content-Type: application/json
 
 {
  
- "UserName": "maaaa",
-  "Password" : "dhf23a",
-  "Email" : "maaaa@gmail.com"
+ "UserName": "Almaha",
+  "Password" : "almaha1234567",
+  "Email" : "almaha1@gmail.com"
 }
 
 ###
@@ -28,8 +28,8 @@ POST  http://localhost:5000/api/v1/auth/login
 Content-Type: application/json
 
 {
-  "Password" : "dhf23a",
-  "Email" : "maaaa@gmail.com"
+  "Password" : "almaha1234567",
+  "Email" : "almaha1@gmail.com"
 
 }
 
@@ -45,9 +45,9 @@ Content-Type: application/json
 }
 ###
 
-// create Admin - The id is for Shahad user 
-PUT  http://localhost:5000/api/v1/users/create-admin/740aadb5-5446-4511-858a-cdc6cabf3165
-Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI3NDBhYWRiNS01NDQ2LTQ1MTEtODU4YS1jZGM2Y2FiZjMxNjUiLCJ1bmlxdWVfbmFtZSI6InNoYWhkIiwicm9sZSI6IkFkbWluIiwibmJmIjoxNzI4MjkzMTUwLCJleHAiOjE3MjgzMTExNTAsImlhdCI6MTcyODI5MzE1MCwiaXNzIjoiTG9jYWxob3N0SXNzdWVyIiwiYXVkIjoiTG9jYWxob3N0QXVkaWVuY2UifQ.zU1eTFUOyMYelIQwbq__KwYlVE2zmb0PcPo63OB3Guc
+// create Admin - 
+PUT  http://localhost:5000/api/v1/users/create-admin/ff94641f-5545-4af7-98f9-e066515d22bf
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiJmZjk0NjQxZi01NTQ1LTRhZjctOThmOS1lMDY2NTE1ZDIyYmYiLCJ1bmlxdWVfbmFtZSI6IkFsbWFoYSBNYW5zb3VyIiwicm9sZSI6IkN1c3RvbWVyIiwibmJmIjoxNzMxMTY3NDA1LCJleHAiOjE3MzExODU0MDUsImlhdCI6MTczMTE2NzQwNSwiaXNzIjoiTG9jYWxob3N0SXNzdWVyIiwiYXVkIjoiTG9jYWxob3N0QXVkaWVuY2UifQ.b-o7Bg2EDyBwr4DOx7dZQsa681kLOhVoEl8a9fvczWo
 ###
 
 //get all users -admin auth
@@ -121,13 +121,11 @@ POST  http://localhost:5000/api/products
 Content-Type: application/json 
 
 {
-  "ProductName" : "Necklace1",
+  "ProductName" : "ring1",
   "Description": "nice 1",
-  "Price" : 503,
-   "Quantity": 2,
-   "categoryId": "5fdc7d7c-c85e-4f5e-8cac-0aee2809a414",
-   "category": "Necklace",
-    "Image": "https://th.bing.com/th/id/OIP.4_vET3Od_LvlExQVLFVARAHaHa?w=174&h=196&c=7&r=0&o=5&dpr=1.4&pid=1.7"
+  "Price" : 150,
+  "categoryId": "55ca9e3b-aeeb-4ad6-bc77-09fbed317a69",
+  "Image": "https://th.bing.com/th/id/OIP.vjvlX98R6T8Pd-ErtsotdQAAAA?w=186&h=186&c=7&r=0&o=5&dpr=1.4&pid=1.7"
 
 }
 

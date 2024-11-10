@@ -124,24 +124,19 @@ public class ProductService : IProductService
 
     public async Task<ProductDto?> GetProductByIdServiceAsync(Guid productId)
     {
-        try
-        {
-            var product = await _appDbContext.Products.FindAsync(productId);
-            if (product == null)
-            {
+        try{
+         var product = await _appDbContext.Products
+            .Include(p => p.Category)
+            .FirstOrDefaultAsync(p => p.ProductId == productId);
+          if (product == null){
                 return null;
             }
             var productDate = _mapper.Map<ProductDto>(product);
             return productDate;
-        }
-        catch (Exception ex)
-        {
-            // Handle any other unexpected exceptions
+        }catch (Exception ex){
             Console.WriteLine($"An unexpected error occurred: {ex.Message}");
             throw new ApplicationException("An unexpected error occurred. Please try again later.");
         }
-
-
     }
 
     public async Task<ProductDto?> UpdateProductServiceAsync(UpdateProductDto updateProduct, Guid productId)
