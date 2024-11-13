@@ -1,5 +1,5 @@
 //create new user
-POST  http://localhost:5000/api/v1/auth/register
+POST  https://ecommerce-backend-g27b.onrender.com/api/v1/auth/register
 Content-Type: application/json
 
 {
@@ -11,7 +11,7 @@ Content-Type: application/json
 
 ###
 //create new Address
-POST  http://localhost:5000/api/v1/address 
+POST  https://ecommerce-backend-g27b.onrender.com/api/v1/address 
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI5ZDQ5OTZlZC1iZTJjLTQwNmItODI4Yy0yNDMyZWI3YTc5YjUiLCJ1bmlxdWVfbmFtZSI6Im5vb3IiLCJyb2xlIjoiQ3VzdG9tZXIiLCJuYmYiOjE3Mjc5NjAwMDIsImV4cCI6MTcyNzk2MDMwMiwiaWF0IjoxNzI3OTYwMDAyLCJpc3MiOiJMb2NhbGhvc3RJc3N1ZXIiLCJhdWQiOiJMb2NhbGhvc3RBdWRpZW5jZSJ9.7p4qbZ8_X9nL24M0r0uCQzpzvCtNFC-2u_4piXiNCHw
 Content-Type: application/json
 
@@ -24,7 +24,7 @@ Content-Type: application/json
 
 ###
 //Customer Login
-POST  http://localhost:5000/api/v1/auth/login
+POST  https://ecommerce-backend-g27b.onrender.com/api/v1/auth/login
 Content-Type: application/json
 
 {
@@ -35,7 +35,7 @@ Content-Type: application/json
 
 ###
 // Admin Login - shahad
-POST  http://localhost:5000/api/v1/auth/login
+POST  https://ecommerce-backend-g27b.onrender.com/api/v1/auth/login
 Content-Type: application/json
 
 {
@@ -51,7 +51,7 @@ Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiJjNzUy
 ###
 
 //get all users -admin auth
-GET http://localhost:5000/api/v1/users
+GET https://ecommerce-backend-g27b.onrender.com/api/v1/users
 
 ###
 
@@ -68,7 +68,7 @@ GET https://ecommerce-backend-g27b.onrender.com/api/v1/users?sortBy=UserName&sor
 ###
 
 //update user - customer auth
-PUT  http://localhost:5000/api/v1/users/20f32d56-dd43-40d1-b4d9-a741a3ed3db7
+PUT  https://ecommerce-backend-g27b.onrender.com/api/v1/users/20f32d56-dd43-40d1-b4d9-a741a3ed3db7
 Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI0MWI4ZTIxMi0wMzE4LTQyYjgtYWQ1Yi0zYWFlNGJkZDI5ZDAiLCJ1bmlxdWVfbmFtZSI6InJlaGFiIiwicm9sZSI6IkN1c3RvbWVyIiwibmJmIjoxNzI4MjkzNjYxLCJleHAiOjE3MjgzMTE2NjEsImlhdCI6MTcyODI5MzY2MSwiaXNzIjoiTG9jYWxob3N0SXNzdWVyIiwiYXVkIjoiTG9jYWxob3N0QXVkaWVuY2UifQ.-XgKdt3nLdzzdYjx6UfQ7KoTbA7YhUNo5-V1FGKTHu0
 Content-Type: application/json
 
@@ -78,11 +78,11 @@ Content-Type: application/json
 }
 ###
 // delete user - admin auth
-DELETE http://localhost:5000/api/v1/users/d477a701-21b2-4056-8de0-00ef832f4ca1
+DELETE https://ecommerce-backend-g27b.onrender.com/api/v1/users/d477a701-21b2-4056-8de0-00ef832f4ca1
 Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI3NDBhYWRiNS01NDQ2LTQ1MTEtODU4YS1jZGM2Y2FiZjMxNjUiLCJ1bmlxdWVfbmFtZSI6InNoYWhkIiwicm9sZSI6IkFkbWluIiwibmJmIjoxNzI4MjkzNTY3LCJleHAiOjE3MjgzMTE1NjcsImlhdCI6MTcyODI5MzU2NywiaXNzIjoiTG9jYWxob3N0SXNzdWVyIiwiYXVkIjoiTG9jYWxob3N0QXVkaWVuY2UifQ.6-bVu-tgdoyrARTNEowgv6H7vQK1bmSmCFmr70QCjMI
 
 ###
-POST http://localhost:5125/api/v1/orders
+POST https://ecommerce-backend-g27b.onrender.com/api/v1/orders
 Content-Type: application/json
 
 {
@@ -109,7 +109,11 @@ GET  https://ecommerce-backend-g27b.onrender.com/api/categories
 
 ###
 // delete categories - admin auth
-DELETE   http://localhost:5000/api/categories/642a8635-0702-4367-bf93-056f90195628
+DELETE   https://ecommerce-backend-g27b.onrender.com/api/categories/642a8635-0702-4367-bf93-056f90195628
+
+###
+
+PUT   https://ecommerce-backend-g27b.onrender.com/api/categories/642a8635-0702-4367-bf93-056f90195628
 
 
 ###
@@ -117,7 +121,7 @@ DELETE   http://localhost:5000/api/categories/642a8635-0702-4367-bf93-056f901956
 //products 
 
 // creat productb - admin auth
-POST  http://localhost:5000/api/products
+POST  https://ecommerce-backend-g27b.onrender.com/api/products
 Content-Type: application/json 
 
 {
@@ -132,7 +136,7 @@ Content-Type: application/json
 
 ###
 
-GET  http://localhost:5000/api/categories/products/5fdc7d7c-c85e-4f5e-8cac-0aee2809a414
+GET  https://ecommerce-backend-g27b.onrender.com/api/categories/products/5fdc7d7c-c85e-4f5e-8cac-0aee2809a414
 Content-Type: application/json 
 
 ###
