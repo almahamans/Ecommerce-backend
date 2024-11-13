@@ -20,7 +20,7 @@ public class ProductController : ControllerBase
     }
 
     // create products
-    // [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     public async Task<IActionResult> CreateProduct([FromBody] CreateProductDto newProduct)
     {
@@ -45,7 +45,7 @@ public class ProductController : ControllerBase
     }
 
     [HttpGet]
-    // [Authorize(Roles = "Admin, Customer")]
+    [Authorize(Roles = "Admin, Customer")]
     [HttpGet]
     public async Task<IActionResult> GetProducts([FromQuery] QueryParameters queryParameters)
     {
@@ -66,7 +66,7 @@ public class ProductController : ControllerBase
     }
 
     [HttpGet("{productId}")]
-   // [Authorize(Roles = "Admin, Customer")]
+   [Authorize(Roles = "Admin, Customer")]
     public async Task<IActionResult> GetProductById(Guid productId)
     {
         try
@@ -89,11 +89,9 @@ public class ProductController : ControllerBase
     }
 
     [HttpPut("{productId}")]
-    //[Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> UpdateProduct(UpdateProductDto updateProduct, Guid productId)
     {
-
-
         if (!ModelState.IsValid)
         {
             return ApiResponse.BadRequest("Invalid product Data");
@@ -118,11 +116,9 @@ public class ProductController : ControllerBase
     }
 
     [HttpDelete("{productId}")]
-    // [Authorize(Roles = "Admin, Customer")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> DeletProduct(Guid productId)
     {
-
-
         if (!ModelState.IsValid)
         {
             return ApiResponse.BadRequest("Invalid product Data");
@@ -144,8 +140,6 @@ public class ProductController : ControllerBase
         {
             return ApiResponse.ServerError("Server error: DeletProduct" + ex.Message);
         }
-
-
     }
 }
 

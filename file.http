@@ -4,9 +4,9 @@ Content-Type: application/json
 
 {
  
- "UserName": "Almaha",
-  "Password" : "almaha1234567",
-  "Email" : "almaha1@gmail.com"
+ "UserName": "Almaha Mansour",
+  "Password" : "almaha123456",
+  "Email" : "almaha115@gmail.com"
 }
 
 ###
@@ -39,19 +39,19 @@ POST  http://localhost:5000/api/v1/auth/login
 Content-Type: application/json
 
 {
-  "Password" : "dhggf2333",
-  "Email" : "shahd@gmail.com"
+  "Password" : "almaha123456",
+  "Email" : "almaha115@gmail.com"
 
 }
 ###
 
 // create Admin - 
-PUT  http://localhost:5000/api/v1/users/create-admin/ff94641f-5545-4af7-98f9-e066515d22bf
-Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiJmZjk0NjQxZi01NTQ1LTRhZjctOThmOS1lMDY2NTE1ZDIyYmYiLCJ1bmlxdWVfbmFtZSI6IkFsbWFoYSBNYW5zb3VyIiwicm9sZSI6IkN1c3RvbWVyIiwibmJmIjoxNzMxMTY3NDA1LCJleHAiOjE3MzExODU0MDUsImlhdCI6MTczMTE2NzQwNSwiaXNzIjoiTG9jYWxob3N0SXNzdWVyIiwiYXVkIjoiTG9jYWxob3N0QXVkaWVuY2UifQ.b-o7Bg2EDyBwr4DOx7dZQsa681kLOhVoEl8a9fvczWo
+PUT  http://localhost:5000/api/v1/users/create-admin/c752bca9-a1bd-443f-adb3-2a7c921410a2
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiJjNzUyYmNhOS1hMWJkLTQ0M2YtYWRiMy0yYTdjOTIxNDEwYTIiLCJ1bmlxdWVfbmFtZSI6IkFsbWFoYSBNYW5zb3VyIiwicm9sZSI6IkN1c3RvbWVyIiwibmJmIjoxNzMxMzA4NjQ3LCJleHAiOjE3MzEzMjY2NDcsImlhdCI6MTczMTMwODY0NywiaXNzIjoiTG9jYWxob3N0SXNzdWVyIiwiYXVkIjoiTG9jYWxob3N0QXVkaWVuY2UifQ.AmUj6ehCZVC_ig_Oe4zwkFP8ikFK9cT6hctGu8OGhN4
 ###
 
 //get all users -admin auth
-GET https://ecommerce-backend-g27b.onrender.com/api/v1/users
+GET http://localhost:5000/api/v1/users
 
 ###
 
