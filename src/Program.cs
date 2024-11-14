@@ -14,7 +14,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigins", builder =>
     {
-        builder.WithOrigins("https://e-commerce-gamma-lac-90.vercel.app/") // Specify the allowed origins
+        builder.WithOrigins("*") // Specify the allowed origins
               .AllowAnyMethod() // Allows all methods
               .AllowAnyHeader() // Allows all headers
               .AllowCredentials(); // Allows credentials like cookies, authorization headers, etc.
