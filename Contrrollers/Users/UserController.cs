@@ -16,7 +16,7 @@ public class UserController : ControllerBase
 
     }
 
-    [Authorize(Roles = "Admin")] 
+    // [Authorize(Roles = "Admin")] 
     [HttpPut("create-admin/{userId}")]
     public async Task<IActionResult> UpdateToAdmin(Guid userId)
     {
@@ -27,7 +27,7 @@ public class UserController : ControllerBase
         }
         return ApiResponse.Success(user, "User is now is Admin");
     }
-   [Authorize(Roles = "Admin, Customer")]
+//    [Authorize(Roles = "Admin, Customer")]
     [HttpGet]
     public async Task<IActionResult> GetUsers([FromQuery] QueryParameters queryParameters)
     {
@@ -46,7 +46,7 @@ public class UserController : ControllerBase
             return ApiResponse.ServerError("An unexpected error occurred.");
         }
     }
-    [Authorize(Roles = "Admin, Customer")]
+    // [Authorize(Roles = "Admin, Customer")]
     [HttpGet("{userId}")]
     public async Task<IActionResult> GetUser(Guid userId)
     {
@@ -57,7 +57,7 @@ public class UserController : ControllerBase
         }
         return ApiResponse.Success(user, "User is returned succesfully");
     }
-    [Authorize(Roles = "Customer")]
+    // [Authorize(Roles = "Customer")]
     [HttpPut("{userId}")]
     public async Task<IActionResult> UpdateUser(Guid userId, [FromBody] UpdateUserDto updateUserDto)
     {
@@ -74,7 +74,7 @@ public class UserController : ControllerBase
         return ApiResponse.Success(user, "User is Updated succesfully");
     }
 
-    [Authorize(Roles = "Admin")]
+    // [Authorize(Roles = "Admin")]
     [HttpDelete("{userId}")]
     public async Task<IActionResult> DeleteUser(Guid userId)
     {
