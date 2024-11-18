@@ -1,5 +1,5 @@
 //create new user
-POST  https://ecommerce-backend-g27b.onrender.com/api/v1/auth/register
+POST  https://ecommerce-backend-hpbn.onrender.com/api/v1/auth/register
 Content-Type: application/json
 
 {
@@ -11,7 +11,7 @@ Content-Type: application/json
 
 ###
 //create new Address
-POST  https://ecommerce-backend-g27b.onrender.com/api/v1/address 
+POST  https://ecommerce-backend-hpbn.onrender.com/api/v1/address 
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI5ZDQ5OTZlZC1iZTJjLTQwNmItODI4Yy0yNDMyZWI3YTc5YjUiLCJ1bmlxdWVfbmFtZSI6Im5vb3IiLCJyb2xlIjoiQ3VzdG9tZXIiLCJuYmYiOjE3Mjc5NjAwMDIsImV4cCI6MTcyNzk2MDMwMiwiaWF0IjoxNzI3OTYwMDAyLCJpc3MiOiJMb2NhbGhvc3RJc3N1ZXIiLCJhdWQiOiJMb2NhbGhvc3RBdWRpZW5jZSJ9.7p4qbZ8_X9nL24M0r0uCQzpzvCtNFC-2u_4piXiNCHw
 Content-Type: application/json
 
@@ -24,7 +24,7 @@ Content-Type: application/json
 
 ###
 //Customer Login
-POST  https://ecommerce-backend-g27b.onrender.com/api/v1/auth/login
+POST  https://ecommerce-backend-hpbn.onrender.com/api/v1/auth/login
 Content-Type: application/json
 
 {
@@ -35,7 +35,7 @@ Content-Type: application/json
 
 ###
 // Admin Login - shahad
-POST  https://ecommerce-backend-g27b.onrender.com/api/v1/auth/login
+POST  https://ecommerce-backend-hpbn.onrender.com/api/v1/auth/login
 Content-Type: application/json
 
 {
@@ -46,29 +46,29 @@ Content-Type: application/json
 ###
 
 // create Admin - 
-PUT  http://localhost:5000/api/v1/users/create-admin/c752bca9-a1bd-443f-adb3-2a7c921410a2
+PUT  https://ecommerce-backend-hpbn.onrender.com/api/v1/users/create-admin/c752bca9-a1bd-443f-adb3-2a7c921410a2
 Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiJjNzUyYmNhOS1hMWJkLTQ0M2YtYWRiMy0yYTdjOTIxNDEwYTIiLCJ1bmlxdWVfbmFtZSI6IkFsbWFoYSBNYW5zb3VyIiwicm9sZSI6IkN1c3RvbWVyIiwibmJmIjoxNzMxMzA4NjQ3LCJleHAiOjE3MzEzMjY2NDcsImlhdCI6MTczMTMwODY0NywiaXNzIjoiTG9jYWxob3N0SXNzdWVyIiwiYXVkIjoiTG9jYWxob3N0QXVkaWVuY2UifQ.AmUj6ehCZVC_ig_Oe4zwkFP8ikFK9cT6hctGu8OGhN4
 ###
 
 //get all users -admin auth
-GET https://ecommerce-backend-g27b.onrender.com/api/v1/users
+GET https://ecommerce-backend-hpbn.onrender.com/api/v1/users
 
 ###
 
 //get user by id -customer auth
 
-GET https://ecommerce-backend-g27b.onrender.com/api/v1/users/41b8e212-0318-42b8-ad5b-3aae4bdd29d0
+GET https://ecommerce-backend-hpbn.onrender.com/api/v1/users/41b8e212-0318-42b8-ad5b-3aae4bdd29d0
 
 ###
 
 // user searching - admin auth
-GET https://ecommerce-backend-g27b.onrender.com/api/v1/users?sortBy=UserName&sortOrder=asc&pageNumber=1&pageSize=10&searchTerm=shahd
+GET https://ecommerce-backend-hpbn.onrender.com/api/v1/users?sortBy=UserName&sortOrder=asc&pageNumber=1&pageSize=10&searchTerm=shahd
 
 
 ###
 
 //update user - customer auth
-PUT  https://ecommerce-backend-g27b.onrender.com/api/v1/users/20f32d56-dd43-40d1-b4d9-a741a3ed3db7
+PUT  https://ecommerce-backend-hpbn.onrender.com/api/v1/users/20f32d56-dd43-40d1-b4d9-a741a3ed3db7
 Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI0MWI4ZTIxMi0wMzE4LTQyYjgtYWQ1Yi0zYWFlNGJkZDI5ZDAiLCJ1bmlxdWVfbmFtZSI6InJlaGFiIiwicm9sZSI6IkN1c3RvbWVyIiwibmJmIjoxNzI4MjkzNjYxLCJleHAiOjE3MjgzMTE2NjEsImlhdCI6MTcyODI5MzY2MSwiaXNzIjoiTG9jYWxob3N0SXNzdWVyIiwiYXVkIjoiTG9jYWxob3N0QXVkaWVuY2UifQ.-XgKdt3nLdzzdYjx6UfQ7KoTbA7YhUNo5-V1FGKTHu0
 Content-Type: application/json
 
@@ -78,11 +78,11 @@ Content-Type: application/json
 }
 ###
 // delete user - admin auth
-DELETE https://ecommerce-backend-g27b.onrender.com/api/v1/users/d477a701-21b2-4056-8de0-00ef832f4ca1
+DELETE https://ecommerce-backend-hpbn.onrender.com/api/v1/users/d477a701-21b2-4056-8de0-00ef832f4ca1
 Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI3NDBhYWRiNS01NDQ2LTQ1MTEtODU4YS1jZGM2Y2FiZjMxNjUiLCJ1bmlxdWVfbmFtZSI6InNoYWhkIiwicm9sZSI6IkFkbWluIiwibmJmIjoxNzI4MjkzNTY3LCJleHAiOjE3MjgzMTE1NjcsImlhdCI6MTcyODI5MzU2NywiaXNzIjoiTG9jYWxob3N0SXNzdWVyIiwiYXVkIjoiTG9jYWxob3N0QXVkaWVuY2UifQ.6-bVu-tgdoyrARTNEowgv6H7vQK1bmSmCFmr70QCjMI
 
 ###
-POST https://ecommerce-backend-g27b.onrender.com/api/v1/orders
+POST https://ecommerce-backend-hpbn.onrender.com/api/v1/orders
 Content-Type: application/json
 
 {
@@ -95,7 +95,7 @@ Content-Type: application/json
 
 // create category - admin auth
 
-POST  https://ecommerce-backend-g27b.onrender.com/api/categories
+POST  https://ecommerce-backend-hpbn.onrender.com/api/categories
 Content-Type: application/json 
 
 {
@@ -104,16 +104,16 @@ Content-Type: application/json
 
 ###
 // get all categories 
-GET  https://ecommerce-backend-g27b.onrender.com/api/categories
+GET  https://ecommerce-backend-hpbn.onrender.com/api/categories
 
 
 ###
 // delete categories - admin auth
-DELETE   https://ecommerce-backend-g27b.onrender.com/api/categories/642a8635-0702-4367-bf93-056f90195628
+DELETE   https://ecommerce-backend-hpbn.onrender.com/api/categories/642a8635-0702-4367-bf93-056f90195628
 
 ###
 
-PUT   https://ecommerce-backend-g27b.onrender.com/api/categories/642a8635-0702-4367-bf93-056f90195628
+PUT   https://ecommerce-backend-hpbn.onrender.com/api/categories/642a8635-0702-4367-bf93-056f90195628
 
 
 ###
@@ -121,7 +121,7 @@ PUT   https://ecommerce-backend-g27b.onrender.com/api/categories/642a8635-0702-4
 //products 
 
 // creat productb - admin auth
-POST  https://ecommerce-backend-g27b.onrender.com/api/products
+POST  https://ecommerce-backend-hpbn.onrender.com/api/products
 Content-Type: application/json 
 
 {
@@ -136,12 +136,12 @@ Content-Type: application/json
 
 ###
 
-GET  https://ecommerce-backend-g27b.onrender.com/api/categories/products/5fdc7d7c-c85e-4f5e-8cac-0aee2809a414
+GET  https://ecommerce-backend-hpbn.onrender.com/api/categories/products/5fdc7d7c-c85e-4f5e-8cac-0aee2809a414
 Content-Type: application/json 
 
 ###
 
-PUT  https://ecommerce-backend-g27b.onrender.com/api/products/9af53c38-246b-46e0-bed7-acd5ad862e78
+PUT  https://ecommerce-backend-hpbn.onrender.com/api/products/9af53c38-246b-46e0-bed7-acd5ad862e78
 Content-Type: application/json 
 
 {
@@ -151,14 +151,14 @@ Content-Type: application/json
 
 ###
 
-DELETE  https://ecommerce-backend-g27b.onrender.com/api/products/89081077-bf6e-46ee-be27-7a2b9c41107d
+DELETE  https://ecommerce-backend-hpbn.onrender.com/api/products/89081077-bf6e-46ee-be27-7a2b9c41107d
 Content-Type: application/json 
 
 ### 
 //create new order => customer
 
 
-POST  https://ecommerce-backend-g27b.onrender.com/api/v1/orders
+POST  https://ecommerce-backend-hpbn.onrender.com/api/v1/orders
 Content-Type: application/json 
 
 {
@@ -168,25 +168,25 @@ Content-Type: application/json
 
 ###
 //get all orders => customer
-GET  https://ecommerce-backend-g27b.onrender.com/api/v1/orders
+GET  https://ecommerce-backend-hpbn.onrender.com/api/v1/orders
 
 ###
 //get order by id => admin auth
-GET  https://ecommerce-backend-g27b.onrender.com/api/v1/orders/{}
+GET  https://ecommerce-backend-hpbn.onrender.com/api/v1/orders/{}
 
 ###
 //delete order by id => customer
-DELETE   https://ecommerce-backend-g27b.onrender.com/api/v1/orders/{}
+DELETE   https://ecommerce-backend-hpbn.onrender.com/api/v1/orders/{}
 
 ###
-PUT https://ecommerce-backend-g27b.onrender.com/api/v1/orders/{}
+PUT https://ecommerce-backend-hpbn.onrender.com/api/v1/orders/{}
 {
   "shipmentDate": 08/10/24
 }
 
 ### 
 //create new shipment => admin
-POST   https://ecommerce-backend-g27b.onrender.com/api/v1/shipments
+POST  https://ecommerce-backend-hpbn.onrender.com/api/v1/shipments
 Content-Type: application/json 
 
 {
@@ -194,14 +194,14 @@ Content-Type: application/json
 } 
 ###
 //get all shipment => admin
-GET  https://ecommerce-backend-g27b.onrender.com/api/v1/shipments
+GET  https://ecommerce-backend-hpbn.onrender.com/api/v1/shipments
 
 ###
 //get shipment by id => admin auth
-GET  https://ecommerce-backend-g27b.onrender.com/api/v1/shipments/{}
+GET  https://ecommerce-backend-hpbn.onrender.com/api/v1/shipments/{}
 
 ###
 //delete shipment by id => admin
-DELETE  https://ecommerce-backend-g27b.onrender.com/api/v1/shipment/{}
+DELETE  https://ecommerce-backend-hpbn.onrender.com/api/v1/shipment/{}
 
 ###
