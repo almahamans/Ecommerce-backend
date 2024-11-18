@@ -7,7 +7,7 @@ public class ShipmentController : ControllerBase{
     public ShipmentController(IShipmentSrvice ishipmentSrvice){
         _ishipmentSrvice = ishipmentSrvice;
     }
-    //  [Authorize(Roles = "Admin")]
+     [Authorize(Roles = "Admin")]
     [HttpPost]
     public async Task<IActionResult> CrerateShipment(){
         if (!ModelState.IsValid){
@@ -45,7 +45,7 @@ public class ShipmentController : ControllerBase{
             return ApiResponse.NotFound($"Error in deleting shipment controller: {ex.Message}");
         }
     }
-    // [Authorize("Admin")]
+    [Authorize("Admin")]
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetShipmentById(Guid id){
         if (!ModelState.IsValid){
@@ -59,7 +59,7 @@ public class ShipmentController : ControllerBase{
         }
     }
 
-    // [Authorize("Admin")]
+    [Authorize("Admin")]
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> UpdateShipmentInfo(Guid id, ShipmentUpdateDto updateShipmentDto){
         if (!ModelState.IsValid){
