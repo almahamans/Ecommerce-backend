@@ -11,5 +11,5 @@ public class UpdateUserDto
     [StringLength(100, ErrorMessage = "Password must be between 6 and 100 characters.", MinimumLength = 6)]
     public string? Password { get; set; }
     public string? Phone { get; set; }
-      public string? Image { get; set; }
+      public string? Email { get; set; }
 }

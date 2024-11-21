@@ -231,7 +231,7 @@ public class UserService : IUserService
             user.UserName = updateUser.UserName ?? user.UserName;
             user.Password = updateUser.Password ?? user.Password;
             user.Phone = updateUser.Phone ?? user.Phone;
-            user.Image = updateUser.Image ?? user.Image;
+            user.Email = updateUser.Email ?? user.Email;
 
             _appDbContext.Update(user);
             await _appDbContext.SaveChangesAsync();
