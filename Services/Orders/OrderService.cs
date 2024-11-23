@@ -30,15 +30,16 @@ public class OrderService : IOrderService
             await _appDbContext.Orders.AddAsync(newOrder);
             await _appDbContext.SaveChangesAsync();
 
-        // foreach (var orderproduct in createOrderDto.OrderProducts){
-        // var newOrderProduct = new OrderProduct{
-        //     ProductQuantity = orderproduct.ProductQuantity,
-        //     ProductsPrice = orderproduct.ProductsPrice,
-        //     OrderId = newOrder.OrderId
-        // };
-        //     await _appDbContext.OrderProducts.AddAsync(newOrderProduct);     
-        // }
-        //     await _appDbContext.SaveChangesAsync();
+        foreach (var orderproduct in createOrderDto.OrderProducts){
+        var newOrderProduct = new OrderProduct{
+            ProductId = orderproduct.ProductId,
+            ProductQuantity = orderproduct.ProductQuantity,
+            ProductsPrice = orderproduct.ProductsPrice,
+            OrderId = newOrder.OrderId
+        };
+            await _appDbContext.OrderProducts.AddAsync(newOrderProduct);     
+        }
+            await _appDbContext.SaveChangesAsync();
 
             var newShipment = new Shipment{
             ShipmentStatus = ShipmentStatus.OnProgress,
